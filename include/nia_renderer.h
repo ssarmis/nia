@@ -6,12 +6,8 @@
 #include "nia_window.h"
 #include "nia_general.h"
 
-NIA_CLASS niaRenderer{
-public:
-    NIA_CALL niaRenderer();
-    NIA_CALL ~niaRenderer();
-
-    NIA_CALL void swapBuffers(const niaWindow& window);
-};
+#ifdef _WIN32
+#include "arch/win32/nia_renderer.h"
+#endif
 
 #endif //_NIA_RENDERER_H_

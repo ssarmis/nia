@@ -1,17 +1,17 @@
+#ifdef _WIN32
+
 #ifndef UNICODE
 #define UNICODE
 #endif
-#include "nia_window.h"
+
+#include "arch/win32/nia_window.h"
 
 #include <stdio.h>
 #include <tchar.h>
 
 bool niaWindow::closed;
-
-#ifdef _WIN32
-    HDC niaWindow::deviceContext;
-    HGLRC niaWindow::glRenderContext; 
-#endif
+HDC niaWindow::deviceContext;
+HGLRC niaWindow::glRenderContext; 
 
 NIA_CALL niaWindow::niaWindow(){
 }
@@ -20,7 +20,6 @@ NIA_CALL niaWindow::~niaWindow(){
 }
 
 NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
-#ifdef _WIN32
     HINSTANCE hInstance = GetModuleHandle(NULL);
 	WNDCLASS wc      = {0}; 
 	wc.lpfnWndProc   = WndProc;
@@ -34,24 +33,18 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
 
 	CreateWindowW(wc.lpszClassName, L"openglversioncheck", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 640, 480, 0, 0, hInstance, 0);
     closed = false;
-    // while(GetMessage( &msg, NULL, 0, 0 ) > 0){
-    // }
-#endif
 }
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
-#ifdef _WIN32
     if(GetMessage(&event.msg, NULL, 0, 0) > 0){
         DispatchMessage(&event.msg);
     }
-#endif
 }
 
 NIA_CALL bool niaWindow::isClosed() const {
     return closed;
 }
 
-#ifdef _WIN32
 NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {  
     switch (message) { 
         case WM_CREATE:{
@@ -88,4 +81,5 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
     }  
     return DefWindowProc(hWnd, message, wParam, lParam);  
 }  
+
 #endif
