@@ -8,6 +8,7 @@
 
 #ifdef _WIN32
 #include "arch/win32/nia_renderer.h"
+#elif __unix
 #endif
 
 #endif //_NIA_RENDERER_H_
