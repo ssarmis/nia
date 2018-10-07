@@ -6,9 +6,9 @@
 #include "nia_event.h"
 #include "nia_general.h"
 
-#ifdef _WIN32
+#ifdef __WIN32__
 #include "arch/win32/nia_window.h"
-#elif __unix
+#elif __unix__
 #endif
 
 #endif //_NIA_WINDOW_H_

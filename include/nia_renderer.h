@@ -6,9 +6,9 @@
 #include "nia_window.h"
 #include "nia_general.h"
 
-#ifdef _WIN32
+#ifdef __WIN32__
 #include "arch/win32/nia_renderer.h"
-#elif __unix
+#elif __unix__
 #endif
 
 #endif //_NIA_RENDERER_H_

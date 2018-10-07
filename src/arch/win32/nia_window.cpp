@@ -1,4 +1,4 @@
-#ifdef _WIN32
+#ifdef __WIN32__
 
 #ifndef UNICODE
 #define UNICODE
