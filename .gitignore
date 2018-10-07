@@ -1,0 +1,4 @@
+.todo
+*.o
+*.exe
+*.dll
