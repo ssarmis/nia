@@ -7,7 +7,7 @@
 ```cd nia/```<br>
 ```mkdir build```<br>
 ```cd build/```<br>
-```cmake ../```<br>
+```cmake ../ -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"```<br>
 ```mingw32-make```<br>
 
 ### MSVC: (untested)
