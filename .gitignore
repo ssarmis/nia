@@ -5,4 +5,7 @@
 *.a
 *.so
 a
-
+*.bat
+*.sh
+build/
+Makefile
