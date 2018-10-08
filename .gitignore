@@ -2,3 +2,8 @@
 *.o
 *.exe
 *.dll
+*.a
+*.sh
+*.so
+a
+
