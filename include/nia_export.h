@@ -5,7 +5,7 @@
 extern "C"{
 #endif
 
-#ifdef _WIN32_
+#ifdef _WIN32
 #   if defined NIA_LIBRARY_BUILD
 #       define NIA_EXPORT __declspec(dllexport)
 #   else
@@ -19,7 +19,7 @@ extern "C"{
 #   endif
 #endif
 
-#ifdef _WIN32_
+#ifdef _WIN32
 #define NIA_CALL __stdcall NIA_EXPORT
 #elif defined __unix__
 #define NIA_CALL NIA_EXPORT
