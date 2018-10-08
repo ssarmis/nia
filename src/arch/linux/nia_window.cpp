@@ -25,7 +25,7 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     display = XOpenDisplay(NULL);
     
     if(!display) {
-        printf("\n\tcannot connect to X server\n\n");
+        printf("Cannot connect to X server\n");
     }
 
     rootWindow = DefaultRootWindow(display);
@@ -33,9 +33,7 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     visualInfo = glXChooseVisual(display, 0, attributes);
 
     if(visualInfo == NULL) {
-        printf("\n\tno appropriate visual found\n\n");
-    } else {
-        printf("\n\tvisual %p selected\n", (void *)visualInfo->visualid);
+        printf("No appropriate visual found\n");
     }
 
     colorMap = XCreateColormap(display, rootWindow, visualInfo->visual, AllocNone);
@@ -43,7 +41,7 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     setWindowAttributes.colormap = colorMap;
     setWindowAttributes.event_mask = ExposureMask | KeyPressMask;
 
-    window = XCreateWindow(display, rootWindow, 0, 0, 600, 600, 0, visualInfo->depth, InputOutput,
+    window = XCreateWindow(display, rootWindow, 0, 0, width, height, 0, visualInfo->depth, InputOutput,
         visualInfo->visual, CWColormap | CWEventMask, &setWindowAttributes);
 
     XMapWindow(display, window);
