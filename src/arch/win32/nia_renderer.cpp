@@ -1,4 +1,4 @@
-#ifdef __WIN32__
+#ifdef _WIN32
 #include "nia_renderer.h"
 
 NIA_CALL niaRenderer::niaRenderer(){

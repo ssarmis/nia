@@ -1,7 +1,7 @@
 #ifndef _NIA_EVENT_H_
 #define _NIA_EVENT_H_
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include "arch/win32/nia_event.h"
 #elif defined __unix__
 #include "arch/linux/nia_event.h"
