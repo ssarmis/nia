@@ -4,7 +4,7 @@ project(nia VERSION 0.0.0 DESCRIPTION "Nia is a cross platform graphics API")
 
 include(GNUInstallDirs)
 
-add_compile_definitions(NIA_LIBRARY_BUILD)
+add_definitions(-DNIA_LIBRARY_BUILD)
 
 if (UNIX)
     add_library(nia SHARED 
