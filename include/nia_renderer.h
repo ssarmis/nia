@@ -5,9 +5,13 @@
 #include "nia_general.h"
 
 #ifdef _WIN32
-#include "arch/win32/nia_renderer.h"
+#   ifdef NIA_RENDERER_GL
+#       include "arch/win32/nia_renderer_gl.h"
+#   endif
 #elif defined __unix__
-#include "arch/linux/nia_renderer.h"
+#   ifdef NIA_RENDERER_GL
+#       include "arch/linux/nia_renderer.h"
+#   endif
 #endif
 
 #endif //_NIA_RENDERER_H_

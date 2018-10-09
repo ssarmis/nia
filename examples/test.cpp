@@ -1,3 +1,5 @@
+#define NIA_RENDERER_GL
+
 #include "nia_event.h"
 #include "nia_window.h"
 #include "nia_renderer.h"

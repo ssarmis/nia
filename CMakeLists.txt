@@ -4,7 +4,7 @@ project(nia VERSION 0.0.0 DESCRIPTION "Nia is a cross platform graphics API")
 
 include(GNUInstallDirs)
 
-add_definitions(-DNIA_LIBRARY_BUILD)
+add_definitions(-DNIA_LIBRARY_BUILD -DNIA_RENDERER_GL)
 
 if (UNIX)
     add_library(nia SHARED 
@@ -16,8 +16,8 @@ endif (UNIX)
 if (WIN32)
     add_library(nia SHARED 
         ./src/nia_event.cpp
-        ./src/arch/win32/nia_window.cpp
-        ./src/arch/win32/nia_renderer.cpp)
+        ./src/arch/win32/nia_window_gl.cpp
+        ./src/arch/win32/nia_renderer_gl.cpp)
 endif (WIN32)
 
 set_target_properties(nia PROPERTIES

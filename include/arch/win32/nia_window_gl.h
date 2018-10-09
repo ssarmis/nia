@@ -1,7 +1,9 @@
 #ifdef _WIN32
 
-#ifndef _NIA_WINDOW_WIN32_H_
-#define _NIA_WINDOW_WIN32_H_
+#ifdef NIA_RENDERER_GL
+
+#ifndef _NIA_WINDOW_GL_WIN32_H_
+#define _NIA_WINDOW_GL_WIN32_H_
 
 #include <windows.h>
 
@@ -26,6 +28,6 @@ public:
     friend class niaRenderer;
 };
 
-#endif //_NIA_WINDOW_WIN32_H_
-
-#endif
+#endif //NIA_RENDERER_GL
+#endif //_NIA_WINDOW_GL_WIN32_H_
+#endif //_WIN32

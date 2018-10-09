@@ -1,10 +1,12 @@
 #ifdef _WIN32
 
+#ifdef NIA_RENDERER_GL
+
 #ifndef UNICODE
 #define UNICODE
 #endif
 
-#include "arch/win32/nia_window.h"
+#include "arch/win32/nia_window_gl.h"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -82,4 +84,5 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
     return DefWindowProc(hWnd, message, wParam, lParam);  
 }  
 
-#endif
+#endif //NIA_RENDERER_GL
+#endif //_WIN32
