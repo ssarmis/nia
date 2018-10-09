@@ -22,7 +22,7 @@ Now you should have a Visual Studio 20XX project that you can build into a share
 ### Or raw g++:
 ```g++ -c -DNIA_LIBRARY_BUILD src/*.cpp src/arch/win32/*.cpp -Iinclude/```<br>
 ```g++ -shared -o nia.dll *.o -lopengl32 -lgdi32```<br>
-```g++ -o a examples/test.cpp -L. -lnia -Iinclude/ -lopengl32```<br>
+```g++ -o ./build/a examples/test.cpp -Lbuild/ -lnia -Iinclude/ -lopengl32```<br>
 
 ## Linux
 
