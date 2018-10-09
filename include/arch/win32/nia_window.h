@@ -1,4 +1,4 @@
-#ifdef __WIN32__
+#ifdef _WIN32
 
 #ifndef _NIA_WINDOW_WIN32_H_
 #define _NIA_WINDOW_WIN32_H_

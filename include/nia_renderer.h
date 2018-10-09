@@ -4,7 +4,7 @@
 #include "nia_window.h"
 #include "nia_general.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include "arch/win32/nia_renderer.h"
 #elif defined __unix__
 #include "arch/linux/nia_renderer.h"
