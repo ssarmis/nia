@@ -3,12 +3,12 @@
 #ifndef _NIA_WINDOW_LINUX_H_
 #define _NIA_WINDOW_LINUX_H_
 
-#include<X11/X.h>
-#include<X11/Xlib.h>
+#include <X11/X.h>
+#include <X11/Xlib.h>
 
-#include<GL/gl.h>
-#include<GL/glx.h>
-#include<GL/glu.h>
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
 
 #include "nia_event.h"
 #include "nia_general.h"
