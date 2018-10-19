@@ -15,8 +15,12 @@
 #endif
 
 #define NIA_CLASS class NIA_EXPORT
+#define NIA_STRUCT struct NIA_EXPORT
+#define NIA_INLINE inline
 
-#define NIA_INTERNAL static
+#define NIA_EXTERN extern
+#define NIA_INTERNAL
+#define NIA_STATIC static
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -24,5 +28,12 @@ typedef uint32_t u32;
 
 typedef float r32;
 typedef double r64;
+
+NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
+    while(amount){
+        dest[amount - 1] = value;
+        amount--;
+    }
+}
 
 #endif //_NIA_GENERAL_H_

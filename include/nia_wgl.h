@@ -3,20 +3,14 @@
 
 #include <windows.h>
 
+#include <GL/gl.h>
 #include <GL/wglext.h>
 
 #include "nia_general.h"
 
-NIA_CALL PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT;
+NIA_EXTERN NIA_CALL PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT;
 #define wglSwapIntervalEXT _nia_wglSwapIntervalEXT
 
-bool niaInitWGL(){
-    bool extensionLoadCheck = true; 
-
-    extensionLoadCheck = ((wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT")) && extensionLoadCheck);
-
-    return extensionLoadCheck;
-}
-
+NIA_CALL bool niaInitWGL();
 
 #endif // _NIA_WGL_H_
