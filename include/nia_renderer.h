@@ -4,6 +4,8 @@
 #include "nia_window.h"
 #include "nia_general.h"
 
+#include "nia_batch_renderer_gl.h"
+
 #ifdef _WIN32
 #   ifdef NIA_RENDERER_GL
 #       include "arch/win32/nia_renderer_gl.h"

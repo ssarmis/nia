@@ -71,4 +71,8 @@ NIA_CALL bool niaWindow::isClosed() const {
     return closed;
 }
 
+NIA_CALL void niaWindow::swapBuffers(){
+    glXSwapBuffers(display, window);
+}
+
 #endif

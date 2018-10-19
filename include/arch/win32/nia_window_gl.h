@@ -25,6 +25,7 @@ public:
     NIA_CALL void handleEvents(niaEvent& event);
     NIA_CALL void enableAdaptiveVsync();
     NIA_CALL void enableVsync();
+    NIA_CALL void swapBuffers();
     NIA_CALL bool isClosed() const;
 
     friend class niaRenderer;

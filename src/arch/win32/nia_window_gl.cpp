@@ -108,5 +108,9 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
     return DefWindowProc(hWnd, message, wParam, lParam);  
 }  
 
+NIA_CALL void niaWindow::swapBuffers(){
+    SwapBuffers(deviceContext);
+}
+
 #endif //NIA_RENDERER_GL
 #endif //_WIN32

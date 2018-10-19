@@ -17,7 +17,7 @@ int main() {
 
     window.enableVsync();
     
-    niaRenderer renderer;
+    niaBatchRenderer renderer;
 
     niaEvent event;
     while(!window.isClosed()){
@@ -25,8 +25,11 @@ int main() {
 
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+    
+        renderer.renderRectangle(0, 0, 1, 1);
 
-        renderer.swapBuffers(window);
+        renderer.executeRender();
+        window.swapBuffers();
     }
 
     return 0;

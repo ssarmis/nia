@@ -10,8 +10,6 @@ NIA_CLASS niaRenderer{
 public:
     NIA_CALL niaRenderer();
     NIA_CALL ~niaRenderer();
-
-    NIA_CALL void swapBuffers(const niaWindow& window);
 };
 
 #endif //_NIA_RENDERER_LINUX_H_

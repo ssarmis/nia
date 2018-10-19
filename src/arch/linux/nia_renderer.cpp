@@ -15,7 +15,5 @@ NIA_CALL niaRenderer::niaRenderer(){
 NIA_CALL niaRenderer::~niaRenderer(){
 }
 
-NIA_CALL void niaRenderer::swapBuffers(const niaWindow& window){
-    glXSwapBuffers(window.display, window.window);
-}
+
 #endif
