@@ -9,7 +9,33 @@
 
 #include "nia_general.h"
 #include "nia_sprite.h"
+
 #include "arch/win32/nia_window_gl.h"
+
+NIA_CLASS niaRenderable{
+    union {
+        float attrs[6];
+        struct {
+            union {
+                float vert[3];
+                struct {
+                    float x;
+                    float y;
+                    float z;
+                };
+            };
+
+            union {
+                float cols[3];
+                struct {
+                    float r;
+                    float g;
+                    float b;
+                };
+            };
+        };
+    };
+};
 
 NIA_CLASS niaRenderer{
 public:

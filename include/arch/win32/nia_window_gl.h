@@ -23,6 +23,8 @@ public:
 
     NIA_CALL void createWindow(u32 width, u32 height, const char* title); // additional flags later on
     NIA_CALL void handleEvents(niaEvent& event);
+    NIA_CALL void enableAdaptiveVsync();
+    NIA_CALL void enableVsync();
     NIA_CALL bool isClosed() const;
 
     friend class niaRenderer;
