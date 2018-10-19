@@ -3,6 +3,7 @@
 
 #include "nia_event.h"
 #include "nia_window.h"
+#include "nia_general.h"
 #include "nia_renderer.h"
 
 #endif //_NIA_H_
