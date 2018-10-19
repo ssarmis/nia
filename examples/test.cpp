@@ -1,17 +1,22 @@
 #define NIA_RENDERER_GL
 
-#include "nia_event.h"
-#include "nia_window.h"
-#include "nia_renderer.h"
+#define GL_GLEXT_PROTOTYPES
 
 #include <GL/gl.h>
-#include <GL/glcorearb.h>
+#include <GL/glext.h>
+#include "nia.h"
+#include "nia_loader.h"
 
+#include <stdio.h>
 int main() {
 
     niaWindow window;
     window.createWindow(600, 400, "no matter");
 
+    niaLoadEverything();
+
+    window.enableVsync();
+    
     niaRenderer renderer;
 
     niaEvent event;
