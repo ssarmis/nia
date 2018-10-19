@@ -54,6 +54,14 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     closed = false;
 }
 
+NIA_CALL void niaWindow::enableAdaptiveVsync(){
+    glXSwapIntervalEXT(-1);
+}
+
+NIA_CALL void niaWindow::enableVsync(){
+    glXSwapIntervalEXT(1);
+}
+
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
     XGetWindowAttributes(display, window, &windowAttributes);
     XNextEvent(display, &event.xEvent);

@@ -8,7 +8,9 @@
 
 #include "arch/win32/nia_window_gl.h"
 
-#include <stdio.h>
+#include <GL/gl.h>
+#include "nia_wgl.h"
+
 #include <tchar.h>
 
 bool niaWindow::closed;
@@ -33,13 +35,29 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
         printf("Oopsie\n");
     }
 
-	CreateWindowW(wc.lpszClassName, L"openglversioncheck", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 640, 480, 0, 0, hInstance, 0);
+	CreateWindowW(wc.lpszClassName, L"openglversioncheck", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
     closed = false;
 }
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
     if(GetMessage(&event.msg, NULL, 0, 0) > 0){
         DispatchMessage(&event.msg);
+    }
+}
+
+NIA_CALL void niaWindow::enableAdaptiveVsync(){
+    if(wglSwapIntervalEXT){
+        wglSwapIntervalEXT(-1);
+    } else {
+        NIA_TRACE("Vsync is not supported!\n");
+    }
+}
+
+NIA_CALL void niaWindow::enableVsync(){
+    if(wglSwapIntervalEXT){
+        wglSwapIntervalEXT(1);
+    } else {
+        NIA_TRACE("Vsync is not supported!\n");
     }
 }
 
@@ -64,11 +82,17 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
                 int PixelFormat = ChoosePixelFormat(deviceContext, &pfd); 
                 
                 SetPixelFormat(deviceContext, PixelFormat, &pfd);
-
+                
+                int arrtributes[] = {
+                    WGL_ARB_extensions_string,
+                    WGL_ARB_pixel_format,
+                    WGL_ARB_make_current_read
+                };
+                
                 glRenderContext = wglCreateContext(deviceContext);
 
                 if (!wglMakeCurrent(deviceContext, glRenderContext)){
-                    fprintf(stderr, "Failed to create context, return with error code %d\n", GetLastError());
+                    NIA_ERROR("Failed to create context, return with error code %d\n", GetLastError());
                 }
             }
             break;
