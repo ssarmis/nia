@@ -8,5 +8,4 @@ a
 *.bat
 *.sh
 build/
-Makefile
 .vscode
