@@ -66,6 +66,14 @@ typedef struct niaRectangle{
     r32 y;
     r32 w;
     r32 h;
+    union {
+        r32 c[3];
+        struct {
+            r32 r;
+            r32 g;
+            r32 b;
+        };
+    };
 } niaRectangle;
 
 NIA_INTERNAL niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
@@ -119,13 +127,54 @@ NIA_CALL niaBatchRenderer::niaBatchRenderer(){
 NIA_CALL niaBatchRenderer::~niaBatchRenderer(){
 }
 
-NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
+NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]){
     if (usedRectangles == NIA_BATCH_MAXIMUM_QUADS){
-        printf("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
+        NIA_ERROR("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
     } else {
-        rectangleArray[usedRectangles++] = {x, y, w, h};
+        rectangleArray[usedRectangles].x = x;
+        rectangleArray[usedRectangles].y = y;
+
+        rectangleArray[usedRectangles].w = w;
+        rectangleArray[usedRectangles].h = h;
+
+        rectangleArray[usedRectangles].r = colors[0];
+        rectangleArray[usedRectangles].g = colors[1];
+        rectangleArray[usedRectangles].b = colors[2];
+
+        ++usedRectangles;
         batchUsedIndices += 6;
     }
+}
+
+NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
+    r32 colors[3] = {0, 1, 0};
+    renderRectangle(x, y, w, h, colors);
+}
+
+NIA_INTERNAL void niaBuildVertex(niaVertex* source, const niaRectangle& rectangle, u32* vertex){
+    for (u32 i = 0; i < 4; ++i){
+        source[*vertex + i].r = rectangle.r;
+        source[*vertex + i].g = rectangle.g;
+        source[*vertex + i].b = rectangle.b;
+    }
+
+    source[*vertex + 0].x = rectangle.x;
+    source[*vertex + 0].y = rectangle.y;
+    source[*vertex + 0].z = 0;
+    
+    source[*vertex + 1].x = rectangle.x + rectangle.w;
+    source[*vertex + 1].y = rectangle.y + rectangle.h;
+    source[*vertex + 1].z = 0;
+
+    source[*vertex + 2].x = rectangle.x;
+    source[*vertex + 2].y = rectangle.y + rectangle.h;
+    source[*vertex + 2].z = 0;
+
+    source[*vertex + 3].x = rectangle.x + rectangle.w;
+    source[*vertex + 3].y = rectangle.y;
+    source[*vertex + 3].z = 0;
+
+    *vertex += 4;
 }
 
 NIA_CALL void niaBatchRenderer::executeRender(){
@@ -134,37 +183,7 @@ NIA_CALL void niaBatchRenderer::executeRender(){
     
     u32 vertex = 0;
     for(u32 rect = 0; rect < usedRectangles; ++rect){
-        source[vertex].x = rectangleArray[rect].x;
-        source[vertex].y = rectangleArray[rect].y;
-        source[vertex].z = 0;
-
-        source[vertex].r = source[vertex].g = source[vertex].b = 0.5;
-
-        ++vertex;
-
-        source[vertex].x = rectangleArray[rect].x + rectangleArray[rect].w;
-        source[vertex].y = rectangleArray[rect].y + rectangleArray[rect].h;
-        source[vertex].z = 0;
-
-        source[vertex].r = source[vertex].g = source[vertex].b = 0.5;
-
-        ++vertex;
-
-        source[vertex].x = rectangleArray[rect].x;
-        source[vertex].y = rectangleArray[rect].y + rectangleArray[rect].h;
-        source[vertex].z = 0;
-
-        source[vertex].r = source[vertex].g = source[vertex].b = 0.5;
-
-        ++vertex;
-
-        source[vertex].x = rectangleArray[rect].x + rectangleArray[rect].w;
-        source[vertex].y = rectangleArray[rect].y;
-        source[vertex].z = 0;
-
-        source[vertex].r = source[vertex].g = source[vertex].b = 0.5;
-
-        ++vertex;
+        niaBuildVertex(source, rectangleArray[rect], &vertex);
     }
 
     nia_memset((u8*)rectangleArray, 0, usedRectangles * sizeof(niaRectangle));
@@ -172,8 +191,10 @@ NIA_CALL void niaBatchRenderer::executeRender(){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(batchVao);
+    shader.useShader();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo);
     glDrawElements(GL_TRIANGLES, batchUsedIndices, GL_UNSIGNED_SHORT, 0);
+    shader.unuseShader();
     glBindVertexArray(0);
 
     usedRectangles = 0;

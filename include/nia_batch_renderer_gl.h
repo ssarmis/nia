@@ -6,11 +6,15 @@
 #include "nia_general.h"
 #include "nia_sprite.h"
 
+#include "nia_shader.h"
+
 NIA_CLASS niaBatchRenderer{
 public:
+    niaShader shader;
     NIA_CALL niaBatchRenderer();
     NIA_CALL ~niaBatchRenderer();
 
+    NIA_CALL void renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]);
     NIA_CALL void renderRectangle(r32 x, r32 y, r32 w, r32 h);
     NIA_CALL void renderSprite(const niaSprite& sprite);
     NIA_CALL void renderTexture();

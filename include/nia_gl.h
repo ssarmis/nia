@@ -41,8 +41,6 @@ NIA_EXTERN NIA_CALL PFNGLGENVERTEXARRAYSPROC _nia_glGenVertexArrays;
 #define glGenVertexArrays _nia_glGenVertexArrays
 NIA_EXTERN NIA_CALL PFNGLVERTEXATTRIBPOINTERPROC _nia_glVertexAttribPointer;
 #define glVertexAttribPointer _nia_glVertexAttribPointer
-
-// for some reason some extensions cannot be seen or I am doing something really wrong here
 NIA_EXTERN NIA_CALL PFNGLDRAWELEMENTSPROC _nia_glDrawElements;
 #define glDrawElements _nia_glDrawElements
 
@@ -58,6 +56,9 @@ NIA_EXTERN NIA_CALL PFNGLLINKPROGRAMPROC _nia_glLinkProgram;
 #define glLinkProgram _nia_glLinkProgram
 NIA_EXTERN NIA_CALL PFNGLUSEPROGRAMPROC _nia_glUseProgram;
 #define glUseProgram _nia_glUseProgram
+NIA_EXTERN NIA_CALL PFNGLDELETEPROGRAMPROC _nia_glDeleteProgram;
+#define glDeleteProgram _nia_glDeleteProgram
+
 
 NIA_EXTERN NIA_CALL PFNGLATTACHSHADERPROC _nia_glAttachShader;
 #define glAttachShader _nia_glAttachShader
@@ -77,9 +78,9 @@ NIA_EXTERN NIA_CALL PFNGLGETSHADERIVPROC _nia_glGetShaderiv;
 #define glGetShaderiv _nia_glGetShaderiv
 
 #ifdef _WIN32
-NIA_INTERNAL WINGDIAPI PROC WINAPI getProcAddress(const char* name);
+NIA_INTERNAL WINGDIAPI PROC WINAPI niaGetProcAddress(const char* name);
 #elif defined __unix__
-void* getProcAddress(const char* name);
+void* niaGetProcAddress(const char* name);
 #endif
 
 NIA_CALL bool niaInitGL();

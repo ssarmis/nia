@@ -5,5 +5,6 @@
 #include "nia_window.h"
 #include "nia_general.h"
 #include "nia_renderer.h"
+#include "nia_shader.h"
 
 #endif //_NIA_H_
