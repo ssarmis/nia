@@ -8,7 +8,7 @@
 
 #include "arch/win32/nia_window_gl.h"
 
-#include <GL/gl.h>
+#include "nia_gl.h"
 #include "nia_wgl.h"
 
 #include <tchar.h>

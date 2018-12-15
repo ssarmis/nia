@@ -1,7 +1,7 @@
 #ifndef _NIA_TEXTURE_GL_H_
 #define _NIA_TEXTURE_GL_H_
 
-#include <GL/gl.h>
+#include "nia_gl.h"
 #include "nia_general.h"
 
 NIA_CLASS niaTexture {
