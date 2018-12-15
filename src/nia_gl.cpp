@@ -40,6 +40,12 @@ NIA_INTERNAL WINGDIAPI PROC WINAPI getProcAddress(const char* name){
 void* getProcAddress(const char* name){
 #endif
 #ifdef _WIN32
+    NIA_STATIC HINSTANCE gl = LoadLibrary("opengl32.dll");
+    
+    WINGDIAPI PROC WINAPI result = GetProcAddress(gl, name);
+    if (result){
+        return result;
+    }
     return wglGetProcAddress(name);
 #elif defined __unix__
     return glXGetProcAddress(name);

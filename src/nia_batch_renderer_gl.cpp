@@ -32,7 +32,7 @@ NIA_STRUCT niaVertex{
     };
 };
 
-#define NIA_BATCH_MAXIMUM_QUADS     3000
+#define NIA_BATCH_MAXIMUM_QUADS     100000
 #define NIA_BATCH_VERTICES_COUNT    (NIA_BATCH_MAXIMUM_QUADS * sizeof(niaVertex))
 #define NIA_BATCH_INDICES_COUNT     (NIA_BATCH_VERTICES_COUNT * 6)
 
@@ -94,11 +94,12 @@ NIA_INTERNAL void setupBatchBuffers(){
         batchIndices[i + 0] = indicesOffset + 0;
         batchIndices[i + 1] = indicesOffset + 1;
         batchIndices[i + 2] = indicesOffset + 2;
+
         batchIndices[i + 3] = indicesOffset + 0;
         batchIndices[i + 4] = indicesOffset + 3;
         batchIndices[i + 5] = indicesOffset + 1;
 
-        indicesOffset += 3;
+        indicesOffset += 4;
     }
 
     glGenBuffers(1, &batchVeo);
@@ -119,14 +120,18 @@ NIA_CALL niaBatchRenderer::~niaBatchRenderer(){
 }
 
 NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
-    rectangleArray[usedRectangles++] = {x, y, w, h};
-    batchUsedIndices += 6;
+    if (usedRectangles == NIA_BATCH_MAXIMUM_QUADS){
+        printf("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
+    } else {
+        rectangleArray[usedRectangles++] = {x, y, w, h};
+        batchUsedIndices += 6;
+    }
 }
 
 NIA_CALL void niaBatchRenderer::executeRender(){
     glBindBuffer(GL_ARRAY_BUFFER, batchVbo);
     niaVertex* source = (niaVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-
+    
     u32 vertex = 0;
     for(u32 rect = 0; rect < usedRectangles; ++rect){
         source[vertex].x = rectangleArray[rect].x;
