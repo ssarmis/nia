@@ -28,14 +28,14 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
 	WNDCLASS wc      = {0}; 
 	wc.lpfnWndProc   = WndProc;
 	wc.hInstance     = hInstance;
-	wc.lpszClassName = L"oglversionchecksample";
+	wc.lpszClassName = L"Nia window";
 	wc.style = CS_OWNDC;
 
 	if( !RegisterClass(&wc) ){
         printf("Oopsie\n");
     }
 
-	CreateWindowW(wc.lpszClassName, L"openglversioncheck", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
+	CreateWindowW(wc.lpszClassName, L"Nia window", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
     closed = false;
 }
 
