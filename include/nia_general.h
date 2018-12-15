@@ -36,4 +36,12 @@ NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
     }
 }
 
+NIA_INLINE u32 nia_strlen(const char* str){
+    u32 result;
+    while(*str++){
+        ++result;
+    }
+    return result;
+}
+
 #endif //_NIA_GENERAL_H_
