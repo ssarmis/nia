@@ -32,7 +32,7 @@ NIA_STRUCT niaVertex{
     };
 };
 
-#define NIA_BATCH_MAXIMUM_QUADS     100000
+#define NIA_BATCH_MAXIMUM_QUADS     1000000
 #define NIA_BATCH_VERTICES_COUNT    (NIA_BATCH_MAXIMUM_QUADS * sizeof(niaVertex))
 #define NIA_BATCH_INDICES_COUNT     (NIA_BATCH_VERTICES_COUNT * 6)
 
@@ -181,9 +181,11 @@ NIA_CALL void niaBatchRenderer::executeRender(){
     glBindBuffer(GL_ARRAY_BUFFER, batchVbo);
     niaVertex* source = (niaVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     
-    u32 vertex = 0;
-    for(u32 rect = 0; rect < usedRectangles; ++rect){
-        niaBuildVertex(source, rectangleArray[rect], &vertex);
+    if(source){
+        u32 vertex = 0;
+        for(u32 rect = 0; rect < usedRectangles; ++rect){
+            niaBuildVertex(source, rectangleArray[rect], &vertex);
+        }
     }
 
     nia_memset((u8*)rectangleArray, 0, usedRectangles * sizeof(niaRectangle));

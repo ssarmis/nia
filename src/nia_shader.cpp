@@ -67,14 +67,23 @@ NIA_INTERNAL void niaShader::compileShader(GLuint shader){
 }
 
 NIA_INTERNAL void niaShader::buildProgram(GLuint vertexShader, GLuint fragmentShader){
-    GLuint program = glCreateProgram();
+    program = glCreateProgram();
 
     glAttachShader(program, vertexShader);
-    glAttachShader(program, vertexShader);
+    glAttachShader(program, fragmentShader);
     glLinkProgram(program);
+    glValidateProgram(program);
 
     GLint status;
     glGetProgramiv(program, GL_LINK_STATUS, &status);
+    if (status != GL_TRUE){
+        GLsizei logLength = 0;
+        GLchar log[1024] = {0};
+        glGetProgramInfoLog(program, 1024, &logLength, log);
+        NIA_ERROR("%s\n", log);
+    }
+
+    glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
     if (status != GL_TRUE){
         GLsizei logLength = 0;
         GLchar log[1024] = {0};

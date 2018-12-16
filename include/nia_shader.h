@@ -9,16 +9,19 @@ NIA_STATIC char* basicVertexShader = ""
 "#version 440 core\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
+"out vec4 o_color;\n"
 "void main(){\n"
-"  gl_Position = vec4(0, 0, 0, 1);\n"
+"   gl_Position = vec4(pos, 1.0);\n"
+"   o_color = vec4(pos, 1.0);\n"
 "}\n"
 "";
 
 NIA_STATIC char* basicFragmentShader = ""
 "#version 440 core\n"
-"out vec4 finalColor\n"
+"out vec4 finalColor;\n"
+"in vec4 o_color;\n"
 "void main(){\n"
-"  finalColor = vec4(1, 1, 0, 1);\n"
+"  finalColor = o_color;\n"
 "}\n"
 "";
 
