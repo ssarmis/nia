@@ -58,7 +58,8 @@ NIA_EXTERN NIA_CALL PFNGLUSEPROGRAMPROC _nia_glUseProgram;
 #define glUseProgram _nia_glUseProgram
 NIA_EXTERN NIA_CALL PFNGLDELETEPROGRAMPROC _nia_glDeleteProgram;
 #define glDeleteProgram _nia_glDeleteProgram
-
+NIA_EXTERN NIA_CALL PFNGLVALIDATEPROGRAMPROC _nia_glValidateProgram;
+#define glValidateProgram _nia_glValidateProgram
 
 NIA_EXTERN NIA_CALL PFNGLATTACHSHADERPROC _nia_glAttachShader;
 #define glAttachShader _nia_glAttachShader

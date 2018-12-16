@@ -24,6 +24,7 @@ PFNGLGETPROGRAMIVPROC _nia_glGetProgramiv = NULL;
 PFNGLLINKPROGRAMPROC _nia_glLinkProgram = NULL;
 PFNGLUSEPROGRAMPROC _nia_glUseProgram = NULL;
 PFNGLDELETEPROGRAMPROC _nia_glDeleteProgram = NULL;
+PFNGLVALIDATEPROGRAMPROC _nia_glValidateProgram = NULL;
 
 PFNGLATTACHSHADERPROC _nia_glAttachShader = NULL;
 PFNGLCOMPILESHADERPROC _nia_glCompileShader = NULL;
@@ -80,7 +81,8 @@ NIA_CALL bool niaInitGL(){
     extensionLoadCheck = ((glLinkProgram = (PFNGLLINKPROGRAMPROC) niaGetProcAddress("glLinkProgram")) && extensionLoadCheck);
     extensionLoadCheck = ((glUseProgram = (PFNGLUSEPROGRAMPROC) niaGetProcAddress("glUseProgram")) && extensionLoadCheck);
     extensionLoadCheck = ((glDeleteProgram = (PFNGLDELETEPROGRAMPROC) niaGetProcAddress("glDeleteProgram")) && extensionLoadCheck);
-
+    extensionLoadCheck = ((glValidateProgram = (PFNGLVALIDATEPROGRAMPROC) niaGetProcAddress("glValidateProgram")) && extensionLoadCheck);
+    
     extensionLoadCheck = ((glAttachShader = (PFNGLATTACHSHADERPROC) niaGetProcAddress("glAttachShader")) && extensionLoadCheck);
     extensionLoadCheck = ((glCompileShader = (PFNGLCOMPILESHADERPROC) niaGetProcAddress("glCompileShader")) && extensionLoadCheck);
     extensionLoadCheck = ((glCreateShader = (PFNGLCREATESHADERPROC) niaGetProcAddress("glCreateShader")) && extensionLoadCheck);
