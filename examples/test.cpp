@@ -8,6 +8,7 @@
 #include <GL/glext.h>
 
 #include <stdio.h>
+
 int main() {
 
     niaWindow window;
@@ -25,10 +26,14 @@ int main() {
 
         glClearColor(1, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT);
-    
-        for (float y = -1.1; y < 1; y += 0.015){
-            for (float x = -1.1; x < 1; x += 0.015){
-                renderer.renderRectangle(x, y, 0.012, 0.012);
+     
+        for (float y = -1; y < 1; y += 0.03){
+            for (float x = -1; x < 1; x += 0.03){
+                r32 colors[3];
+                colors[0] = 0;
+                colors[1] = 0;
+                colors[2] = 1;
+                renderer.renderRectangle(x, y, 0.027, 0.027, colors);
             }
         }
 
