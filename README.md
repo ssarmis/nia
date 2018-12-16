@@ -1,5 +1,6 @@
 # Nia
 
+For debugging use '-DCMAKE_BUILD_TYPE=Debug' when using cmake<br>
 ## Windows
 
 ### Mingw32:
