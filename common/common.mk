@@ -16,7 +16,7 @@ APP		 		:= example
 
 # Used for help
 HELP			:= 'If inside an example directory, type "make run"\n'
-HELP			:= $(HELP)'If in main directory(in the "nia" folder) type "make build_lib" to build the library\n'
+HELP			:= $(HELP)'If in main directory(in the "nia" folder) type "make build_lib" to build the library, for debugging add DEBUG=true\n'
 HELP 			:= $(HELP)'If you want to run a quick test, type "make test" (always after "make build_lib")'
 
 
@@ -35,7 +35,7 @@ build_lib:
 ifeq ($(DEBUG),)
 	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 else
-	@cmake -Bbuild -H../ -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
+	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
 endif
 	@make -C build
 
