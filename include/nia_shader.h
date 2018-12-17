@@ -12,7 +12,7 @@ NIA_STATIC char* basicVertexShader = ""
 "out vec4 o_color;\n"
 "void main(){\n"
 "   gl_Position = vec4(pos, 1.0);\n"
-"   o_color = vec4(pos, 1.0);\n"
+"   o_color = vec4(color, 1.0);\n"
 "}\n"
 "";
 
