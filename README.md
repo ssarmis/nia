@@ -1,8 +1,9 @@
 # Build Nia using 'make'
-
+(This is not very Windows friendly)<br>
 ```git clone https://github.com/streanga-sarmis/nia```<br>
 ```cd nia/```<br>
 ```make build_lib``` or ```make build_lib DEBUG=true``` for debugging version.<br>
+
 ## Now you can test the lib 
 ```make test```<br>
 
