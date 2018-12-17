@@ -1,4 +1,16 @@
-# Nia
+# Build Nia using 'make'
+
+```git clone https://github.com/streanga-sarmis/nia```<br>
+```cd nia/```<br>
+```make build_lib``` or ```make build_lib DEBUG=true``` for debugging version.<br>
+## Now you can test the lib 
+```make test```<br>
+
+## To run manually an example, go into the example folder and type ```make run``` 
+
+(For this to be more portable I will make a script in the future that does these, instead of using "make")<br>
+
+# Build Nia using other methods
 
 For debugging use '-DCMAKE_BUILD_TYPE=Debug' when using cmake<br>
 ## Windows
