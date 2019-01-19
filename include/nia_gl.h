@@ -1,15 +1,14 @@
 #ifndef _NIA_GL_H_
 #define _NIA_GL_H_
 
-
 #include "nia_general.h"
 
-#include <GL/glcorearb.h>
-
 #ifdef _WIN32
+#   include "arch/win32/gl_khronos/glcorearb.h"
 #   include <windows.h>
 #   include <nia_wgl.h>
 #elif defined  __unix__
+#   include <GL/glcorearb.h>
 #   include <nia_xgl.h>
 #endif
 
