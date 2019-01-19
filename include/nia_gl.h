@@ -4,7 +4,7 @@
 #include "nia_general.h"
 
 #ifdef _WIN32
-#   include "arch/win32/gl_khronos/glcorearb.h"
+#   include "arch/win32/khronos/glcorearb.h"
 #   include <windows.h>
 #   include <nia_wgl.h>
 #elif defined  __unix__

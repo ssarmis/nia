@@ -6,7 +6,7 @@
 #include <windows.h>
 
 #include "nia_gl.h"
-#include <GL/wglext.h>
+#include "arch/win32/khronos/wglext.h"
 
 #include "nia_general.h"
 
