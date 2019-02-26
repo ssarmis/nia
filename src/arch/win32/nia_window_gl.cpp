@@ -15,7 +15,7 @@
 
 bool niaWindow::closed;
 HDC niaWindow::deviceContext;
-HGLRC niaWindow::glRenderContext; 
+HGLRC niaWindow::glRenderContext;
 
 NIA_CALL niaWindow::niaWindow(){
 }
@@ -40,8 +40,9 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
 }
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
-    if(GetMessage(&event.msg, NULL, 0, 0) > 0){
-        DispatchMessage(&event.msg);
+    while (PeekMessageW(&event.msg, NULL, 0, 0, PM_REMOVE)) {
+        TranslateMessage(&event.msg);
+        DispatchMessageW(&event.msg);
     }
 }
 
