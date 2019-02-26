@@ -7,31 +7,6 @@
 #define NIA_SIMPLE_RENDERER         0x00000001
 #define NIA_BATCH_RENDERER          0x00000002
 
-NIA_STRUCT niaVertex{
-    union {
-        float attrs[6];
-        struct {
-            union {
-                float vert[3];
-                struct {
-                    float x;
-                    float y;
-                    float z;
-                };
-            };
-
-            union {
-                float cols[3];
-                struct {
-                    float r;
-                    float g;
-                    float b;
-                };
-            };
-        };
-    };
-};
-
 #define NIA_BATCH_MAXIMUM_QUADS     1000000
 #define NIA_BATCH_VERTICES_COUNT    (NIA_BATCH_MAXIMUM_QUADS * sizeof(niaVertex))
 #define NIA_BATCH_INDICES_COUNT     (NIA_BATCH_VERTICES_COUNT * 6)
@@ -40,9 +15,6 @@ NIA_STRUCT niaVertex{
 //     |\  |         so 6 indices per quad
 //     |  \|
 //  2  +---+  1
-
-#define NIA_VERTEX_STRIDE   0
-#define NIA_COLOR_STRIDE    (3 * sizeof(float))
 
 // niaVertex
 //      float x;
@@ -61,22 +33,7 @@ NIA_INTERNAL u16 batchIndices[NIA_BATCH_INDICES_COUNT] = {};
 
 NIA_INTERNAL u32 usedRectangles = 0;
 
-typedef struct niaRectangle{
-    r32 x;
-    r32 y;
-    r32 w;
-    r32 h;
-    union {
-        r32 c[3];
-        struct {
-            r32 r;
-            r32 g;
-            r32 b;
-        };
-    };
-} niaRectangle;
-
-NIA_INTERNAL niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
+niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
 
 NIA_INTERNAL void setupBatchBuffers(){
     glGenVertexArrays(1, &batchVao);

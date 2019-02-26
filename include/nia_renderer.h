@@ -8,11 +8,11 @@
 
 #ifdef _WIN32
 #   ifdef NIA_RENDERER_GL
-#       include "arch/win32/nia_renderer_gl.h"
+#       include "nia_renderer_gl.h"
 #   endif
 #elif defined __unix__
 #   ifdef NIA_RENDERER_GL
-#       include "arch/linux/nia_renderer.h"
+#       include "nia_renderer.h"
 #   endif
 #endif
 

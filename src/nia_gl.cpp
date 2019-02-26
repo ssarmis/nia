@@ -9,6 +9,7 @@ PFNGLBUFFERDATAPROC _nia_glBufferData = NULL;
 PFNGLGENBUFFERSPROC _nia_glGenBuffers = NULL;
 PFNGLMAPBUFFERPROC _nia_glMapBuffer = NULL;
 PFNGLUNMAPBUFFERPROC _nia_glUnmapBuffer = NULL;
+PFNGLNAMEDBUFFERSUBDATAPROC _nia_glNamedBufferSubData = NULL;
 
 PFNGLBINDVERTEXARRAYPROC _nia_glBindVertexArray = NULL;
 PFNGLDISABLEVERTEXATTRIBARRAYPROC _nia_glDisableVertexAttribArray = NULL;
@@ -74,6 +75,7 @@ NIA_CALL bool niaInitGL(){
     extensionLoadCheck = ((glBufferData = (PFNGLBUFFERDATAPROC) niaGetProcAddress("glBufferData")) && extensionLoadCheck);
     extensionLoadCheck = ((glMapBuffer = (PFNGLMAPBUFFERPROC) niaGetProcAddress("glMapBuffer")) && extensionLoadCheck);
     extensionLoadCheck = ((glUnmapBuffer = (PFNGLUNMAPBUFFERPROC) niaGetProcAddress("glUnmapBuffer")) && extensionLoadCheck);
+    extensionLoadCheck = ((glNamedBufferSubData = (PFNGLNAMEDBUFFERSUBDATAPROC) niaGetProcAddress("glNamedBufferSubData")) && extensionLoadCheck);
 
     extensionLoadCheck = ((glCreateProgram = (PFNGLCREATEPROGRAMPROC) niaGetProcAddress("glCreateProgram")) && extensionLoadCheck);
     extensionLoadCheck = ((glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) niaGetProcAddress("glGetProgramInfoLog")) && extensionLoadCheck);

@@ -29,6 +29,8 @@ NIA_EXTERN NIA_CALL PFNGLMAPBUFFERPROC _nia_glMapBuffer;
 #define glMapBuffer _nia_glMapBuffer
 NIA_EXTERN NIA_CALL PFNGLUNMAPBUFFERPROC _nia_glUnmapBuffer;
 #define glUnmapBuffer _nia_glUnmapBuffer
+NIA_EXTERN NIA_CALL PFNGLNAMEDBUFFERSUBDATAPROC _nia_glNamedBufferSubData;
+#define glNamedBufferSubData _nia_glNamedBufferSubData
 
 NIA_EXTERN NIA_CALL PFNGLBINDVERTEXARRAYPROC _nia_glBindVertexArray;
 #define glBindVertexArray _nia_glBindVertexArray
