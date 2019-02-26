@@ -15,7 +15,7 @@
 #define NIA_ERROR(...) fprintf(stderr, __VA_ARGS__)
 
 #define NIA_CLASS class NIA_EXPORT
-#define NIA_STRUCT struct NIA_EXPORT
+#define NIA_STRUCT typedef struct NIA_EXPORT
 #define NIA_INLINE inline
 
 #define NIA_EXTERN extern
