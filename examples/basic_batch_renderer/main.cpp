@@ -33,7 +33,6 @@ int main() {
     niaLoadEverything();
 
     window.enableVsync();
-    
 
     niaBatchRenderer renderer;
 
