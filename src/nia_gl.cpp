@@ -38,14 +38,14 @@ PFNGLGETSHADERIVPROC _nia_glGetShaderiv = NULL;
 
 
 #ifdef _WIN32
-NIA_INTERNAL WINGDIAPI PROC WINAPI niaGetProcAddress(const char* name){
+NIA_INTERNAL PROC WINAPI niaGetProcAddress(const char* name){
 #elif defined __unix__
 void* niaGetProcAddress(const char* name){
 #endif
 #ifdef _WIN32
     NIA_STATIC HINSTANCE gl = LoadLibrary("opengl32.dll");
     
-    WINGDIAPI PROC WINAPI result = GetProcAddress(gl, name);
+    PROC WINAPI result = GetProcAddress(gl, name);
     if (result){
         return result;
     }
