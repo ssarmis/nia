@@ -10,7 +10,7 @@
 
 #include "nia_general.h"
 
-NIA_EXTERN NIA_CALL PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT;
+NIA_EXTERN PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT;
 #define wglSwapIntervalEXT _nia_wglSwapIntervalEXT
 
 NIA_CALL bool niaInitWGL();
