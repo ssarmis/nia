@@ -1,5 +1,3 @@
-#ifdef _WIN32
-
 #ifndef _NIA_RECTANGLE_H_
 #define _NIA_RECTANGLE_H_
 
@@ -36,5 +34,4 @@ NIA_STRUCT niaRectangle {
     };
 } niaRectangle;
 
-#endif
 #endif
