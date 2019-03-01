@@ -2,8 +2,10 @@
 
 #include "nia_renderer_gl.h"
 
+#include "nia_constants.h"
 #include "nia_general.h"
-
+#include "nia_vector.h"
+#include "nia_vertex.h"
 #include "nia_gl.h"
 
 #define createAndBufferVertexies(_x, _y, _w, _h, _colors) {\
@@ -68,6 +70,14 @@ NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 color
     shader.useShader();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0);
+    shader.unuseShader();
+}
+
+NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh){
+    glBindVertexArray(mesh.vao);
+    shader.useShader();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.veo);
+    glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0);
     shader.unuseShader();
 }
 

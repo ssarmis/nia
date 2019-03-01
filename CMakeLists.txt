@@ -13,6 +13,7 @@ if (UNIX)
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
+        ./src/nia_mesh.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
         ./src/arch/linux/nia_window.cpp
@@ -26,6 +27,7 @@ if (WIN32)
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
+        ./src/nia_mesh.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
         ./src/arch/win32/nia_window_gl.cpp)
