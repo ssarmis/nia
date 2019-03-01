@@ -3,12 +3,14 @@
 #include "nia_batch_renderer_gl.h"
 
 #include "nia_gl.h"
+#include "nia_vertex.h"
+#include "nia_constants.h"
 
 #define NIA_SIMPLE_RENDERER         0x00000001
 #define NIA_BATCH_RENDERER          0x00000002
 
 #define NIA_BATCH_MAXIMUM_QUADS     1000000
-#define NIA_BATCH_VERTICES_COUNT    (NIA_BATCH_MAXIMUM_QUADS * sizeof(niaVertex))
+#define NIA_BATCH_VERTICES_COUNT    (NIA_BATCH_MAXIMUM_QUADS * sizeof(niaBasicVertex))
 #define NIA_BATCH_INDICES_COUNT     (NIA_BATCH_VERTICES_COUNT * 6)
 
 //  0  +---+  3      order to render: 0 1 2   0 3 1
@@ -16,14 +18,13 @@
 //     |  \|
 //  2  +---+  1
 
-// niaVertex
+// niaBasicVertex
 //      float x;
 //      float y;
 //      float z;
 //      float r;
 //      float g;
 //      float b;
-
 
 NIA_INTERNAL u32 batchVao = 0;
 NIA_INTERNAL u32 batchVbo = 0;
@@ -44,8 +45,8 @@ NIA_INTERNAL void setupBatchBuffers(){
 
     glBufferData(GL_ARRAY_BUFFER, NIA_BATCH_VERTICES_COUNT, 0, GL_DYNAMIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_VERTEX_STRIDE);
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_COLOR_STRIDE);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_VERTEX_STRIDE);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_COLOR_STRIDE);
     
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -108,7 +109,7 @@ NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
     renderRectangle(x, y, w, h, colors);
 }
 
-NIA_INTERNAL void niaBuildVertex(niaVertex* source, const niaRectangle& rectangle, u32* vertex){
+NIA_INTERNAL void niaBuildVertex(niaBasicVertex* source, const niaRectangle& rectangle, u32* vertex){
     for (u32 i = 0; i < 4; ++i){
         source[*vertex + i].r = rectangle.r;
         source[*vertex + i].g = rectangle.g;
@@ -136,7 +137,7 @@ NIA_INTERNAL void niaBuildVertex(niaVertex* source, const niaRectangle& rectangl
 
 NIA_CALL void niaBatchRenderer::executeRender(){
     glBindBuffer(GL_ARRAY_BUFFER, batchVbo);
-    niaVertex* source = (niaVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    niaBasicVertex* source = (niaBasicVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     
     if(source){
         u32 vertex = 0;
