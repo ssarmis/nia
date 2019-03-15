@@ -10,6 +10,12 @@
 #include "nia_event.h"
 #include "nia_general.h"
 
+/**
+ *  @author Streanga Sarmis-Stefan
+ *  @brief 
+ * 
+ * Win32 Window class
+ */
 NIA_CLASS niaWindow{
 private:
     static bool closed;
@@ -18,14 +24,49 @@ private:
     static NIA_CALL LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam); 
     
 public:
+    /**
+     * Constructor
+     */
     NIA_CALL niaWindow();
+
+    /**
+     * Destructor
+     */
     NIA_CALL ~niaWindow();
 
+    /**
+     * The function for creating a window and the opengl context 
+     * @param width An unsigned value representing the window width.
+     * @param height An unsigned value representing the window height.
+     * @param title The title of the window.
+     */
     NIA_CALL void createWindow(u32 width, u32 height, const char* title); // additional flags later on
+
+    /**
+     * The function for creating a window and the opengl context 
+     * @param event An niaEvent instance used to store the current event message.
+     */
     NIA_CALL void handleEvents(niaEvent& event);
+
+    /**
+     * Function for enabling adaptive vsync(if supported)
+     */
     NIA_CALL void enableAdaptiveVsync();
+
+    /**
+     * Function for enabling vsync(if supported)
+     */
     NIA_CALL void enableVsync();
+
+    /**
+     * Function for swapping the window buffers
+     */
     NIA_CALL void swapBuffers();
+
+    /**
+     * Function that returns if the window is closed or not
+     * @return If the window is closed
+     */
     NIA_CALL bool isClosed() const;
 
     friend class niaRenderer;

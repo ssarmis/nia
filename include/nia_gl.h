@@ -18,6 +18,9 @@ NIA_EXTERN NIA_CALL PFNGLUNIFORM1DPROC _nia_glUniform1d;
 #define glUniform1d _nia_glUniform1d
 NIA_EXTERN NIA_CALL PFNGLUNIFORM1FPROC _nia_glUniform1f;
 #define glUniform1f _nia_glUniform1f
+NIA_EXTERN NIA_CALL PFNGLUNIFORMMATRIX4FVPROC _nia_glUniformMatrix4fv;
+#define glUniformMatrix4fv _nia_glUniformMatrix4fv
+
 
 NIA_EXTERN NIA_CALL PFNGLBINDBUFFERPROC _nia_glBindBuffer;
 #define glBindBuffer _nia_glBindBuffer

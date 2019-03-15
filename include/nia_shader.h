@@ -4,26 +4,7 @@
 #include "nia_gl.h"
 
 #include "nia_general.h"
-
-NIA_STATIC char* basicVertexShader = ""
-"#version 440 core\n"
-"layout(location = 0) in vec3 pos;\n"
-"layout(location = 1) in vec3 color;\n"
-"out vec4 o_color;\n"
-"void main(){\n"
-"   gl_Position = vec4(pos, 1.0);\n"
-"   o_color = vec4(color, 1.0);\n"
-"}\n"
-"";
-
-NIA_STATIC char* basicFragmentShader = ""
-"#version 440 core\n"
-"out vec4 finalColor;\n"
-"in vec4 o_color;\n"
-"void main(){\n"
-"  finalColor = o_color;\n"
-"}\n"
-"";
+#include "nia_matrix.h"
 
 NIA_CLASS niaShader {
 private:
@@ -40,6 +21,12 @@ public:
     NIA_CALL niaShader(const char* vertexShaderFilename, const char* fragmentShaderFilename);
     NIA_CALL niaShader();
     NIA_CALL ~niaShader();
+
+    NIA_CALL GLuint getProgram() const;
+    NIA_CALL GLuint getVertexShader() const;
+    NIA_CALL GLuint getFragmentShader() const;
+
+    NIA_CALL void setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
 
     NIA_CALL void useShader();
     NIA_CALL void unuseShader();
