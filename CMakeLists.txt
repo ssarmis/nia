@@ -8,7 +8,9 @@ add_definitions(-DNIA_LIBRARY_BUILD -DNIA_RENDERER_GL -DGL_GLEXT_PROTOTYPES -DNI
 
 if (UNIX)
     add_library(nia SHARED 
+        ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
@@ -22,7 +24,9 @@ endif (UNIX)
 
 if (WIN32)
     add_library(nia SHARED 
+        ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
