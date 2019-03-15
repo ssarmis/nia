@@ -26,6 +26,25 @@ typedef struct {
 rect rectangles[1024 * 1024];
 
 int main() {
+#if 0
+    niaVector2<int> v0;
+    niaVector2<int> v1(12, 5);
+    niaVector2<int> v2 = v0.add(v1).mul(2);
+
+    printf("%d, %d\n", v2.x, v2.y);
+
+    niaVector3<int> vv0;
+    niaVector3<int> vv1(12, 5, 2);
+    niaVector3<int> vv2 = vv0.add(vv1).mul(2);
+
+    printf("%d, %d, %d\n", vv2.x, vv2.y, vv2.z);
+
+    niaVector4<int> vvv0;
+    niaVector4<int> vvv1(12, 5, 2, 6);
+    niaVector4<int> vvv2 = vvv0.add(vvv1).mul(2);
+
+    printf("%d, %d, %d, %d\n", vvv2.x, vvv2.y, vvv2.z, vvv2.w);
+#endif
 
     niaWindow window;
     window.createWindow(1024, 1024, "no matter");
@@ -36,34 +55,36 @@ int main() {
 
     niaBatchRenderer renderer;
 
+    renderer.pushOrthographicView(0, 1024, 0, 1024, 0, 1000); // TODO make this also default if the call is not done
+
     srand(time(NULL));
     int i = 0;
-    for (float y = -5; y < 5; y += 0.03){
-        for (float x = -5; x < 5; x += 0.03){
+    for (float y = 0; y < 100; y += 1){
+        for (float x = 0; x < 100; x += 1){
             rectangles[i].r = ((double) rand() / (RAND_MAX));
             rectangles[i].g = ((double) rand() / (RAND_MAX));
             rectangles[i].b = ((double) rand() / (RAND_MAX));
 
-            float speed = ((double) rand() / (RAND_MAX)) * 0.005;
+            float speed = ((double) rand() / (RAND_MAX)) * 3;
 
             rectangles[i].vx = rand() % 2 ? speed : -speed;
             rectangles[i].vy = rand() % 2 ? speed : -speed;
 
-            float xx = -1 + 2 * ((float)rand()) / RAND_MAX;
-            float yy = -1 + 2 * ((float)rand()) / RAND_MAX;
+            float xx = x * 12;
+            float yy = y * 12;
 
             rectangles[i].x = xx;
             rectangles[i].y = yy;
 
-            rectangles[i].w = 0.027;
-            rectangles[i].h = 0.027;
+            rectangles[i].w = 20;
+            rectangles[i].h = 20;
 
             ++i;
         }
     }
     
     printf("Quads count: %d\n", i);
-    
+
     niaEvent event;
     while(!window.isClosed()){
         window.handleEvents(event);
@@ -72,19 +93,19 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         int i = 0;
-        for (float y = -5; y < 5; y += 0.03){
-            for (float x = -5; x < 5; x += 0.03){
+        for (float y = 0; y < 100; y += 1){
+            for (float x = 0; x < 100; x += 1){
                 rect *r = &rectangles[i++];
 
-                bool xr = r->x + r->w / 2 >= 1;
-                bool xl = r->x - r->w / 2 <= -1;
+                bool xr = r->x + r->w / 2 >= 1024;
+                bool xl = r->x - r->w / 2 <= 0;
 
                 if (xr || xl){
                    r->vx *= -1;
                 }
 
-                bool yd = r->y - r->h / 2 <= -1;
-                bool yu = r->y + r->h / 2 >= 1;
+                bool yd = r->y - r->h / 2 <= 0;
+                bool yu = r->y + r->h / 2 >= 1024;
 
                 if (yd || yu){
                    r->vy *= -1;

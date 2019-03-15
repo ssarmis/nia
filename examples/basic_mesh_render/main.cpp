@@ -21,12 +21,13 @@ int main() {
     window.enableVsync();
 
     niaRenderer renderer;
+    renderer.pushOrthographicView(0, 1024, 0, 1024, 0, 1000); // TODO make this also default if the call is not done
 
     niaVector3<float>* verts = (niaVector3<float>*)malloc(sizeof(niaVector3<float>) * 4);
     verts[0] = niaVector3<float>(0, 0, 0);
-    verts[1] = niaVector3<float>(1, 1, 0);
-    verts[2] = niaVector3<float>(0, 1, 0);
-    verts[3] = niaVector3<float>(1, 0, 0);
+    verts[1] = niaVector3<float>(500, 500, 0);
+    verts[2] = niaVector3<float>(0, 500, 0);
+    verts[3] = niaVector3<float>(500, 0, 0);
 
     niaVector3<float>* colors = (niaVector3<float>*)malloc(sizeof(niaVector3<float>) * 4);
     colors[0] = niaVector3<float>(1, 1, 1);
