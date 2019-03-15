@@ -37,21 +37,21 @@ NIA_INTERNAL u32 usedRectangles = 0;
 niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
 
 NIA_INTERNAL void setupBatchBuffers(){
-    glGenVertexArrays(1, &batchVao);
-    glBindVertexArray(batchVao);
+    NIA_GL_CALL(glGenVertexArrays(1, &batchVao));
+    NIA_GL_CALL(glBindVertexArray(batchVao));
 
-    glGenBuffers(1, &batchVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, batchVbo);
+    NIA_GL_CALL(glGenBuffers(1, &batchVbo));
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, batchVbo));
 
-    glBufferData(GL_ARRAY_BUFFER, NIA_BATCH_VERTICES_COUNT, 0, GL_DYNAMIC_DRAW);
+    NIA_GL_CALL(glBufferData(GL_ARRAY_BUFFER, NIA_BATCH_VERTICES_COUNT, 0, GL_DYNAMIC_DRAW));
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_VERTEX_STRIDE);
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_COLOR_STRIDE);
+    NIA_GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_VERTEX_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaBasicVertex), (GLvoid*)NIA_COLOR_STRIDE));
     
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
+    NIA_GL_CALL(glEnableVertexAttribArray(0));
+    NIA_GL_CALL(glEnableVertexAttribArray(1));
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
     u32 indicesOffset = 0;
 
@@ -68,14 +68,14 @@ NIA_INTERNAL void setupBatchBuffers(){
         indicesOffset += 4;
     }
 
-    glGenBuffers(1, &batchVeo);
+    NIA_GL_CALL(glGenBuffers(1, &batchVeo));
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(batchIndices), batchIndices, GL_STATIC_DRAW);
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo));
+    NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(batchIndices), batchIndices, GL_STATIC_DRAW));
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-    glBindVertexArray(0);
+    NIA_GL_CALL(glBindVertexArray(0));
 }
 
 NIA_CALL niaBatchRenderer::niaBatchRenderer(){
@@ -136,7 +136,7 @@ NIA_INTERNAL void niaBuildVertex(niaBasicVertex* source, const niaRectangle& rec
 }
 
 NIA_CALL void niaBatchRenderer::executeRender(){
-    glBindBuffer(GL_ARRAY_BUFFER, batchVbo);
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, batchVbo));
     niaBasicVertex* source = (niaBasicVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     
     if(source){
@@ -147,15 +147,15 @@ NIA_CALL void niaBatchRenderer::executeRender(){
     }
 
     nia_memset((u8*)rectangleArray, 0, usedRectangles * sizeof(niaRectangle));
-    glUnmapBuffer(GL_ARRAY_BUFFER);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    NIA_GL_CALL(glUnmapBuffer(GL_ARRAY_BUFFER));
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
-    glBindVertexArray(batchVao);
+    NIA_GL_CALL(glBindVertexArray(batchVao));
     shader.useShader();
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo);
-    glDrawElements(GL_TRIANGLES, batchUsedIndices, GL_UNSIGNED_SHORT, 0);
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, batchUsedIndices, GL_UNSIGNED_SHORT, 0));
     shader.unuseShader();
-    glBindVertexArray(0);
+    NIA_GL_CALL(glBindVertexArray(0));
 
     usedRectangles = 0;
     batchUsedIndices = 0;

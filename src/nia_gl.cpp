@@ -3,6 +3,7 @@
 PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation = NULL;
 PFNGLUNIFORM1DPROC _nia_glUniform1d = NULL;
 PFNGLUNIFORM1FPROC _nia_glUniform1f = NULL;
+PFNGLUNIFORMMATRIX4FVPROC _nia_glUniformMatrix4fv = NULL;
 
 PFNGLBINDBUFFERPROC _nia_glBindBuffer = NULL;
 PFNGLBUFFERDATAPROC _nia_glBufferData = NULL;
@@ -62,6 +63,7 @@ NIA_CALL bool niaInitGL(){
     extensionLoadCheck = ((glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) niaGetProcAddress("glGetUniformLocation")) && extensionLoadCheck);
     extensionLoadCheck = ((glUniform1d = (PFNGLUNIFORM1DPROC) niaGetProcAddress("glUniform1d")) && extensionLoadCheck);
     extensionLoadCheck = ((glUniform1f = (PFNGLUNIFORM1FPROC) niaGetProcAddress("glUniform1f")) && extensionLoadCheck);
+    extensionLoadCheck = ((glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC) niaGetProcAddress("glUniformMatrix4fv")) && extensionLoadCheck);
 
     extensionLoadCheck = ((glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) niaGetProcAddress("glBindVertexArray")) && extensionLoadCheck);
     extensionLoadCheck = ((glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC) niaGetProcAddress("glDisableVertexAttribArray")) && extensionLoadCheck);
