@@ -80,6 +80,7 @@ public:
     NIA_CALL void scale_self(r32 amount);
     NIA_CALL void rotate_self(r32 angle, niaAxis axis);
 
+    static NIA_CALL bool compareMat4(const niaMatrix4& left, const niaMatrix4& right);
     static NIA_CALL niaMatrix4 identity();
     static NIA_CALL niaMatrix4 rotate(r32 angle, niaAxis axis);
     static NIA_CALL niaMatrix4 scale(r32 amount);
