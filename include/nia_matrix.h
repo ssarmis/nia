@@ -56,34 +56,10 @@ NIA_STRUCT niaMat4d {
     };
 } niaMat4d;
 
-
-NIA_CLASS niaMatrix3 {
-public:
-    union {
-        niaMat3f mat;
-        r32 m[MAT_3_SIZE];
-    };
-
-    NIA_CALL niaMatrix3(r32 data = 1);
-    NIA_CALL ~niaMatrix3();
-
-    NIA_CALL niaMatrix3 add(r32 number) const;
-    NIA_CALL niaMatrix3 add(const niaMatrix3& other) const;
-
-    NIA_CALL niaMatrix3 sub(r32 number) const;
-    NIA_CALL niaMatrix3 sub(const niaMatrix3& other) const;
-
-    NIA_CALL niaMatrix3 mul(r32 number) const;
-    NIA_CALL niaMatrix3 mul(const niaMatrix3& other) const;
-
-    static NIA_CALL niaMatrix3 identity();
-};
-
 NIA_CLASS niaMatrix4 {
 public:
     union {
-        niaMat4f mat;
-        r32 m[MAT_4_SIZE];
+        r32 m[MAT_4_SIZE] __attribute__((aligned(16))); // for faster SSE
     };
 
     NIA_CALL niaMatrix4(r32 data = 1);
