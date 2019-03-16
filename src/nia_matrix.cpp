@@ -88,10 +88,10 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
         const __m128 c2 = {other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4]};
         const __m128 c3 = {other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]};
         
-        const __m128 f0 = r0 * c0;
-        const __m128 f1 = r0 * c1;
-        const __m128 f2 = r0 * c2;
-        const __m128 f3 = r0 * c3;
+        const __m128 f0 = _mm_mul_ps(r0, c0);
+        const __m128 f1 = _mm_mul_ps(r0, c1);
+        const __m128 f2 = _mm_mul_ps(r0, c2);
+        const __m128 f3 = _mm_mul_ps(r0, c3);
 
         r32 f00 = f0[0] + f0[1] + f0[2] + f0[3];
         r32 f10 = f1[0] + f1[1] + f1[2] + f1[3];
@@ -249,6 +249,62 @@ NIA_CALL niaMatrix4 niaMatrix4::translate(r32 x, r32 y, r32 z){
     result.m[11] = z;
 
     return result;
+}
+
+NIA_CALL bool niaMatrix4::compareMat4(const niaMatrix4& left, const niaMatrix4& right){
+    for(u8 i = 0; i < MAT_4_SIZE; ++i){
+        if (left.m[i] != right.m[i]){
+            return false;
+        }
+    }
+#if 0
+    __m128 r0 = _mm_load_ps(left.m);
+    __m128 r1 = _mm_load_ps(left.m + 4);
+    __m128 r2 = _mm_load_ps(left.m + 8);
+    __m128 r3 = _mm_load_ps(left.m + 12);
+
+    __m128 o0 = _mm_load_ps(right.m);
+    __m128 o1 = _mm_load_ps(right.m + 4);
+    __m128 o2 = _mm_load_ps(right.m + 8);
+    __m128 o3 = _mm_load_ps(right.m + 12);
+#endif
+
+#if 0
+    __m128i tmp = _mm_cmpeq_epi32((__m128i)r0, (__m128i)o0);
+    result = (tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0) && result;
+    printf("%d\n", result);
+    printf("%ul %ul %ul %ul\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+
+    tmp =_mm_cmpeq_epi32((__m128i)r1, (__m128i)o1);
+    result = (tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0) && result;
+    printf("%d\n", result);
+    printf("%ul %ul %ul %ul\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+
+    tmp =_mm_cmpeq_epi32((__m128i)r2, (__m128i)o2);
+    result = (tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0) && result;
+    printf("%d\n", result);
+    printf("%ul %ul %ul %ul\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+
+    tmp =_mm_cmpeq_epi32((__m128i)r3, (__m128i)o3);
+    result = (tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0) && result;
+    printf("%d\n", result);
+    printf("%ul %ul %ul %ul\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+#endif
+
+#if 0
+    __m128i tmp = _mm_cmpeq_epi32((__m128i)r0, (__m128i)o0);
+    result = ((tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0)) && result;
+
+    tmp = _mm_cmpeq_epi32((__m128i)r1, (__m128i)o1);
+    result = ((tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0)) && result;
+
+    tmp = _mm_cmpeq_epi32((__m128i)r2, (__m128i)o3);
+    result = ((tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0)) && result;
+
+    tmp = _mm_cmpeq_epi32((__m128i)r3, (__m128i)o3);
+    result = ((tmp[0] != 0) && (tmp[1] != 0) && (tmp[2] != 0) && (tmp[3] != 0)) && result;
+#endif
+    return true;
 }
 
 NIA_CALL void niaMatrix4::printMat4(const niaMatrix4& mat) {
