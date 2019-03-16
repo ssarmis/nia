@@ -30,8 +30,9 @@ public:
 
     NIA_CALL void pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far); // future, custom matrix
     NIA_CALL void pushPerspectiveView(r32 fov, r32 aspectRatio, r32 near, r32 far);
-
+    // TODO add texture support for rectangles as well, maybe they will be sprites
     NIA_CALL void renderMesh(const niaMesh& mesh);
+    NIA_CALL void renderMesh(const niaMesh& mesh, const niaTexture& texture);
 
     NIA_CALL void renderSprite(const niaSprite& sprite);
 };

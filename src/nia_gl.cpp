@@ -38,6 +38,12 @@ PFNGLGETSHADERINFOLOGPROC _nia_glGetShaderInfoLog = NULL;
 PFNGLSHADERSOURCEPROC _nia_glShaderSource = NULL;
 PFNGLGETSHADERIVPROC _nia_glGetShaderiv = NULL;
 
+PFNGLGENTEXTURESPROC _nia_glGenTextures = NULL;
+PFNGLBINDTEXTUREPROC _nia_glBindTexture = NULL;
+PFNGLTEXPARAMETERIPROC _nia_glTexParameteri = NULL;
+PFNGLTEXPARAMETERFVPROC _nia_glTexParameterfv = NULL;
+PFNGLGENERATEMIPMAPPROC _nia_glGenerateMipmap = NULL;
+PFNGLTEXIMAGE2DPROC _nia_glTexImage2D = NULL;
 
 #ifdef _WIN32
 NIA_INTERNAL PROC WINAPI niaGetProcAddress(const char* name){
@@ -97,6 +103,13 @@ NIA_CALL bool niaInitGL(){
     extensionLoadCheck = ((glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) niaGetProcAddress("glGetShaderInfoLog")) && extensionLoadCheck);
     extensionLoadCheck = ((glGetShaderiv = (PFNGLGETSHADERIVPROC) niaGetProcAddress("glGetShaderiv")) && extensionLoadCheck);
     extensionLoadCheck = ((glShaderSource = (PFNGLSHADERSOURCEPROC) niaGetProcAddress("glShaderSource")) && extensionLoadCheck);
+
+    extensionLoadCheck = ((glGenTextures = (PFNGLGENTEXTURESPROC) niaGetProcAddress("glGenTextures")) && extensionLoadCheck);
+    extensionLoadCheck = ((glBindTexture = (PFNGLBINDTEXTUREPROC) niaGetProcAddress("glBindTexture")) && extensionLoadCheck);
+    extensionLoadCheck = ((glTexParameteri = (PFNGLTEXPARAMETERIPROC) niaGetProcAddress("glTexParameteri")) && extensionLoadCheck);
+    extensionLoadCheck = ((glTexParameterfv = (PFNGLTEXPARAMETERFVPROC) niaGetProcAddress("glTexParameterfv")) && extensionLoadCheck);
+    extensionLoadCheck = ((glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) niaGetProcAddress("glGenerateMipmap")) && extensionLoadCheck);
+    extensionLoadCheck = ((glTexImage2D = (PFNGLTEXIMAGE2DPROC) niaGetProcAddress("glTexImage2D")) && extensionLoadCheck);
 
     return extensionLoadCheck;
 }

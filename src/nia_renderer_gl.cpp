@@ -27,7 +27,10 @@ u32 rectVao = 0;
 u32 rectVeo = 0;
 u32 rectVbo = 0;
 
+#include "nia_texture_gl.h"
+
 NIA_CALL niaRenderer::niaRenderer(){
+
     NIA_GL_CALL(glGenVertexArrays(1, &rectVao));
     NIA_GL_CALL(glBindVertexArray(rectVao));
 
@@ -109,5 +112,16 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh){
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
     shader.unuseShader();
 }
+
+NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, const niaTexture& texture){
+    NIA_GL_CALL(glBindVertexArray(mesh.vao));
+    shader.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.veo));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+    shader.unuseShader();
+}
+
 
 #endif

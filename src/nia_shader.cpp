@@ -9,21 +9,33 @@ NIA_STATIC char* basicVertexShader = ""
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
 "layout(location = 3) in vec2 uv;\n"
+
 "uniform mat4 mP;\n"
 "uniform mat4 mT;\n"
+
 "out vec4 o_color;\n"
+
+"out vec2 o_uv;\n"
+
 "void main(){\n"
 "   gl_Position = mP * mT * vec4(pos, 1.0);\n"
 "   o_color = vec4(color, 1.0);\n"
+"   o_uv = uv;"
 "}\n"
 "";
 
 NIA_STATIC char* basicFragmentShader = ""
 "#version 440 core\n"
+
 "out vec4 finalColor;\n"
+
 "in vec4 o_color;\n"
+
+"in vec2 o_uv;\n"
+"uniform sampler2D tex;\n"
+
 "void main(){\n"
-"  finalColor = o_color;\n"
+"  finalColor = texture(tex, o_uv) * o_color;\n"
 "}\n"
 "";
 

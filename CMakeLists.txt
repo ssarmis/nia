@@ -16,6 +16,7 @@ if (UNIX)
         ./src/nia_vector.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_texture_gl.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
@@ -32,6 +33,7 @@ if (WIN32)
         ./src/nia_vector.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_texture_gl.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp

@@ -21,7 +21,6 @@ NIA_EXTERN NIA_CALL PFNGLUNIFORM1FPROC _nia_glUniform1f;
 NIA_EXTERN NIA_CALL PFNGLUNIFORMMATRIX4FVPROC _nia_glUniformMatrix4fv;
 #define glUniformMatrix4fv _nia_glUniformMatrix4fv
 
-
 NIA_EXTERN NIA_CALL PFNGLBINDBUFFERPROC _nia_glBindBuffer;
 #define glBindBuffer _nia_glBindBuffer
 NIA_EXTERN NIA_CALL PFNGLBUFFERDATAPROC _nia_glBufferData;
@@ -83,6 +82,20 @@ NIA_EXTERN NIA_CALL PFNGLSHADERSOURCEPROC _nia_glShaderSource;
 #define glShaderSource _nia_glShaderSource
 NIA_EXTERN NIA_CALL PFNGLGETSHADERIVPROC _nia_glGetShaderiv;
 #define glGetShaderiv _nia_glGetShaderiv
+
+NIA_EXTERN NIA_CALL PFNGLGENTEXTURESPROC _nia_glGenTextures;
+#define glGenTextures _nia_glGenTextures
+NIA_EXTERN NIA_CALL PFNGLBINDTEXTUREPROC _nia_glBindTexture;
+#define glBindTexture _nia_glBindTexture
+NIA_EXTERN NIA_CALL PFNGLTEXPARAMETERIPROC _nia_glTexParameteri;
+#define glTexParameteri _nia_glTexParameteri
+NIA_EXTERN NIA_CALL PFNGLTEXPARAMETERFVPROC _nia_glTexParameterfv;
+#define glTexParameterfv _nia_glTexParameterfv
+NIA_EXTERN NIA_CALL PFNGLGENERATEMIPMAPPROC _nia_glGenerateMipmap;
+#define glGenerateMipmap _nia_glGenerateMipmap
+NIA_EXTERN NIA_CALL PFNGLTEXIMAGE2DPROC _nia_glTexImage2D;
+#define glTexImage2D _nia_glTexImage2D
+
 
 #ifdef _WIN32
 NIA_INTERNAL WINGDIAPI PROC WINAPI niaGetProcAddress(const char* name);
