@@ -1,12 +1,13 @@
-EXAMPLES_ROOT	:= ../..
+# TODO add variable to be overriden in makefile with path
+PROJECT_ROOT	?= ../..
 ROOT			:= .
 
 # Used for examples
 CC      		:= g++
 CFLAGS 			:= -Wall -g
-CINCLUDE		:= -I$(EXAMPLES_ROOT)/include
+CINCLUDE		:= -I$(PROJECT_ROOT)/include
 
-LIBSPATH		:= $(EXAMPLES_ROOT)/build
+LIBSPATH		:= $(PROJECT_ROOT)/build
 LIBS 			:= -lnia -lopengl32 -lgdi32
 
 SRCS 			:= $(shell echo *.cpp)
@@ -32,6 +33,7 @@ wrong_run:
 build_lib:
 	@mkdir -p build
 
+# @cmake -Bbuild -H$(ROOT) -G "Visual Studio 15 2017" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 ifeq ($(DEBUG),)
 	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 else
@@ -43,15 +45,15 @@ endif
 run: 
 	@$(MAKE) $(APP)
 
-test:
+test_lib:
 	@make run -C examples/basic_batch_renderer/
 
 $(OBJS): $(SRCS)
 	@$(CC) -c $(SRCS) $(CFLAGS)	$(CINCLUDE)
 
 $(APP): $(OBJS)
-	@$(CC) -o $(EXAMPLES_ROOT)/build/$@ $< $(CFLAGS) $(CINCLUDE) -L$(LIBSPATH) $(LIBS)
-	$(EXAMPLES_ROOT)/build/$@
+	@$(CC) -o $(PROJECT_ROOT)/build/$@ $< $(CFLAGS) $(CINCLUDE) -L$(LIBSPATH) $(LIBS)
+	$(PROJECT_ROOT)/build/$@
 
 clean: 
 	@rm -rf build/
