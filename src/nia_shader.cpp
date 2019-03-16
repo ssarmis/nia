@@ -7,6 +7,8 @@ NIA_STATIC char* basicVertexShader = ""
 "#version 440 core\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
+"layout(location = 2) in vec3 normal;\n"
+"layout(location = 3) in vec2 uv;\n"
 "uniform mat4 mP;\n"
 "uniform mat4 mT;\n"
 "out vec4 o_color;\n"
@@ -45,9 +47,9 @@ NIA_CALL niaShader::niaShader(){
 
 NIA_CALL niaShader::~niaShader(){
     // TODO free source files loaded in memory after using them
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-    glDeleteProgram(program);
+    NIA_GL_CALL(glDeleteShader(vertexShader));
+    NIA_GL_CALL(glDeleteShader(fragmentShader));
+    NIA_GL_CALL(glDeleteProgram(program));
 }
 
 NIA_INTERNAL GLuint niaShader::loadBufferToShader(const char* source, GLenum type){

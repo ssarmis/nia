@@ -2,11 +2,10 @@
 
 #include "nia_renderer_gl.h"
 
-#include "nia_constants.h"
-#include "nia_general.h"
+#include "nia_gl.h"
 #include "nia_vector.h"
 #include "nia_vertex.h"
-#include "nia_gl.h"
+#include "nia_constants.h"
 
 //  0  +---+  3      order to render: 0 1 2   0 3 1
 //     |\  |         so 6 indices per quad
@@ -67,21 +66,21 @@ NIA_CALL void niaRenderer::enableDepthTest(){
 
 NIA_CALL void niaRenderer::pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 n, r32 f){
     shader.useShader();
-    shader.setUniformMat4("mP", niaMatrix4::orthographic(left, right, top, bottom, n, f));
-    shader.setUniformMat4("mT", niaMatrix4::identity());
+    shader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     shader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, r32 f){
     shader.useShader();
-    shader.setUniformMat4("mP", niaMatrix4::perspective(fov, aspectRatio, n, f));
-    shader.setUniformMat4("mT", niaMatrix4::identity());
+    shader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     shader.unuseShader();
 }
 
-NIA_CALL void niaRenderer::submitTransformation(const niaMatrix4& transformation, bool transpose){
+NIA_CALL void niaRenderer::submitTransformation(const niaTransform& transformation, bool transpose){
     shader.useShader();
-    shader.setUniformMat4("mT", transformation, transpose);
+    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
     shader.unuseShader();
 }
 

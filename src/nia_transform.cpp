@@ -17,3 +17,11 @@ NIA_CALL void niaTransform::translate(const niaVector3<r32>& position){
 NIA_CALL void niaTransform::rotate(r32 amount, niaAxis axis){
     transform = transform.mul(niaMatrix4::rotate(amount, axis));
 }
+
+NIA_CALL void niaTransform::clear(){
+    transform = niaMatrix4();
+}
+
+NIA_CALL niaMatrix4 niaTransform::getTransformation() const {
+    return transform;
+}
