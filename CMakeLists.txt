@@ -4,7 +4,11 @@ project(nia VERSION 0.0.0 DESCRIPTION "Nia is a cross platform graphics API")
 
 include(GNUInstallDirs)
 
-add_definitions(-DNIA_LIBRARY_BUILD -DNIA_RENDERER_GL -DGL_GLEXT_PROTOTYPES -DNIA_DEBUG_BUILD -msse2)
+add_definitions(-DNIA_LIBRARY_BUILD -DNIA_RENDERER_GL -DGL_GLEXT_PROTOTYPES -msse2)
+
+if (CMAKE_BUILD_TYPE)
+    add_definitions(-DNIA_DEBUG_BUILD)
+endif(CMAKE_BUILD_TYPE)
 
 if (UNIX)
     add_library(nia SHARED 
