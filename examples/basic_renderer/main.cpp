@@ -12,8 +12,10 @@
 
 int main() {
 
+    float width = 1280.0, height = 768.0;
+
     niaWindow window;
-    window.createWindow(1024, 1024, "no matter");
+    window.createWindow((int)width, (int)height, "no matter");
 
     niaLoadEverything();
 
@@ -23,18 +25,14 @@ int main() {
 
     niaTransform transform;
 
-
-    transform.translate(niaVector3<r32>(400, 400, 0));
-    transform.scale(2);
-    transform.rotate(50, NIA_AXIS_Z);
-
-
-    niaMatrix4::printMat4(transform.transform);
-
 #if 0
-    renderer.pushPerspectiveView(60, 1, 0, 1000);
-#endif
     renderer.pushOrthographicView(0, 1024, 0, 1024, 0, 1000);
+#endif
+    renderer.pushPerspectiveView(90.0, width/height, 0.0, 1000.0);
+
+    float rotation = 0;
+
+    transform.translate(niaVector3<r32>(0, 0, 60));
 
     niaEvent event;
     while(!window.isClosed()){
@@ -42,17 +40,14 @@ int main() {
         glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // TODO think about reseting all transformations at the end of the rendering maybe...
+        r32 colors[] = {0.0, 0.5, 0.2};
 
-        r32 colors[] = {0.0, 0.5, 0.2}; // green
-        renderer.submitTransformation(transform.transform);
+        transform.translate(niaVector3<r32>(50, 75, 60));
+        transform.rotate(0.01, NIA_AXIS_Y);
+        transform.translate(niaVector3<r32>(-50, -75, -60));
 
-
-        renderer.renderRectangle(0, 0, 100, 150, colors);
-#if 0
+        renderer.submitTransformation(transform);
         renderer.renderRectangle(0, 0, 60, 100, 150, colors);
-#endif
-
 
         window.swapBuffers();
     }
