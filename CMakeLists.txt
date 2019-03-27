@@ -12,8 +12,11 @@ endif(CMAKE_BUILD_TYPE)
 
 if (UNIX)
     add_library(nia SHARED 
+        ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/nia_bmp_parser.cpp
+        ./src/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_texture_gl.cpp
@@ -21,6 +24,7 @@ if (UNIX)
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
         ./src/nia_mesh.cpp
+        ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
         ./src/arch/linux/nia_window.cpp
@@ -29,8 +33,11 @@ endif (UNIX)
 
 if (WIN32)
     add_library(nia SHARED 
+        ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/nia_obj_parser.cpp
+        ./src/nia_bmp_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_texture_gl.cpp
@@ -38,6 +45,7 @@ if (WIN32)
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
         ./src/nia_mesh.cpp
+        ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
         ./src/arch/win32/nia_window_gl.cpp)

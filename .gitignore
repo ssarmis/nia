@@ -8,4 +8,6 @@ a
 *.bat
 *.sh
 build/
+config
+docs/
 .vscode
