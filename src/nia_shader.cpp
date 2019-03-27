@@ -10,17 +10,43 @@ NIA_STATIC char* basicVertexShader = ""
 "layout(location = 2) in vec3 normal;\n"
 "layout(location = 3) in vec2 uv;\n"
 
+"uniform vec3 dlP;\n"
+"uniform vec3 dlC;\n"
+
+"uniform vec3 slP;\n"
+"uniform vec3 slC;\n"
+
 "uniform mat4 mP;\n"
 "uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
 
 "out vec4 o_color;\n"
 
 "out vec2 o_uv;\n"
 
+"out vec3 o_dlP;\n"
+"out vec3 o_dlC;\n"
+"out vec3 o_slP;\n"
+"out vec3 o_slC;\n"
+
+"out float o_lightFactor;\n"
+
 "void main(){\n"
-"   gl_Position = mP * mT * vec4(pos, 1.0);\n"
+"   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
+"   gl_Position = mP * mV * transformedPosition;\n"
 "   o_color = vec4(color, 1.0);\n"
-"   o_uv = uv;"
+"   o_uv = uv;\n"
+"   o_dlP = dlP;\n"
+"   o_dlC = dlC;\n"
+"   o_slP = slP;\n"
+"   o_slC = slC;\n"
+
+"   vec3 lightVector = (transformedPosition.xyz - dlP);\n"
+"   lightVector = normalize(lightVector);\n"
+"   vec3 transformedNormal = (transformedPosition.xyz * normal);\n"
+"   transformedNormal = normalize(transformedNormal);\n"
+"   o_lightFactor = dot(lightVector, transformedNormal);\n"
+
 "}\n"
 "";
 
@@ -32,10 +58,18 @@ NIA_STATIC char* basicFragmentShader = ""
 "in vec4 o_color;\n"
 
 "in vec2 o_uv;\n"
+
+"in vec3 o_dlP;\n"
+"in vec3 o_dlC;\n"
+"in vec3 o_slP;\n"
+"in vec3 o_slC;\n"
+"in float o_lightFactor;\n"
+
 "uniform sampler2D tex;\n"
 
 "void main(){\n"
-"  finalColor = texture(tex, o_uv) * o_color;\n"
+"   float finalDiffuseFactor = max(o_lightFactor, 0.3);\n"
+"   finalColor = finalDiffuseFactor * texture(tex, o_uv) * o_color;\n"
 "}\n"
 "";
 
@@ -151,6 +185,11 @@ NIA_CALL void niaShader::unuseShader(){
 }
 
 NIA_CALL void niaShader::setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose){
-    GLint id = glGetUniformLocation(program, name);
+    GLint id = glGetUniformLocation(program, name); // cache these
     NIA_GL_CALL(glUniformMatrix4fv(id, 1, transpose, mat.m));
+}
+
+NIA_CALL void niaShader::setUniformVec3(const char* name, const niaVector3<r32>& vec){
+    GLint id = glGetUniformLocation(program, name);
+    NIA_GL_CALL(glUniform3f(id, vec.x, vec.y, vec.z));
 }
