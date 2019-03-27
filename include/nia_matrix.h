@@ -2,6 +2,7 @@
 #define _NIA_MATRIX_H_
 
 #include "nia_general.h"
+#include "nia_vector.h"
 
 #define MAT_3_SIZE 9 // 3 * 3
 #define MAT_4_SIZE 16 // 3 * 3
@@ -87,6 +88,7 @@ public:
     static NIA_CALL niaMatrix4 translate(r32 x, r32 y, r32 z);
     static NIA_CALL niaMatrix4 orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far);
     static NIA_CALL niaMatrix4 perspective(r32 fov, r32 aspectRatio, r32 near, r32 far);
+    static NIA_CALL niaMatrix4 lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up);
 
     static NIA_CALL void printMat4(const niaMatrix4& mat);
 };

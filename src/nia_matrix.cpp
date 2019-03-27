@@ -4,6 +4,8 @@
 
 #include <xmmintrin.h>
 
+#include "nia_constants.h"
+
 // mat 4
 NIA_CALL niaMatrix4::niaMatrix4(r32 data){
     // nia_memset((u8*)m, 0, MAT_4_SIZE * sizeof(r32));
@@ -150,13 +152,31 @@ NIA_CALL niaMatrix4 niaMatrix4::rotate(r32 angle, niaAxis axis){
 
 NIA_CALL niaMatrix4 niaMatrix4::perspective(r32 fov, r32 aspectRatio, r32 near, r32 far){
     niaMatrix4 result(0.0);
-    result.m[0] = nia_cot(fov / 2) / aspectRatio;
-    result.m[5] = nia_cot(fov / 2);
+
+    r32 fovRad = fov * 180.0 / NIA_PI;
+
+    result.m[0] = nia_cot(fovRad / 2.0) / aspectRatio;
+    result.m[5] = nia_cot(fovRad / 2.0);
     
-    result.m[10] = far / (far - near);
-    result.m[11] = - ((far * near) / (far - near));
+    result.m[10] = (far + near) / (far - near);
+    result.m[11] = - ((2 * far * near) / (far - near));
 
     result.m[14] = 1;
+
+    // float d2r = NIA_PI / 180.0;
+    // float ys = 1.0 / tanf(d2r * fov / 2);
+    // float xs = ys / aspectRatio;
+    // result.m[0 + 0 * 4] = xs;
+    // result.m[1 + 1 * 4] = ys;
+    // result.m[2 + 2 * 4] = (far + near) / (near - far);
+    // result.m[3 + 2 * 4] = 1;
+    // result.m[2 + 3 * 4] = (2 * far * near) / (near - far);
+
+    // result.m[0 + 0 * 4] = 1.0 / (aspectRatio * tanf(((fov / 2.0) * 180 / NIA_PI)));
+    // result.m[1 + 1 * 4] = 1.0 / tanf(((fov / 2.0) * 180 / NIA_PI));
+    // result.m[2 + 2 * 4] = (-(near - far)) / (near - far);
+    // result.m[3 + 2 * 4] = (2.0 * near * far) / (near - far);
+    // result.m[2 + 3 * 4] = 1.0;
 
     return result;
 }
@@ -314,4 +334,32 @@ NIA_CALL void niaMatrix4::printMat4(const niaMatrix4& mat) {
         }
         printf("\n");
     }
+}
+
+NIA_CALL niaMatrix4 niaMatrix4::lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up){
+    niaMatrix4 result(0.0);
+
+    niaVector3<r32> zx = position.sub(target).normal();
+    niaVector3<r32> xx = up.cross(zx).normal();
+    niaVector3<r32> yx = zx.cross(xx);
+
+    result.m[0] = xx.x;
+    result.m[4] = xx.y;
+    result.m[8] = xx.z;
+
+    result.m[1] = yx.x;
+    result.m[5] = yx.y;
+    result.m[9] = yx.z;
+
+    result.m[2] = zx.x;
+    result.m[6] = zx.y;
+    result.m[10] = zx.z;
+
+    result.m[12] = -niaVector3<r32>::dot(xx, position);
+    result.m[13] = -niaVector3<r32>::dot(yx, position);
+    result.m[14] = -niaVector3<r32>::dot(zx, position);
+
+    result.m[15] = 1.0;
+
+    return result;
 }
