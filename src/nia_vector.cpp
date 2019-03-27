@@ -9,6 +9,11 @@ x(x), y(y){
 }
 
 template<typename T>
+NIA_CALL niaVector2<T>::niaVector2(const T* data):
+x(data[0]), y(data[1]){
+}
+
+template<typename T>
 NIA_CALL niaVector2<T>::~niaVector2(){
 }
 
@@ -51,6 +56,11 @@ x(x), y(y), z(z){
 }
 
 template<typename T>
+NIA_CALL niaVector3<T>::niaVector3(const T* data):
+x(data[0]), y(data[1]), z(data[2]){
+}
+
+template<typename T>
 NIA_CALL niaVector3<T>::~niaVector3(){
 }
 
@@ -82,6 +92,54 @@ NIA_CALL niaVector3<T> niaVector3<T>::mul(const niaVector3& other) const{
 template<typename T>
 NIA_CALL niaVector3<T> niaVector3<T>::mul(const T& t) const{
     return niaVector3<T>(x * t, y * t, z * t);
+}
+
+template<typename T>
+NIA_CALL niaVector3<T> niaVector3<T>::normal() {
+    r32 length = sqrtf(x * x + y * y + z * z);
+    if(!length){
+        length = 1;
+    }
+    return niaVector3<T>(x / length, y / length, z / length);
+}
+
+template<typename T>
+NIA_CALL niaVector3<T> niaVector3<T>::cross(const niaVector3& other) const {
+    niaVector3<T> result;
+    result.x = y * other.z - z * other.y;
+    result.y = z * other.x - x * other.z;
+    result.z = x * other.y - y * other.x;
+    return result;
+}
+
+template<typename T>
+NIA_CALL r32 niaVector3<T>::dot(const niaVector3& other) const{
+    r32 leftMagnitute = sqrtf(x * x + y * y + z * z);
+    r32 otherMagnitute = sqrtf(other.x * other.x + other.y * other.y + other.z * other.z);
+
+    if(!leftMagnitute){
+        leftMagnitute = 1;
+    }
+
+    if(!otherMagnitute){
+        otherMagnitute = 1;
+    }
+
+    r32 product = x * other.x + y * other.y + z * other.z;
+    
+    r32 cosAngle = product / (leftMagnitute * otherMagnitute);
+
+    return leftMagnitute * otherMagnitute * cosAngle;
+}
+
+template<typename T>
+NIA_CALL r32 niaVector3<T>::dot(const niaVector3& left, const niaVector3& right) {
+    return left.dot(right);
+}
+
+template<typename T>
+NIA_CALL bool niaVector3<T>::operator==(const niaVector3& other) const {
+    return (x == other.x && y == other.y && z == other.z);
 }
 
 // vector 4

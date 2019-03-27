@@ -85,10 +85,16 @@ NIA_STRUCT niaVec3d {
 template <typename T>
 NIA_CLASS niaVector2 {
 public:
-    T x;
-    T y;
-
+    union {
+        T data[2];
+        struct {
+            T x;
+            T y;
+        };
+    };
+    
     NIA_CALL niaVector2(const T& x = 0, const T& y = 0);
+    NIA_CALL niaVector2(const T* data);
     NIA_CALL ~niaVector2();
 
     NIA_CALL niaVector2 add(const niaVector2& other) const;
@@ -104,11 +110,17 @@ public:
 template <typename T>
 NIA_CLASS niaVector3 {
 public:
-    T x;
-    T y;
-    T z;
+    union {
+        T data[3];
+        struct {
+            T x;
+            T y;
+            T z;
+        };
+    };
 
     NIA_CALL niaVector3(const T& x = 0, const T& y = 0, const T& z = 0);
+    NIA_CALL niaVector3(const T* data);
     NIA_CALL ~niaVector3();
 
     NIA_CALL niaVector3 add(const niaVector3& other) const;
@@ -119,6 +131,14 @@ public:
     
     NIA_CALL niaVector3 mul(const niaVector3& other) const;
     NIA_CALL niaVector3 mul(const T& t) const;
+
+    NIA_CALL niaVector3 normal();
+    NIA_CALL r32 dot(const niaVector3& other) const;
+
+    NIA_CALL niaVector3 cross(const niaVector3& other) const;
+    static NIA_CALL r32 dot(const niaVector3& left, const niaVector3& right);
+
+    NIA_CALL bool operator==(const niaVector3& other) const;
 };
 
 template <typename T>
