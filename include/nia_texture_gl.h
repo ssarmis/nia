@@ -7,11 +7,12 @@
 NIA_CLASS niaTexture {
 private:
 
-    NIA_INTERNAL void allocateTexture(u32 width, u32 height, r32* data);
+    NIA_INTERNAL void allocateTexture(u32 width, u32 height, u8* data);
 
 public:
     GLuint textureId;
     NIA_CALL niaTexture();
+    NIA_CALL niaTexture(const char* filename);
     NIA_CALL ~niaTexture();
 };
 

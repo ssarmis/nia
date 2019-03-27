@@ -68,23 +68,31 @@ NIA_CALL void niaRenderer::enableDepthTest(){
 }
 
 NIA_CALL void niaRenderer::pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 n, r32 f){
-    shader.useShader();
-    shader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
-    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
-    shader.unuseShader();
+    defaultShader.useShader();
+    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, r32 f){
-    shader.useShader();
-    shader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
-    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
-    shader.unuseShader();
+    defaultShader.useShader();
+    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::submitTransformation(const niaTransform& transformation, bool transpose){
-    shader.useShader();
-    shader.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
-    shader.unuseShader();
+    defaultShader.useShader();
+    defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
+    defaultShader.unuseShader();
+}
+
+NIA_CALL void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
+    defaultShader.useShader();
+    defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
+    defaultShader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
@@ -99,29 +107,32 @@ NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 color
 NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){
     createAndBufferVertexies(x, y, z, w, h, colors);
     NIA_GL_CALL(glBindVertexArray(rectVao));
-    shader.useShader();
+    defaultShader.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
-    shader.unuseShader();
+    defaultShader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh){
-    NIA_GL_CALL(glBindVertexArray(mesh.vao));
-    shader.useShader();
-    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.veo));
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    defaultShader.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+    
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
-    shader.unuseShader();
+    defaultShader.unuseShader();
 }
 
 NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, const niaTexture& texture){
-    NIA_GL_CALL(glBindVertexArray(mesh.vao));
-    shader.useShader();
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    defaultShader.useShader();
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.textureId));
 
-    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.veo));
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
-    shader.unuseShader();
+    defaultShader.unuseShader();
 }
-
 
 #endif
