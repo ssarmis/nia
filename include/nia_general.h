@@ -15,6 +15,7 @@
 #define NIA_TRACE(...) 
 #endif
 
+
 #define NIA_ERROR(...) fprintf(stderr, __VA_ARGS__)
 
 
@@ -66,7 +67,7 @@ typedef float r32;
 typedef double r64;
 
 NIA_INLINE r64 nia_cot(r64 angle){
-  return (1.0 / tan(angle));
+  return (1.0 / tanf(angle));
 }
 
 NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
