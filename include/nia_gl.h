@@ -12,6 +12,19 @@
 #   include <nia_xgl.h>
 #endif
 
+NIA_EXTERN NIA_CALL PFNGLGENFRAMEBUFFERSPROC _nia_glGenFramebuffers;
+#define glGenFramebuffers _nia_glGenFramebuffers
+NIA_EXTERN NIA_CALL PFNGLBINDFRAMEBUFFERPROC _nia_glBindFramebuffer;
+#define glBindFramebuffer _nia_glBindFramebuffer
+NIA_EXTERN NIA_CALL PFNGLFRAMEBUFFERTEXTUREPROC _nia_glFramebufferTexture;
+#define glFramebufferTexture _nia_glFramebufferTexture
+NIA_EXTERN NIA_CALL PFNGLDELETEBUFFERSPROC _nia_glDeleteFramebuffers;
+#define glDeleteFramebuffers _nia_glDeleteFramebuffers
+NIA_EXTERN NIA_CALL PFNGLCHECKFRAMEBUFFERSTATUSPROC _nia_glCheckFramebufferStatus;
+#define glCheckFramebufferStatus _nia_glCheckFramebufferStatus
+NIA_EXTERN NIA_CALL PFNGLDRAWBUFFERPROC _nia_glDrawBuffers;
+#define glDrawBuffers _nia_glDrawBuffers
+
 NIA_EXTERN NIA_CALL PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation;
 #define glGetUniformLocation _nia_glGetUniformLocation
 NIA_EXTERN NIA_CALL PFNGLUNIFORM1DPROC _nia_glUniform1d;

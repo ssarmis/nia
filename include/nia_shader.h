@@ -8,7 +8,7 @@
 #include "nia_matrix.h"
 
 NIA_CLASS niaShader {
-private:
+protected:
     GLuint vertexShader; 
     GLuint fragmentShader;
     GLuint program;

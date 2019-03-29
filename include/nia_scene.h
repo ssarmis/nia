@@ -16,6 +16,7 @@
 #include "nia_shader.h"
 #include "nia_renderer.h"
 #include "nia_constants.h"
+#include "nia_cube_texture.h"
 
 NIA_CLASS niaScene {
 protected:
@@ -26,6 +27,10 @@ protected:
     niaVector3<r32> specularLightColor;
 
     niaMatrix4 view;
+
+    niaCubeTexture cubeTexture;
+
+    NIA_CALL void setSkyBoxTextures(const char* textures[6]);
 
     NIA_CALL void setAttributeVec2(u32 attribute, const niaVector2<r32>& vector);
     NIA_CALL void setAttributeVec3(u32 attribute, const niaVector3<r32>& vector);

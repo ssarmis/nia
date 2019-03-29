@@ -66,7 +66,7 @@ int main() {
     niaTransform meshTransform;
     niaEvent event;
 
-    meshTransform.translate(niaVector3<float>(-2.5, -2.5, 5));
+    meshTransform.translate(niaVector3<float>(-2.5, -2.5, 10));
 
     while(!window.isClosed()){
         window.handleEvents(event);
@@ -74,7 +74,7 @@ int main() {
         glClearColor(0.0, 0.0, 0.0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        meshTransform.translate(niaVector3<float>(0, 0, 0.01));
+        meshTransform.translate(niaVector3<float>(0, 0, 0.08));
 
         renderer.submitTransformation(meshTransform);
 

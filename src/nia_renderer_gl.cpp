@@ -30,8 +30,9 @@ u32 rectVbo = 0;
 #include "nia_texture_gl.h"
 
 NIA_CALL niaRenderer::niaRenderer(){
-
-    NIA_GL_CALL(glGenVertexArrays(1, &rectVao));
+    cubeMesh = niaMesh::cube(1024);
+    
+    NIA_GL_CALL(glGenVertexArrays(1, &rectVao)); // put this inside niaMesh
     NIA_GL_CALL(glBindVertexArray(rectVao));
 
     NIA_GL_CALL(glGenBuffers(1, &rectVbo));
@@ -81,18 +82,38 @@ NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, 
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShader.unuseShader();
+
+    defaultShaderCubeMap.useShader();
+    defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderCubeMap.unuseShader();
+
+    defaultShaderReflective.useShader();
+    defaultShaderReflective.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderReflective.unuseShader();
 }
 
 NIA_CALL void niaRenderer::submitTransformation(const niaTransform& transformation, bool transpose){
     defaultShader.useShader();
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
     defaultShader.unuseShader();
+
+    defaultShaderReflective.useShader();
+    defaultShaderReflective.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
+    defaultShaderReflective.unuseShader();
 }
 
 NIA_CALL void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
     defaultShader.useShader();
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
     defaultShader.unuseShader();
+
+    defaultShaderCubeMap.useShader();
+    defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
+    defaultShaderCubeMap.unuseShader();
+
+    defaultShaderReflective.useShader();
+    defaultShaderReflective.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
+    defaultShaderReflective.unuseShader();
 }
 
 NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
@@ -104,7 +125,7 @@ NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 color
     renderRectangle(x, y, 0, w, h, colors);
 }
 
-NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){
+NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){ // TODO add unbinding for vaos
     createAndBufferVertexies(x, y, z, w, h, colors);
     NIA_GL_CALL(glBindVertexArray(rectVao));
     defaultShader.useShader();
@@ -133,6 +154,28 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, const niaTexture& tex
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
     defaultShader.unuseShader();
+}
+
+NIA_CALL void niaRenderer::renderSkyBox(const niaCubeTexture& texture){
+    NIA_GL_CALL(glDepthFunc(GL_LEQUAL));
+    NIA_GL_CALL(glBindVertexArray(cubeMesh.vao.id));
+    defaultShaderCubeMap.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, texture.textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeMesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, cubeMesh.verts, GL_UNSIGNED_SHORT, 0));
+    defaultShaderCubeMap.unuseShader();
+    NIA_GL_CALL(glDepthFunc(GL_LESS));
+}
+
+NIA_CALL void niaRenderer::renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture){ // TODO make the cubeTexture not needed
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    defaultShaderReflective.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, texture.textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+    defaultShaderReflective.unuseShader();
 }
 
 #endif

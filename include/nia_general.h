@@ -38,7 +38,7 @@ static char* GL_ERRORS[] = {
 
 #define NIA_PARSE_GL_ERROR(_code){\
     if (_code) {\
-        printf("%s:%d %s \n", __FILE__, __LINE__, GL_ERRORS[_code & 9]);\
+        NIA_TRACE("%s:%d %s \n", __FILE__, __LINE__, GL_ERRORS[_code & 9]);\
     }\
 }
 

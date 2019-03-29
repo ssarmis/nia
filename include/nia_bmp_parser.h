@@ -3,7 +3,6 @@
 
 #include "nia_general.h"
 
-
 #define NIA_BMP_1_BIT 1
 #define NIA_BMP_4_BIT 4
 #define NIA_BMP_8_BIT 8

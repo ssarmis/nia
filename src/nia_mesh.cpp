@@ -51,6 +51,18 @@ NIA_CALL niaMesh::niaMesh(const char* filename){
     // 2 -> 0.306641 0.500000
     // 3 -> 0.000000 0.000000 0.000000
 
+    if(!parser.getUVS().getSize()){
+        parser.getUVS().add(niaVector2<r32>(0, 0));
+    }
+
+    if(!parser.getVertexies().getSize()){
+        parser.getVertexies().add(niaVector3<r32>(0.0, 0.0, 0.0));
+    }
+
+    if(!parser.getFaces().getSize()){
+        parser.getFaces().add(niaVector3<u32>(0, 0, 0));
+    }
+
     for(int index = 0; index < parser.getFaces().getSize(); ++index){
         u32 vert = parser.getFaces()[index].data[0];
         u32 tex = parser.getFaces()[index].data[1];
@@ -158,4 +170,91 @@ NIA_CALL niaMesh::niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaV
     NIA_GL_CALL(glBindVertexArray(0));
 
     verts = indicesAmount;
+}
+
+NIA_CALL niaMesh niaMesh::cube(u32 size){
+    niaMesh result;
+
+    r32 vertexies[] = {
+        1.000000 * size, -1.000000 * size, -1.000000 * size,
+        1.000000 * size, -1.000000 * size, 1.000000 * size,
+        -1.000000 * size, -1.000000 * size, 1.000000 * size,
+        -1.000000 * size, -1.000000 * size, -1.000000 * size,
+        1.000000 * size, 1.000000 * size, -0.999999 * size,
+        0.999999 * size, 1.000000 * size, 1.000001 * size,
+        -1.000000 * size, 1.000000 * size, 1.000000 * size,
+        -1.000000 * size, 1.000000 * size, -1.000000 * size,
+    };
+
+    NIA_GL_CALL(glGenVertexArrays(1, &result.vao.id));
+    NIA_GL_CALL(glBindVertexArray(result.vao.id));
+
+    NIA_GL_CALL(glGenBuffers(1, &result.vao.vboId));
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, result.vao.vboId));
+
+    NIA_GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(niaVertex) * 36, 0, GL_STATIC_DRAW));
+    
+    NIA_GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_VERTEX_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_COLOR_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_NORMALS_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(3, 2, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_UV_STRIDE));
+    
+    NIA_GL_CALL(glEnableVertexAttribArray(0));
+    NIA_GL_CALL(glEnableVertexAttribArray(1));
+    NIA_GL_CALL(glEnableVertexAttribArray(2));
+    NIA_GL_CALL(glEnableVertexAttribArray(3));
+
+    u32 index = 0;
+    u32 offset = 0;
+    while(index <= 36 - 1){
+        // TODO get rid of the unneeded copy in the struct, unwrap it in subbuffers
+        niaVertex v = {
+            vertexies[offset + 0],
+            vertexies[offset + 1],
+            vertexies[offset + 2],
+
+            1,
+            1,
+            1,
+
+            1,
+            1,
+            1,
+
+            1,
+            1,
+        };
+
+        NIA_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(niaVertex), sizeof(niaVertex), &v));
+        
+        index++;
+        offset += 3;
+    }
+
+    u16 indices[] = {
+        2-1, 4-1, 1-1,
+        8-1, 6-1, 5-1,
+        5-1, 2-1, 1-1,
+        6-1, 3-1, 2-1,
+        3-1, 8-1, 4-1,
+        1-1, 8-1, 5-1,
+        2-1, 3-1, 4-1,
+        8-1, 7-1, 6-1,
+        5-1, 6-1, 2-1,
+        6-1, 7-1, 3-1,
+        3-1, 7-1, 8-1,
+        1-1, 4-1, 8-1
+    };
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result.vao.veoId));
+    NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * 36, indices, GL_STATIC_DRAW));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    NIA_GL_CALL(glBindVertexArray(0));
+
+    result.verts = 36;
+
+    return result;
 }

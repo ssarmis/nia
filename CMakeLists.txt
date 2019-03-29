@@ -6,9 +6,9 @@ include(GNUInstallDirs)
 
 add_definitions(-DNIA_LIBRARY_BUILD -DNIA_RENDERER_GL -DGL_GLEXT_PROTOTYPES -msse2)
 
-if (CMAKE_BUILD_TYPE)
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_definitions(-DNIA_DEBUG_BUILD)
-endif(CMAKE_BUILD_TYPE)
+endif(CMAKE_BUILD_TYPE MATCHES "Debug")
 
 if (UNIX)
     add_library(nia SHARED 
@@ -16,9 +16,13 @@ if (UNIX)
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
         ./src/nia_bmp_parser.cpp
+        ./src/nia_tga_parser.cpp
         ./src/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_shader_cubemap.cpp
+        ./src/nia_shader_reflective.cpp
+        ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
@@ -38,8 +42,12 @@ if (WIN32)
         ./src/nia_vector.cpp
         ./src/nia_obj_parser.cpp
         ./src/nia_bmp_parser.cpp
+        ./src/nia_tga_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_shader_cubemap.cpp
+        ./src/nia_shader_reflective.cpp
+        ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp

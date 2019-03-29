@@ -7,7 +7,7 @@ NIA_CALL niaBmpParser::niaBmpParser(const char* filename){
     decodeFile();
 }
 
-NIA_CALL niaBmpParser::~niaBmpParser(){
+NIA_CALL niaBmpParser::~niaBmpParser(){ // TODO free buffers
 }
 
 NIA_CALL void niaBmpParser::loadFile(const char* filename){
@@ -46,11 +46,12 @@ NIA_CALL void niaBmpParser::decodeFile(){
     switch(bmpData.imageHeader.bitCount){
         case NIA_BMP_24_BIT:{
                 bmpData.pixelData = source;
+                // TODO make this work even if outise scope of object... e.g. not loading the niaTexture in the same scope as where this object was created ma leave to problems if source is freed
             }
             break;
 
         default :{
-                printf("Bit cound unsupported: %d\n", bmpData.imageHeader.bitCount);
+                printf("Bit count unsupported: %d\n", bmpData.imageHeader.bitCount);
             }
             break;
     }

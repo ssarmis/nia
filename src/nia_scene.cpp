@@ -40,7 +40,6 @@ NIA_CALL void niaScene::setAttributeVec3(u32 attribute, const niaVector3<r32>& v
 NIA_CALL void niaScene::setAttributeMat4(u32 attribute, const niaMatrix4& matrix){
     switch(attribute){
         case NIA_VIEW :{
-                view = matrix;
             };
             break;
 
@@ -48,6 +47,10 @@ NIA_CALL void niaScene::setAttributeMat4(u32 attribute, const niaMatrix4& matrix
             };
             break;
     }
+}
+
+NIA_CALL void niaScene::setSkyBoxTextures(const char* textures[]){
+    cubeTexture = niaCubeTexture(textures);
 }
 
 NIA_CALL niaScene::niaScene(){
@@ -59,10 +62,6 @@ NIA_CALL niaScene::~niaScene(){
 }
 
 NIA_CALL void niaScene::bind(niaRenderer* renderer){
-    // niaMatrix4::printMat4(view);
-
-    renderer->submitView(view);
-
     renderer->defaultShader.useShader();
 
     renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, diffuseLightPosition);
@@ -70,6 +69,10 @@ NIA_CALL void niaScene::bind(niaRenderer* renderer){
 
     renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, specularLightPosition);
     renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, specularLightColor);
+    
+    renderer->defaultShader.unuseShader();
+
+    renderer->renderSkyBox(cubeTexture);
 }
 
 // NIA_CALL void niaScene::updateView(niaRenderer* renderer){
@@ -77,5 +80,5 @@ NIA_CALL void niaScene::bind(niaRenderer* renderer){
 // }
 
 NIA_CALL void niaScene::unbind(niaRenderer* renderer){
-    renderer->defaultShader.unuseShader();
+    // renderer->defaultShader.unuseShader();
 }

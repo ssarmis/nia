@@ -11,11 +11,21 @@
 #include "nia_matrix.h"
 #include "nia_general.h"
 #include "nia_transform.h"
+#include "nia_cube_texture.h"
+#include "nia_shader_cubemap.h"
+#include "nia_shader_reflective.h"
 
 NIA_CLASS niaRenderer {
 protected:
+    niaMesh cubeMesh;
+
     niaShader defaultShader;
+    niaShaderCubeMap defaultShaderCubeMap;
+
+    niaShaderReflective defaultShaderReflective;
+
     niaTexture defaultTexture;
+    niaCubeTexture defaultCubeTexture;
 
 public:
     NIA_CALL niaRenderer();
@@ -33,9 +43,11 @@ public:
     NIA_CALL void pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far); // future, custom matrix
     NIA_CALL void pushPerspectiveView(r32 fov, r32 aspectRatio, r32 near, r32 far);
     // TODO add texture support for rectangles as well, maybe they will be sprites
+    NIA_CALL void renderSkyBox(const niaCubeTexture& texture);
     NIA_CALL void renderMesh(const niaMesh& mesh);
     NIA_CALL void renderMesh(const niaMesh& mesh, const niaTexture& texture);
-
+    NIA_CALL void renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
+    
     NIA_CALL void renderSprite(const niaSprite& sprite);
     
     friend class niaScene;

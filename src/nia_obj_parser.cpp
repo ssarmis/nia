@@ -89,7 +89,7 @@ NIA_CALL niaObjParser::niaObjParser(const char* filename){
     fileSize = 0;
     source = NULL;
 
-    FILE* file = fopen(filename, "rb");
+    FILE* file = fopen(filename, "rb"); // TODO CONSIDER MMAP FOR LARGE FILES, THIS WILL SPEED UP THE COPYING QUITE A LOT
 
     if (!file){
         NIA_ERROR("Could not open file, returning.\n");

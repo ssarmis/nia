@@ -1,5 +1,12 @@
 #include "nia_gl.h"
 
+PFNGLGENFRAMEBUFFERSPROC _nia_glGenFramebuffers = NULL;
+PFNGLBINDFRAMEBUFFERPROC _nia_glBindFramebuffer = NULL;
+PFNGLFRAMEBUFFERTEXTUREPROC _nia_glFramebufferTexture = NULL;
+PFNGLDELETEBUFFERSPROC _nia_glDeleteFramebuffers = NULL;
+PFNGLCHECKFRAMEBUFFERSTATUSPROC _nia_glCheckFramebufferStatus = NULL;
+PFNGLDRAWBUFFERPROC _nia_glDrawBuffers = NULL;
+
 PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation = NULL;
 PFNGLUNIFORM1DPROC _nia_glUniform1d = NULL;
 PFNGLUNIFORM1FPROC _nia_glUniform1f = NULL;
@@ -66,6 +73,13 @@ void* niaGetProcAddress(const char* name){
 
 NIA_CALL bool niaInitGL(){
     bool extensionLoadCheck = true; 
+
+    extensionLoadCheck = ((glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) niaGetProcAddress("glGenFramebuffers")) && extensionLoadCheck);
+    extensionLoadCheck = ((glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) niaGetProcAddress("glBindFramebuffer")) && extensionLoadCheck);
+    extensionLoadCheck = ((glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC) niaGetProcAddress("glFramebufferTexture")) && extensionLoadCheck);
+    extensionLoadCheck = ((glDeleteFramebuffers = (PFNGLDELETEBUFFERSPROC) niaGetProcAddress("glDeleteFramebuffers")) && extensionLoadCheck);
+    extensionLoadCheck = ((glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) niaGetProcAddress("glCheckFramebufferStatus")) && extensionLoadCheck);
+    extensionLoadCheck = ((glDrawBuffers = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffers")) && extensionLoadCheck);
 
     extensionLoadCheck = ((glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) niaGetProcAddress("glGetUniformLocation")) && extensionLoadCheck);
     extensionLoadCheck = ((glUniform1d = (PFNGLUNIFORM1DPROC) niaGetProcAddress("glUniform1d")) && extensionLoadCheck);

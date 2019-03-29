@@ -1,12 +1,33 @@
 #include "nia_texture_gl.h"
 
 #include "nia_bmp_parser.h"
+#include "nia_tga_parser.h"
 
 NIA_CALL niaTexture::niaTexture(const char* filename){
     // for now I will assume there will only be .bmp files
     // TODO add extension cheking, header checking, more file formats forsers
-    niaBmpParser parser(filename);
-    allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData());
+    const char* tmp = filename;
+    while(*tmp){
+        if(*tmp++ == '.'){
+            switch (*tmp) {
+                case 't':{
+                        niaTgaParser parser(filename);
+                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData());
+                    }
+                    break;
+
+                case 'b':{
+                        niaBmpParser parser(filename);
+                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData());
+                    }
+                    break;
+
+                default:{
+                    }
+                    break;
+            }
+        }
+    }
 }
 
 NIA_CALL niaTexture::niaTexture(){
