@@ -6,6 +6,10 @@
 #include "nia_constants.h"
 #include "nia_tga_parser.h"
 #include "nia_shader_cubemap.h"
+#include "nia_shader_quad.h"
+
+#include "nia_frame_buffer.h"
+#include "nia_post_processing_pipeline.h"
 
 #include <malloc.h>
 #include <GL/glext.h>
@@ -16,6 +20,34 @@ int main(){
 
     niaLoadEverything();
 
+    // typedef struct abc {
+    //     niaFilterShader* filterBlur;
+    //     niaFilterShader* filterGreyScale;
+    // } abc_t;
+
+    // void* tmp = malloc(sizeof(abc_t) + sizeof(niaFilterShader) * 2);
+    // abc_t* a = (abc_t*)tmp;
+    // a->filterBlur = (niaFilterShader*)(a + sizeof(abc_t));
+    // a->filterGreyScale = (niaFilterShader*)(a + sizeof(abc_t) + sizeof(niaFilterShader));
+
+    // a->filterBlur->a = 666; // use this shit
+    // a->filterBlur->b = 777;
+    // a->filterBlur->c = 888;
+
+    // a->filterGreyScale->a = 111;
+    // a->filterGreyScale->b = 222;
+    // a->filterGreyScale->c = 333;
+
+    // printf("%d %d %d\n", a->filterBlur->a,
+    //                     a->filterBlur->b,
+    //                     a->filterBlur->c
+    // );
+
+    // printf("%d %d %d\n", a->filterGreyScale->a,
+    //                     a->filterGreyScale->b,
+    //                     a->filterGreyScale->c
+    // );
+    
     window.enableVsync();
 
     niaRenderer renderer;
@@ -42,7 +74,7 @@ int main(){
         
     public:
         myScene(){
-            mesh1 = niaMesh("shpere.obj");
+            mesh1 = niaMesh("shrek.obj");
 
             camera = niaMatrix4::lookAt(
                 niaVector3<r32>(0, 0, 0),
@@ -62,7 +94,7 @@ int main(){
             // niaScene::setSkyBoxTextures(textures);
 
             transform1.translate(niaVector3<float>(4, -2, -10));
-
+            transform1.scale(-0.08);
             niaScene::setAttributeMat4(NIA_VIEW, camera);
 
             niaScene::setAttributeVec3(NIA_DIFFUSE_LIGHT_POSITION, niaVector3<r32>(200, 200, -200));
@@ -70,6 +102,7 @@ int main(){
         }
 
         void render(niaRenderer* r) {
+
             niaScene::bind(r);
 
             r->renderSkyBox(*cubeTexture);
@@ -94,14 +127,39 @@ int main(){
 
     niaEvent event;
 
+    // scene.frameBuffer = niaFrameBuffer(1200.0, 700.0, GL_COLOR_ATTACHMENT0);
+    // niaMesh quad = niaMesh::quad(1);
+    // niaShaderQuad quadShader;
+    // niaTexture text("mesh.bmp");
+
+    // niaPostProcessingPipeline pipe(1200, 700, scene.frameBuffer);
+
+    // niaFilterGreyScale A;
+    // niaFilterBoxBlur B;
+    // niaFilterInvert C;
+
+    // pipe.addFilter(&A);
+    // pipe.addFilter(&A);
+    // pipe.addFilter(&B);
+    // pipe.addFilter(&C);
+    
     renderer.enableDepthTest();
+
     while(!window.isClosed()){
         window.handleEvents(event);
 
         glClearColor(0.0, 0.0, 0.0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // scene.frameBuffer.bind();
         scene.render(&renderer);
+        // scene.frameBuffer.unbind();
+
+        // pipe.processPipeline(&renderer);
+
+        // quadShader.useShader();
+        // renderer.renderMeshRaw(niaMesh::quad(1.0), pipe.getFrameBufferTextureId());
+        // quadShader.unuseShader();
 
         window.swapBuffers();
     }

@@ -156,6 +156,40 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, const niaTexture& tex
     defaultShader.unuseShader();
 }
 
+NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, GLuint textureId){
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    defaultShader.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+    defaultShader.unuseShader();
+}
+
+// The NO-raw functions will NOT call the RAW fuction because we don't know if the compiler will optimize the calls
+
+NIA_CALL void niaRenderer::renderMeshRaw(const niaMesh& mesh){
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+}
+
+NIA_CALL void niaRenderer::renderMeshRaw(const niaMesh& mesh, const niaTexture& texture){
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+}
+NIA_CALL void niaRenderer::renderMeshRaw(const niaMesh& mesh, GLuint textureId){
+    NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
+}
+
 NIA_CALL void niaRenderer::renderSkyBox(const niaCubeTexture& texture){
     NIA_GL_CALL(glDepthFunc(GL_LEQUAL));
     NIA_GL_CALL(glBindVertexArray(cubeMesh.vao.id));

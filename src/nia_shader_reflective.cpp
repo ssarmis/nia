@@ -61,8 +61,4 @@ NIA_CALL niaShaderReflective::niaShaderReflective(){
 }
 
 NIA_CALL niaShaderReflective::~niaShaderReflective(){
-    // TODO free source files loaded in memory after using them
-    NIA_GL_CALL(glDeleteShader(vertexShader));
-    NIA_GL_CALL(glDeleteShader(fragmentShader));
-    NIA_GL_CALL(glDeleteProgram(program));
 }

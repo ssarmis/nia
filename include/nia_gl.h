@@ -12,6 +12,9 @@
 #   include <nia_xgl.h>
 #endif
 
+NIA_EXTERN NIA_CALL PFNGLDRAWBUFFERPROC _nia_glDrawBuffer;
+#define glDrawBuffer _nia_glDrawBuffer
+
 NIA_EXTERN NIA_CALL PFNGLGENFRAMEBUFFERSPROC _nia_glGenFramebuffers;
 #define glGenFramebuffers _nia_glGenFramebuffers
 NIA_EXTERN NIA_CALL PFNGLBINDFRAMEBUFFERPROC _nia_glBindFramebuffer;

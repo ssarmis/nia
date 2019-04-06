@@ -3,11 +3,13 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "nia.h"
+#include "nia_array.h"
 
 #include <malloc.h>
 #include <GL/glext.h>
 
 int main(){
+    
     niaWindow window;
     window.createWindow(1280, 768, "no matter");
 

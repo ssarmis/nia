@@ -172,7 +172,7 @@ NIA_CALL niaMesh::niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaV
     verts = indicesAmount;
 }
 
-NIA_CALL niaMesh niaMesh::cube(u32 size){
+NIA_CALL niaMesh niaMesh::cube(r32 size){
     niaMesh result;
 
     r32 vertexies[] = {
@@ -256,5 +256,87 @@ NIA_CALL niaMesh niaMesh::cube(u32 size){
 
     result.verts = 36;
 
+    return result;
+}
+
+NIA_CALL niaMesh niaMesh::quad(r32 size){
+    niaMesh result;
+    
+    r32 vertexies[] = {
+        -size, size, 0,
+        size, -size, 0,
+        -size, -size, 0,
+        size, size, 0
+    };
+
+    NIA_GL_CALL(glGenVertexArrays(1, &result.vao.id));
+    NIA_GL_CALL(glBindVertexArray(result.vao.id));
+
+    NIA_GL_CALL(glGenBuffers(1, &result.vao.vboId));
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, result.vao.vboId));
+
+    NIA_GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(niaVertex) * 4, 0, GL_STATIC_DRAW));
+    
+    NIA_GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_VERTEX_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_COLOR_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_NORMALS_STRIDE));
+    NIA_GL_CALL(glVertexAttribPointer(3, 2, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_UV_STRIDE));
+    
+    NIA_GL_CALL(glEnableVertexAttribArray(0));
+    NIA_GL_CALL(glEnableVertexAttribArray(1));
+    NIA_GL_CALL(glEnableVertexAttribArray(2));
+    NIA_GL_CALL(glEnableVertexAttribArray(3));
+
+    u32 index = 0;
+    u32 vertOffset = 0; // use vectors...
+    u32 texOffset = 0;
+
+    r32 uvs[8] = {
+        0, 0,
+        size, -size,
+        0, -size,
+        size, 0
+    };
+
+    while(index <= 4 - 1){
+        // TODO get rid of the unneeded copy in the struct, unwrap it in subbuffers
+        niaVertex v = {
+            vertexies[vertOffset + 0],
+            vertexies[vertOffset + 1],
+            vertexies[vertOffset + 2],
+
+            1,
+            1,
+            1,
+
+            1,
+            1,
+            1,
+
+            uvs[texOffset + 0],
+            uvs[texOffset + 1],
+        };
+
+        NIA_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(niaVertex), sizeof(niaVertex), &v));
+        
+        index++;
+        vertOffset += 3;
+        texOffset += 2;
+    }
+
+    u16 indices[] = {
+        0, 1, 2,
+        0, 3, 1
+    };
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result.vao.veoId));
+    NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * 6, indices, GL_STATIC_DRAW));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+    NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    NIA_GL_CALL(glBindVertexArray(0));
+
+    result.verts = 6;
     return result;
 }

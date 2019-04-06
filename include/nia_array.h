@@ -7,13 +7,17 @@ template<typename T>
 NIA_CLASS niaArray {
 private:
     u32 size;
+    i32 preallocatedLimit;
     T* data;
 
 public:
     NIA_CALL niaArray();
+    NIA_CALL niaArray(u32 limit);
     NIA_CALL ~niaArray();
 
     NIA_CALL void add(T element);
+    NIA_CALL void remove(u32 index);
+    
     NIA_CALL void clean();
     NIA_CALL T* getData();
     NIA_CALL u32 getSize() const;
@@ -34,5 +38,8 @@ template class niaArray<niaVector2<unsigned int> >;
 
 template class niaArray<niaVector3<int> >;
 template class niaArray<niaVector3<unsigned int> >;
+
+#include "nia_filter.h"
+template class niaArray<niaFilter*>;
 
 #endif // _NIA_ARRAY_H_

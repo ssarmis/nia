@@ -46,6 +46,12 @@ public:
     NIA_CALL void renderSkyBox(const niaCubeTexture& texture);
     NIA_CALL void renderMesh(const niaMesh& mesh);
     NIA_CALL void renderMesh(const niaMesh& mesh, const niaTexture& texture);
+    NIA_CALL void renderMesh(const niaMesh& mesh, GLuint textureId);
+
+    NIA_CALL void renderMeshRaw(const niaMesh& mesh); // for these we asuume the shader was already bounded
+    NIA_CALL void renderMeshRaw(const niaMesh& mesh, const niaTexture& texture);
+    NIA_CALL void renderMeshRaw(const niaMesh& mesh, GLuint textureId);
+
     NIA_CALL void renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
     
     NIA_CALL void renderSprite(const niaSprite& sprite);

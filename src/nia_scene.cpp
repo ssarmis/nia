@@ -82,3 +82,7 @@ NIA_CALL void niaScene::bind(niaRenderer* renderer){
 NIA_CALL void niaScene::unbind(niaRenderer* renderer){
     // renderer->defaultShader.unuseShader();
 }
+
+NIA_CALL niaFrameBuffer niaScene::getFrameBuffer() const {
+    return frameBuffer;
+}

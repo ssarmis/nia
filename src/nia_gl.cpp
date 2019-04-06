@@ -1,5 +1,7 @@
 #include "nia_gl.h"
 
+PFNGLDRAWBUFFERPROC _nia_glDrawBuffer = NULL;
+
 PFNGLGENFRAMEBUFFERSPROC _nia_glGenFramebuffers = NULL;
 PFNGLBINDFRAMEBUFFERPROC _nia_glBindFramebuffer = NULL;
 PFNGLFRAMEBUFFERTEXTUREPROC _nia_glFramebufferTexture = NULL;
@@ -73,6 +75,8 @@ void* niaGetProcAddress(const char* name){
 
 NIA_CALL bool niaInitGL(){
     bool extensionLoadCheck = true; 
+
+    extensionLoadCheck = ((glDrawBuffer = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffer")) && extensionLoadCheck);
 
     extensionLoadCheck = ((glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) niaGetProcAddress("glGenFramebuffers")) && extensionLoadCheck);
     extensionLoadCheck = ((glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) niaGetProcAddress("glBindFramebuffer")) && extensionLoadCheck);

@@ -16,10 +16,12 @@
 #include "nia_shader.h"
 #include "nia_renderer.h"
 #include "nia_constants.h"
+#include "nia_frame_buffer.h"
 #include "nia_cube_texture.h"
 
 NIA_CLASS niaScene {
 protected:
+
     niaVector3<r32> diffuseLightColor;
     niaVector3<r32> diffuseLightPosition;
 
@@ -37,11 +39,14 @@ protected:
     NIA_CALL void setAttributeMat4(u32 attribute, const niaMatrix4& matrix);
 
 public:
+    niaFrameBuffer frameBuffer;
     NIA_CALL niaScene();
     NIA_CALL ~niaScene();
 
     NIA_CALL void bind(niaRenderer* renderer);
     NIA_CALL void unbind(niaRenderer* renderer);
+
+    NIA_CALL niaFrameBuffer getFrameBuffer() const; // consider using references
 };
 
 
