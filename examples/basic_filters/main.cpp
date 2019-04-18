@@ -97,7 +97,24 @@ int main(){
 
     niaEvent event;
 
+    niaMesh quad = niaMesh::quad(1);
+    niaShaderQuad quadShader;
+
+    niaFrameBuffer frameBuffer(1200.0, 700.0, GL_COLOR_ATTACHMENT0);
+
+    niaPostProcessingPipeline pipe(1200, 700, frameBuffer);
+
+    niaFilterGreyScale A;
+    niaFilterBoxBlur B;
+    niaFilterInvert C;
+
+    pipe.addFilter(&A);
+    pipe.addFilter(&A);
+    pipe.addFilter(&B);
+    pipe.addFilter(&C);
+    
     renderer.enableDepthTest();
+    niaTexture texture;
 
     while(!window.isClosed()){
         window.handleEvents(event);
@@ -105,7 +122,15 @@ int main(){
         glClearColor(0.0, 0.0, 0.0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        frameBuffer.bind();
         scene.render(&renderer);
+        frameBuffer.unbind();
+
+        pipe.processPipeline(&renderer);
+
+        quadShader.useShader();
+        renderer.renderMeshRaw(niaMesh::quad(1.0), pipe.getFrameBufferTextureId());
+        quadShader.unuseShader();
 
         window.swapBuffers();
     }

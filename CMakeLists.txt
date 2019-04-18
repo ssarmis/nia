@@ -20,6 +20,7 @@ if (UNIX)
         ./src/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_shader_batch.cpp
         ./src/nia_shader_filter.cpp
         ./src/nia_shader_cubemap.cpp
         ./src/nia_shader_reflective.cpp
@@ -50,6 +51,7 @@ if (WIN32)
         ./src/nia_tga_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
+        ./src/nia_shader_batch.cpp
         ./src/nia_shader_filter.cpp
         ./src/nia_shader_cubemap.cpp
         ./src/nia_shader_reflective.cpp

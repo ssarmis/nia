@@ -151,12 +151,15 @@ NIA_CALL void niaBatchRenderer::executeRender(){
     NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
     NIA_GL_CALL(glBindVertexArray(batchVao));
-    defaultShader.useShader();
+    defaultShaderBatch.useShader();
+    
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchVeo));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, batchUsedIndices, GL_UNSIGNED_SHORT, 0));
-    defaultShader.unuseShader();
+
+    defaultShaderBatch.unuseShader();
+
     NIA_GL_CALL(glBindVertexArray(0));
 
     usedRectangles = 0;

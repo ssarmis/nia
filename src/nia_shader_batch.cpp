@@ -1,7 +1,9 @@
-#include "nia_shader_quad.h"
+#include "nia_shader_batch.h"
 
+#include <stdio.h>
+#include <malloc.h>
 
-NIA_STATIC char* basicQaudVertex = ""
+NIA_STATIC char* basicVertexShaderBatch = ""
 "#version 440 core\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
@@ -17,14 +19,14 @@ NIA_STATIC char* basicQaudVertex = ""
 "out vec2 o_uv;\n"
 
 "void main(){\n"
-"   vec4 position = mP * mV * mT * vec4(pos, 1.0);\n" // why the hell didn't I use this? Can't remember now
-"   gl_Position = vec4(pos, 1.0);\n"
+"   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
+"   gl_Position = mP * mV * transformedPosition;\n"
 "   o_color = vec4(color, 1.0);\n"
 "   o_uv = uv;\n"
 "}\n"
 "";
 
-NIA_STATIC char* basicQaudFragment = ""
+NIA_STATIC char* basicFragmentShaderBatch = ""
 "#version 440 core\n"
 
 "out vec4 finalColor;\n"
@@ -41,14 +43,14 @@ NIA_STATIC char* basicQaudFragment = ""
 "";
 
 
-NIA_CALL niaShaderQuad::niaShaderQuad(){
-    vertexShader = loadBufferToShader(basicQaudVertex, GL_VERTEX_SHADER);
-    fragmentShader = loadBufferToShader(basicQaudFragment, GL_FRAGMENT_SHADER);
+NIA_CALL niaShaderBatch::niaShaderBatch(){
+    vertexShader = loadBufferToShader(basicVertexShaderBatch, GL_VERTEX_SHADER);
+    fragmentShader = loadBufferToShader(basicFragmentShaderBatch, GL_FRAGMENT_SHADER);
 
     compileShader(vertexShader);
     compileShader(fragmentShader);
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderQuad::~niaShaderQuad(){
+NIA_CALL niaShaderBatch::~niaShaderBatch(){
 }

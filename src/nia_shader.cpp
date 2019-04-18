@@ -70,6 +70,7 @@ NIA_STATIC char* basicFragmentShader = ""
 "void main(){\n"
 "   float finalDiffuseFactor = max(o_lightFactor, 0.3);\n"
 "   finalColor = finalDiffuseFactor * texture(tex, o_uv) * o_color;\n"
+// "   finalColor = texture(tex, o_uv) * o_color;\n"
 "}\n"
 "";
 

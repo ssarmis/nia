@@ -74,6 +74,12 @@ NIA_CALL void niaRenderer::pushOrthographicView(r32 left, r32 right, r32 top, r3
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShader.unuseShader();
+
+    defaultShaderBatch.useShader();
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShaderBatch.unuseShader();
 }
 
 NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, r32 f){
@@ -82,6 +88,13 @@ NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, 
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShader.unuseShader();
+
+    defaultShaderBatch.useShader();
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShaderBatch.unuseShader();
+
 
     defaultShaderCubeMap.useShader();
     defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
@@ -97,6 +110,10 @@ NIA_CALL void niaRenderer::submitTransformation(const niaTransform& transformati
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
     defaultShader.unuseShader();
 
+    defaultShaderBatch.useShader();
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
+    defaultShaderBatch.unuseShader();
+
     defaultShaderReflective.useShader();
     defaultShaderReflective.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
     defaultShaderReflective.unuseShader();
@@ -106,6 +123,10 @@ NIA_CALL void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
     defaultShader.useShader();
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
     defaultShader.unuseShader();
+
+    defaultShaderBatch.useShader();
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
+    defaultShaderBatch.unuseShader();
 
     defaultShaderCubeMap.useShader();
     defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
