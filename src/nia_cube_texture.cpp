@@ -1,7 +1,7 @@
 #include "nia_cube_texture.h"
 
-#include "nia_bmp_parser.h"
-#include "nia_tga_parser.h"
+#include "parsers/nia_bmp_parser.h"
+#include "parsers/nia_tga_parser.h"
 // GL_TEXTURE_CUBE_MAP_POSITIVE_X	Right
 // GL_TEXTURE_CUBE_MAP_NEGATIVE_X	Left
 // GL_TEXTURE_CUBE_MAP_POSITIVE_Y	Top

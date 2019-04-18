@@ -1,7 +1,8 @@
 #include "nia_mesh.h"
 
 #include "nia_gl.h"
-#include "nia_obj_parser.h"
+
+#include "parsers/nia_obj_parser.h"
 
 #include "nia_constants.h"
 

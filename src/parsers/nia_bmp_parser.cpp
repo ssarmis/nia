@@ -1,4 +1,4 @@
-#include "nia_bmp_parser.h"
+#include "parsers/nia_bmp_parser.h"
 
 #include <malloc.h>
 

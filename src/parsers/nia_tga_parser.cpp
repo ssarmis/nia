@@ -1,4 +1,4 @@
-#include "nia_tga_parser.h"
+#include "parsers/nia_tga_parser.h"
 
 #include <malloc.h>
 

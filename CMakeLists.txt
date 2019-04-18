@@ -15,9 +15,9 @@ if (UNIX)
         ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
-        ./src/nia_bmp_parser.cpp
-        ./src/nia_tga_parser.cpp
-        ./src/nia_obj_parser.cpp
+        ./src/parsers/nia_bmp_parser.cpp
+        ./src/parsers/nia_tga_parser.cpp
+        ./src/parsers/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_shader_batch.cpp
@@ -46,9 +46,9 @@ if (WIN32)
         ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
-        ./src/nia_obj_parser.cpp
-        ./src/nia_bmp_parser.cpp
-        ./src/nia_tga_parser.cpp
+        ./src/parsers/nia_obj_parser.cpp
+        ./src/parsers/nia_bmp_parser.cpp
+        ./src/parsers/nia_tga_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_shader_batch.cpp

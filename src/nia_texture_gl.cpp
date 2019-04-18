@@ -1,7 +1,7 @@
 #include "nia_texture_gl.h"
 
-#include "nia_bmp_parser.h"
-#include "nia_tga_parser.h"
+#include "parsers/nia_bmp_parser.h"
+#include "parsers/nia_tga_parser.h"
 
 NIA_CALL niaTexture::niaTexture(const char* filename){
     // for now I will assume there will only be .bmp files

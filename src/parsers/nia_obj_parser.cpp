@@ -1,4 +1,4 @@
-#include "nia_obj_parser.h"
+#include "parsers/nia_obj_parser.h"
 
 #include <math.h>
 #include <stdio.h>
