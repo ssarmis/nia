@@ -3,6 +3,9 @@
 #include "parsers/nia_bmp_parser.h"
 #include "parsers/nia_tga_parser.h"
 
+
+#include "nia_texture_streaming.h"
+
 NIA_CALL niaTexture::niaTexture(const char* filename){
     // for now I will assume there will only be .bmp files
     // TODO add extension cheking, header checking, more file formats forsers
@@ -28,6 +31,7 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
             }
         }
     }
+    niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE);
 }
 
 NIA_CALL niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){

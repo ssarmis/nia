@@ -19,11 +19,12 @@
 NIA_CLASS niaWindow{
 private:
     static bool closed;
-    static HDC deviceContext;
-    static HGLRC glRenderContext; 
     static NIA_CALL LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam); 
     
 public:
+    static HDC deviceContext;
+    static HGLRC glRenderContext; 
+    static HGLRC glRenderContextSecond;
     /**
      * @brief Constructor
      */

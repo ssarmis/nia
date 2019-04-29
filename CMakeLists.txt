@@ -20,6 +20,8 @@ if (UNIX)
         ./src/parsers/nia_tga_parser.cpp
         ./src/parsers/nia_obj_parser.cpp
         ./src/nia_transform.cpp
+        ./src/nia_texture_streaming.cpp
+        ./src/nia_loader.cpp
         ./src/shaders/nia_shader.cpp
         ./src/shaders/nia_shader_batch.cpp
         ./src/shaders/nia_shader_font.cpp
@@ -54,6 +56,8 @@ if (WIN32)
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
         ./src/nia_transform.cpp
+        ./src/nia_texture_streaming.cpp
+        ./src/nia_loader.cpp
         ./src/shaders/nia_shader.cpp
         ./src/shaders/nia_shader_batch.cpp
         ./src/shaders/nia_shader_font.cpp

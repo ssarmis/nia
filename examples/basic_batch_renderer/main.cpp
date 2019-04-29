@@ -81,7 +81,7 @@ int main() {
     niaWindow window;
     window.createWindow(1024, 1024, "no matter");
 
-    niaLoadEverything();
+    niaLoader::loadEverything();
 
     window.enableVsync();
 

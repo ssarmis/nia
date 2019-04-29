@@ -16,6 +16,7 @@
 bool niaWindow::closed;
 HDC niaWindow::deviceContext;
 HGLRC niaWindow::glRenderContext;
+HGLRC niaWindow::glRenderContextSecond;
 
 NIA_CALL niaWindow::niaWindow(){
 }
@@ -91,6 +92,18 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
                 };
                 
                 glRenderContext = wglCreateContext(deviceContext);
+                glRenderContextSecond = wglCreateContext(deviceContext);
+
+                BOOL error = wglShareLists(glRenderContext, glRenderContextSecond);
+                // if(error == FALSE){
+                //     DWORD errorCode = GetLastError();
+                //     LPVOID lpMsgBuf;
+                //     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                //         NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),(LPTSTR) &lpMsgBuf, 0, NULL);
+                //     MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
+                //     LocalFree(lpMsgBuf);
+                //     wglDeleteContext(glRenderContextSecond);
+                // }
 
                 if (!wglMakeCurrent(deviceContext, glRenderContext)){
                     NIA_ERROR("Failed to create context, return with error code %d\n", GetLastError());
