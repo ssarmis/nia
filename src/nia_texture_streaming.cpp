@@ -14,13 +14,10 @@ NIA_CALL void niaTextureStreaming::initializeStream(){
 NIA_CALL void niaTextureStreaming::updateStreams(){
     wglMakeCurrent(niaWindow::deviceContext, niaWindow::glRenderContextSecond);
     
-    while(true){
+    while(!niaWindow::closed){
         textureLiveLoadingChunk* iterator = liveLoadingStream.head;
         textureLiveLoadingChunk* chunk;
         while(iterator){
-            u16 lastMinute;
-            u16 lastSecond;
-
             SYSTEMTIME utcTime;
             SYSTEMTIME localTime;
 
@@ -30,22 +27,31 @@ NIA_CALL void niaTextureStreaming::updateStreams(){
 
             FileTimeToSystemTime(&iterator->writeTime, &utcTime);
             SystemTimeToTzSpecificLocalTime(NULL, &utcTime, &localTime);
-
-            if(localTime.wMinute != lastMinute || localTime.wSecond != lastSecond){
+            
+            if(iterator->writeMinute != localTime.wMinute || iterator->writeSecond != localTime.wSecond){
                 niaTextureStreaming::updateTexture(*iterator, fileHandle);
             }
 
-            lastMinute = localTime.wMinute;
-            lastSecond = localTime.wSecond;
+            iterator->writeMinute = localTime.wMinute;
+            iterator->writeSecond = localTime.wSecond;
 
-            Sleep(1000);
             iterator = iterator->next;
         }
+        Sleep(1000);
+    }
+
+    textureLiveLoadingChunk* iterator = liveLoadingStream.head;
+    textureLiveLoadingChunk* tmp = iterator;
+
+    while(iterator){
+        tmp = iterator;
+        iterator = iterator->next;
+        delete tmp;
     }
 }
 
 NIA_CALL void niaTextureStreaming::appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details){
-    textureLiveLoadingChunk* chunk = new textureLiveLoadingChunk[1];
+    textureLiveLoadingChunk* chunk = new textureLiveLoadingChunk;
 
     chunk->textureId = textureId;
     chunk->texturePath = filename;

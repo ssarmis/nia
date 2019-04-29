@@ -22,6 +22,8 @@ NIA_STRUCT textureLiveLoadingChunk {
 #ifdef _WIN32
     FILETIME writeTime;
 #endif
+    i16 writeMinute;
+    i16 writeSecond;
 
     struct textureLiveLoadingChunk* next;
 } textureLiveLoadingChunk;

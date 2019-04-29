@@ -1,3 +1,8 @@
+/** @file nia_window_gl.h
+  * @author Streanga Sarmis-Stefan
+  * @brief
+  * 
+  */
 #ifdef _WIN32
 
 #ifdef NIA_RENDERER_GL
@@ -11,6 +16,7 @@
 #include "nia_general.h"
 
 /**
+ *  @class niaWindow
  *  @author Streanga Sarmis-Stefan
  *  @brief 
  * 
@@ -18,10 +24,10 @@
  */
 NIA_CLASS niaWindow{
 private:
-    static bool closed;
     static NIA_CALL LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam); 
     
 public:
+    static bool closed;
     static HDC deviceContext;
     static HGLRC glRenderContext; 
     static HGLRC glRenderContextSecond;
