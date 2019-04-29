@@ -1,3 +1,5 @@
+
+<img src="logo.png" width="150px"><br>
 # Build Nia using 'make'
 (This is not very Windows friendly)<br>
 ```git clone https://github.com/streanga-sarmis/nia```<br>
