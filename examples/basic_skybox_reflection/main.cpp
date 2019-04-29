@@ -4,7 +4,7 @@
 
 #include "nia.h"
 #include "nia_constants.h"
-#include "nia_tga_parser.h"
+#include "parsers/nia_tga_parser.h"
 #include "nia_shader_cubemap.h"
 #include "nia_shader_quad.h"
 
@@ -46,7 +46,7 @@ int main(){
         
     public:
         myScene(){
-            mesh1 = niaMesh("shrek.obj");
+            mesh1 = niaMesh("sphere.obj");
 
             camera = niaMatrix4::lookAt(
                 niaVector3<r32>(0, 0, 0),
@@ -63,8 +63,7 @@ int main(){
 
             camera = camera.mul(niaMatrix4::translate(-1, 2, 0));
 
-            transform1.translate(niaVector3<float>(4, -2, -10));
-            transform1.scale(-0.08);
+            transform1.translate(niaVector3<float>(0, -2, -10));
             niaScene::setAttributeMat4(NIA_VIEW, camera);
 
             niaScene::setAttributeVec3(NIA_DIFFUSE_LIGHT_POSITION, niaVector3<r32>(200, 200, -200));
@@ -78,9 +77,9 @@ int main(){
             r->renderSkyBox(*cubeTexture);
 
             ///
-            camera = camera.mul(niaMatrix4::translate(4+1, -2+4, -10));
+            camera = camera.mul(niaMatrix4::translate(0, -2+4, -10));
             camera = camera.mul(niaMatrix4::rotate(-0.003, NIA_AXIS_Y));
-            camera = camera.mul(niaMatrix4::translate(-(4+1), 2-4, 10));
+            camera = camera.mul(niaMatrix4::translate(0, 2-4, 10));
 
             r->submitView(camera);
 

@@ -25,6 +25,38 @@ typedef struct {
 
 rect rectangles[1024 * 1024];
 
+typedef struct color{
+    float r;
+    float g;
+    float b;
+};
+
+float noarmlize(u32 value){
+    return (float)value / 255.0;
+}
+
+color pastels[5] = {
+    {noarmlize(0xff),
+     noarmlize(0xb3),
+     noarmlize(0xba)},
+
+    {noarmlize(0xff),
+     noarmlize(0xdf),
+     noarmlize(0xba)},
+
+    {noarmlize(0xff),
+     noarmlize(0xff),
+     noarmlize(0xba)},
+
+    {noarmlize(0xba),
+     noarmlize(0xff),
+     noarmlize(0xc9)},
+
+    {noarmlize(0xba),
+     noarmlize(0xe1),
+     noarmlize(0xff)}
+};
+
 int main() {
 #if 0
     niaVector2<int> v0;
@@ -59,11 +91,21 @@ int main() {
 
     srand(time(NULL));
     int i = 0;
+
+    u32 index = 0;
+
     for (float y = 0; y < 100; y += 1){
         for (float x = 0; x < 100; x += 1){
-            rectangles[i].r = ((double) rand() / (RAND_MAX));
-            rectangles[i].g = ((double) rand() / (RAND_MAX));
-            rectangles[i].b = ((double) rand() / (RAND_MAX));
+            // rectangles[i].r = ((double) rand() / (RAND_MAX));
+            // rectangles[i].g = ((double) rand() / (RAND_MAX));
+            // rectangles[i].b = ((double) rand() / (RAND_MAX));
+
+            rectangles[i].r = pastels[index].r;
+            rectangles[i].g = pastels[index].g;
+            rectangles[i].b = pastels[index].b;
+
+            ++index;
+            index %= 5;
 
             float speed = ((double) rand() / (RAND_MAX)) * 3;
 

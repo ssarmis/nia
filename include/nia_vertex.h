@@ -28,6 +28,39 @@ NIA_STRUCT niaBasicVertex{
     };
 } niaBasicVertex;
 
+NIA_STRUCT niaBasicUVVertex{
+    union {
+        r32 attrs[6];
+        struct {
+            union {
+                r32 vert[3];
+                struct {
+                    r32 x;
+                    r32 y;
+                    r32 z;
+                };
+            };
+
+            union {
+                r32 cols[3];
+                struct {
+                    r32 r;
+                    r32 g;
+                    r32 b;
+                };
+            };
+
+            union {
+                r32 uv[2];
+                struct {
+                    r32 u;
+                    r32 v;
+                };
+            };
+        };
+    };
+} niaBasicUVVertex;
+
 //
 //  coords   color     normals   tex
 //  4 * 3    4 * 3     4 * 3    4 * 2   = 44 bytes / vertex, could be better

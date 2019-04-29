@@ -85,4 +85,14 @@ NIA_INLINE u32 nia_strlen(const char* str){
     return result;
 }
 
+NIA_INLINE i32 nia_sign(float number){
+    if(number < 0){
+        return -1;
+    } else if(number > 0){
+        return 1;
+    }
+
+    return 0;
+}
+
 #endif //_NIA_GENERAL_H_

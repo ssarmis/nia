@@ -26,17 +26,17 @@
 //      float g;
 //      float b;
 
-NIA_INTERNAL u32 batchVao = 0;
-NIA_INTERNAL u32 batchVbo = 0;
-NIA_INTERNAL u32 batchVeo = 0;
-NIA_INTERNAL u32 batchUsedIndices = 0;
-NIA_INTERNAL u16 batchIndices[NIA_BATCH_INDICES_COUNT] = {};
+NIA_STATIC u32 batchVao = 0;
+NIA_STATIC u32 batchVbo = 0;
+NIA_STATIC u32 batchVeo = 0;
+NIA_STATIC u32 batchUsedIndices = 0;
+NIA_STATIC u16 batchIndices[NIA_BATCH_INDICES_COUNT] = {};
 
-NIA_INTERNAL u32 usedRectangles = 0;
+NIA_STATIC u32 usedRectangles = 0;
 
 niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
 
-NIA_INTERNAL void setupBatchBuffers(){
+NIA_STATIC void setupBatchBuffers(){
     NIA_GL_CALL(glGenVertexArrays(1, &batchVao));
     NIA_GL_CALL(glBindVertexArray(batchVao));
 

@@ -15,6 +15,7 @@
 #include "nia_shader_cubemap.h"
 #include "nia_shader_quad.h"
 #include "nia_shader_batch.h"
+#include "nia_shader_font.h"
 #include "nia_shader_reflective.h"
 
 NIA_CLASS niaRenderer {
@@ -25,6 +26,7 @@ protected:
     niaShaderCubeMap defaultShaderCubeMap;
     niaShaderQuad defaultShaderQuad;
     niaShaderBatch defaultShaderBatch;
+    niaShaderFont defaultShaderFont;
 
     niaShaderReflective defaultShaderReflective;
 
