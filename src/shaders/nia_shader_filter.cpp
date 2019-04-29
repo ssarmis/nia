@@ -1,4 +1,4 @@
-#include "nia_shader_filter.h"
+#include "shaders/nia_shader_filter.h"
 
 NIA_CALL niaShaderFilter::niaShaderFilter(){
 }

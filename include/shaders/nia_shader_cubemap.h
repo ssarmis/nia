@@ -3,7 +3,7 @@
 
 #include "nia_general.h"
 
-#include "nia_shader.h"
+#include "shaders/nia_shader.h"
 
 NIA_CLASS niaShaderCubeMap : public niaShader{
 public:

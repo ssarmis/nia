@@ -1,4 +1,4 @@
-#include "nia_shader_quad.h"
+#include "shaders/nia_shader_quad.h"
 
 
 NIA_STATIC char* basicQaudVertex = ""

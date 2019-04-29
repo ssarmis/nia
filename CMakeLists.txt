@@ -20,13 +20,13 @@ if (UNIX)
         ./src/parsers/nia_tga_parser.cpp
         ./src/parsers/nia_obj_parser.cpp
         ./src/nia_transform.cpp
-        ./src/nia_shader.cpp
-        ./src/nia_shader_batch.cpp
-        ./src/nia_shader_font.cpp
-        ./src/nia_shader_filter.cpp
-        ./src/nia_shader_cubemap.cpp
-        ./src/nia_shader_reflective.cpp
-        ./src/nia_shader_quad.cpp
+        ./src/shaders/nia_shader.cpp
+        ./src/shaders/nia_shader_batch.cpp
+        ./src/shaders/nia_shader_font.cpp
+        ./src/shaders/nia_shader_filter.cpp
+        ./src/shaders/nia_shader_cubemap.cpp
+        ./src/shaders/nia_shader_reflective.cpp
+        ./src/shaders/nia_shader_quad.cpp
         ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_frame_buffer.cpp
@@ -54,13 +54,13 @@ if (WIN32)
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
         ./src/nia_transform.cpp
-        ./src/nia_shader.cpp
-        ./src/nia_shader_batch.cpp
-        ./src/nia_shader_font.cpp
-        ./src/nia_shader_filter.cpp
-        ./src/nia_shader_cubemap.cpp
-        ./src/nia_shader_reflective.cpp
-        ./src/nia_shader_quad.cpp
+        ./src/shaders/nia_shader.cpp
+        ./src/shaders/nia_shader_batch.cpp
+        ./src/shaders/nia_shader_font.cpp
+        ./src/shaders/nia_shader_filter.cpp
+        ./src/shaders/nia_shader_cubemap.cpp
+        ./src/shaders/nia_shader_reflective.cpp
+        ./src/shaders/nia_shader_quad.cpp
         ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_frame_buffer.cpp

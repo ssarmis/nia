@@ -1,4 +1,4 @@
-#include "nia_shader_cubemap.h"
+#include "shaders/nia_shader_cubemap.h"
 
 #include <stdio.h>
 #include <malloc.h>

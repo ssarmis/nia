@@ -5,8 +5,8 @@
 #include "nia.h"
 #include "nia_constants.h"
 #include "parsers/nia_tga_parser.h"
-#include "nia_shader_cubemap.h"
-#include "nia_shader_quad.h"
+#include "shaders/nia_shader_cubemap.h"
+#include "shaders/nia_shader_quad.h"
 
 #include "nia_frame_buffer.h"
 #include "nia_post_processing_pipeline.h"

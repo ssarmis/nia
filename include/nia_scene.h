@@ -13,7 +13,7 @@
 
 #include "nia_vector.h"
 #include "nia_matrix.h"
-#include "nia_shader.h"
+#include "shaders/nia_shader.h"
 #include "nia_renderer.h"
 #include "nia_constants.h"
 #include "nia_frame_buffer.h"

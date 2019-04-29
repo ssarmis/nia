@@ -1,7 +1,7 @@
 #ifndef _NIA_FILTERS_H_
 #define _NIA_FILTERS_H_
 
-#include "nia_shader.h"
+#include "shaders/nia_shader.h"
 #include "nia_general.h"
 
 NIA_CLASS niaShaderFilter : public niaShader {

@@ -7,7 +7,7 @@
 #include "nia_general.h"
 #include "nia_renderer.h"
 #include "nia_frame_buffer.h"
-#include "nia_shader_filter.h"
+#include "shaders/nia_shader_filter.h"
 
 NIA_CLASS niaPostProcessingPipeline {
 private:

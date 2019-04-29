@@ -1,4 +1,4 @@
-#include "nia_shader.h"
+#include "shaders/nia_shader.h"
 
 #include <stdio.h>
 #include <malloc.h>

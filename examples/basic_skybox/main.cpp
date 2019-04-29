@@ -5,7 +5,7 @@
 #include "nia.h"
 #include "nia_constants.h"
 #include "nia_tga_parser.h"
-#include "nia_shader_cubemap.h"
+#include "shaders/nia_shader_cubemap.h"
 
 #include <malloc.h>
 #include <GL/glext.h>

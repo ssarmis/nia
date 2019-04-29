@@ -4,9 +4,9 @@
 #include "nia_mesh.h"
 #include "nia_general.h"
 #include "nia_renderer.h"
-#include "nia_shader_quad.h"
+#include "shaders/nia_shader_quad.h"
 #include "nia_frame_buffer.h"
-#include "nia_shader_filter.h"
+#include "shaders/nia_shader_filter.h"
 
 #define NIA_FILTER_GRAYSCALE
 

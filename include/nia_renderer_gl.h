@@ -6,17 +6,17 @@
 #include <windows.h>
 
 #include "nia_mesh.h"
-#include "nia_shader.h"
 #include "nia_sprite.h"
 #include "nia_matrix.h"
 #include "nia_general.h"
 #include "nia_transform.h"
 #include "nia_cube_texture.h"
-#include "nia_shader_cubemap.h"
-#include "nia_shader_quad.h"
-#include "nia_shader_batch.h"
-#include "nia_shader_font.h"
-#include "nia_shader_reflective.h"
+#include "shaders/nia_shader.h"
+#include "shaders/nia_shader_cubemap.h"
+#include "shaders/nia_shader_quad.h"
+#include "shaders/nia_shader_batch.h"
+#include "shaders/nia_shader_font.h"
+#include "shaders/nia_shader_reflective.h"
 
 NIA_CLASS niaRenderer {
 protected:
