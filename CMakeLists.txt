@@ -15,12 +15,14 @@ if (UNIX)
         ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/parsers/nia_ttf_parser.cpp
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
         ./src/parsers/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_shader_batch.cpp
+        ./src/nia_shader_font.cpp
         ./src/nia_shader_filter.cpp
         ./src/nia_shader_cubemap.cpp
         ./src/nia_shader_reflective.cpp
@@ -37,6 +39,7 @@ if (UNIX)
         ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
+        ./src/nia_font_renderer_gl.cpp
         ./src/arch/linux/nia_window.cpp
         ./src/arch/linux/nia_renderer.cpp)
 endif (UNIX)
@@ -46,12 +49,14 @@ if (WIN32)
         ./src/nia_array.cpp
         ./src/nia_matrix.cpp
         ./src/nia_vector.cpp
+        ./src/parsers/nia_ttf_parser.cpp
         ./src/parsers/nia_obj_parser.cpp
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_shader.cpp
         ./src/nia_shader_batch.cpp
+        ./src/nia_shader_font.cpp
         ./src/nia_shader_filter.cpp
         ./src/nia_shader_cubemap.cpp
         ./src/nia_shader_reflective.cpp
@@ -68,6 +73,7 @@ if (WIN32)
         ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
+        ./src/nia_font_renderer_gl.cpp
         ./src/arch/win32/nia_window_gl.cpp)
 endif (WIN32)
 

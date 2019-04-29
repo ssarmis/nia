@@ -30,6 +30,10 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
     }
 }
 
+NIA_CALL niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){
+    allocateTexture(width, height, data, details); // data should be first, but whatever
+}
+
 NIA_CALL niaTexture::niaTexture(){
     u8 pixels[] = {
         255, 255, 255,
@@ -42,7 +46,7 @@ NIA_CALL niaTexture::niaTexture(){
 NIA_CALL niaTexture::~niaTexture(){
 }
 
-NIA_INTERNAL void niaTexture::allocateTexture(u32 width, u32 height, u8* data){ // TODO add ability to change depth
+NIA_INTERNAL void niaTexture::allocateTexture(u32 width, u32 height, u8* data, const textureFormatDetails& details){ // TODO add ability to change depth
     NIA_GL_CALL(glGenTextures(1, &textureId));
 
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
@@ -54,7 +58,7 @@ NIA_INTERNAL void niaTexture::allocateTexture(u32 width, u32 height, u8* data){ 
     NIA_GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
     NIA_GL_CALL(glGenerateMipmap(GL_TEXTURE_2D));
-    NIA_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data));
+    NIA_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, details.storeFormat, width, height, 0, details.readFormat, details.type, data));
 
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 }

@@ -80,6 +80,12 @@ NIA_CALL void niaRenderer::pushOrthographicView(r32 left, r32 right, r32 top, r3
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderBatch.unuseShader();
+
+    defaultShaderFont.useShader();
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShaderFont.unuseShader();
 }
 
 NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, r32 f){
@@ -95,6 +101,11 @@ NIA_CALL void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, 
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderBatch.unuseShader();
 
+    defaultShaderFont.useShader();
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
+    defaultShaderFont.unuseShader();
 
     defaultShaderCubeMap.useShader();
     defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
