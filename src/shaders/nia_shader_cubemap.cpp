@@ -4,13 +4,13 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicCubeMapVertexShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 
-"out vec3 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_uv;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
 "void main(){\n"
 "   gl_Position = mP * mV * vec4(pos, 1.0);\n"
@@ -19,13 +19,13 @@ NIA_STATIC char* basicCubeMapVertexShader = ""
 "";
 
 NIA_STATIC char* basicCubeMapFragmentShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec3 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_uv;\n"
 
-"uniform samplerCube tex;\n"
+"uniform "NIA_GLSL_PRECISION" samplerCube tex;\n"
 
 "void main(){\n"
 "   finalColor = texture(tex, o_uv);\n"

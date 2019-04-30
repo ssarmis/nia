@@ -83,7 +83,7 @@ int main() {
 
     niaLoader::loadEverything();
 
-    window.enableVsync();
+    window.enableAdaptiveVsync();
 
     niaBatchRenderer renderer;
 
@@ -107,7 +107,7 @@ int main() {
             ++index;
             index %= 5;
 
-            float speed = ((double) rand() / (RAND_MAX)) * 3;
+            float speed = ((double) rand() / (RAND_MAX)) * 1.5;
 
             rectangles[i].vx = rand() % 2 ? speed : -speed;
             rectangles[i].vy = rand() % 2 ? speed : -speed;

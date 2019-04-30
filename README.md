@@ -1,5 +1,8 @@
 
 <img src="logo.png" width="150px"><br>
+# What you need:
+- Cmake 3.11 https://cmake.org/files/v3.11/ (and here is a guide to install it on linux https://peshmerge.io/how-to-install-cmake-3-11-0-on-ubuntu-16-04/)
+
 # Build Nia using 'make'
 (This is not very Windows friendly)<br>
 ```git clone https://github.com/streanga-sarmis/nia```<br>

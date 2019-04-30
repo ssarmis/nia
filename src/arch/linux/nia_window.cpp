@@ -66,7 +66,8 @@ NIA_CALL void niaWindow::enableVsync(){
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
     XGetWindowAttributes(display, window, &windowAttributes);
-    XNextEvent(display, &event.xEvent);
+    // XNextEvent(display, &event.xEvent);
+    XPeekEvent(display, &event.xEvent);
 }
 
 NIA_CALL bool niaWindow::isClosed() const {

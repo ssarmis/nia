@@ -3,6 +3,13 @@
 
 #define NIA_VERSION             "a1.0"
 
+#ifdef __unix__
+#define NIA_GLSL_VERSION    "#version 320 es"
+#define NIA_GLSL_PRECISION  "mediump"
+#elif defined _WIN32
+#define NIA_GLSL_VERSION    "#version 440 core"
+#endif
+
 #define NIA_UNIFORM_PROJECTION              "mP"
 #define NIA_UNIFORM_VIEW                    "mV"
 #define NIA_UNIFORM_TRANSFORM               "mT"

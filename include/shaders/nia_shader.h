@@ -1,6 +1,8 @@
 #ifndef _NIA_SHADER_H_
 #define _NIA_SHADER_H_
 
+#include "nia_constants.h"
+
 #include "nia_gl.h"
 
 #include "nia_general.h"

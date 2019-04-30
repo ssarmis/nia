@@ -6,7 +6,7 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
-#include "nia_gl.h"
+// #include "nia_gl.h"
 #include <GL/glx.h>
 
 #include "nia_general.h"

@@ -8,7 +8,11 @@ CFLAGS 			:= -Wall -g
 CINCLUDE		:= -I$(PROJECT_ROOT)/include
 
 LIBSPATH		:= $(PROJECT_ROOT)/build
+ifeq ($(OS),Windows_NT)
 LIBS 			:= -lnia -lopengl32 -lgdi32
+else
+LIBS 			:= -lnia -lX11 -lGL
+endif
 
 SRCS 			:= $(shell echo *.cpp)
 OBJS 			:= $(SRCS:.cpp=.o)

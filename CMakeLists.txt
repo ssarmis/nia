@@ -37,6 +37,7 @@ if (UNIX)
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
+        ./src/nia_xgl.cpp
         ./src/nia_mesh.cpp
         ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp
@@ -72,6 +73,7 @@ if (WIN32)
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
+        ./src/nia_xgl.cpp
         ./src/nia_mesh.cpp
         ./src/nia_scene.cpp
         ./src/nia_renderer_gl.cpp

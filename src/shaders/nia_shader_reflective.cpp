@@ -4,18 +4,18 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicReflectiveVertexShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mT;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
-"out vec3 o_uv;\n"
-"out vec3 o_color;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_color;\n"
 
 "void main(){\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);"
@@ -30,21 +30,21 @@ NIA_STATIC char* basicReflectiveVertexShader = ""
 "   //viewVector.y *= -1;\n"
 
 "   vec3 reflectedVector = reflect(viewVector.xyz, normalTransformed);\n"
-"   reflectedVector.y *= -1;\n"
+"   reflectedVector.y *= -1.0;\n"
 "   o_uv = reflectedVector;\n"
 "   o_color = color;\n"
 "}\n"
 "";
 
 NIA_STATIC char* basicReflectiveFragmentShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec3 o_uv;\n"
-"in vec3 o_color;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_color;\n"
 
-"uniform samplerCube tex;\n"
+"uniform "NIA_GLSL_PRECISION" samplerCube tex;\n"
 
 "void main(){\n"
 "   finalColor = texture(tex, o_uv) * vec4(o_color, 1.0);\n"

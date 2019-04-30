@@ -7,7 +7,7 @@ PFNGLXSWAPINTERVALEXTPROC _nia_glXSwapIntervalEXT = NULL;
 NIA_CALL bool niaInitXGL(){
     bool extensionLoadCheck = true; 
 
-    extensionLoadCheck = ((glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress("glXSwapIntervalEXT")) && extensionLoadCheck);
+    extensionLoadCheck = ((glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT")) && extensionLoadCheck);
 
     return extensionLoadCheck;
 }

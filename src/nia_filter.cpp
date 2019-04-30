@@ -17,15 +17,15 @@ NIA_CALL void niaFilter::renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer
 
 /// greyscale
 const char* greyScaleVertex = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mT;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
-"out vec2 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -35,13 +35,13 @@ const char* greyScaleVertex = ""
 "";
 
 const char* greyScaleFragment = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec2 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
-"uniform sampler2D tex;\n"
+"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
 
 "void main(){\n"
 "   float avg = (texture(tex, o_uv).x + texture(tex, o_uv).y + texture(tex, o_uv).z) / 3;"
@@ -70,15 +70,15 @@ NIA_CALL void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer&
 
 /// invert
 const char* invertVertex = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mT;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
-"out vec2 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -88,13 +88,13 @@ const char* invertVertex = ""
 "";
 
 const char* invertFragment = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec2 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
-"uniform sampler2D tex;\n"
+"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
 
 "void main(){\n"
 "   float r = 1.0 - texture(tex, o_uv).r;\n"
@@ -123,15 +123,15 @@ NIA_CALL void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& in
 
 /// box blur
 const char* boxBlurVertex = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mT;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
-"out vec2 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -141,13 +141,13 @@ const char* boxBlurVertex = ""
 "";
 
 const char* boxBlurFragment = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec2 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
-"uniform sampler2D tex;\n"
+"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
 
 "vec2 pos = o_uv;\n"
 

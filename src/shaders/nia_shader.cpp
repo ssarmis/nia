@@ -4,32 +4,32 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicVertexShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform vec3 dlP;\n"
-"uniform vec3 dlC;\n"
+"uniform "NIA_GLSL_PRECISION" vec3 dlP;\n"
+"uniform "NIA_GLSL_PRECISION" vec3 dlC;\n"
 
-"uniform vec3 slP;\n"
-"uniform vec3 slC;\n"
+"uniform "NIA_GLSL_PRECISION" vec3 slP;\n"
+"uniform "NIA_GLSL_PRECISION" vec3 slC;\n"
 
-"uniform mat4 mP;\n"
-"uniform mat4 mT;\n"
-"uniform mat4 mV;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
+"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
 
-"out vec4 o_color;\n"
+"out "NIA_GLSL_PRECISION" vec4 o_color;\n"
 
-"out vec2 o_uv;\n"
+"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
-"out vec3 o_dlP;\n"
-"out vec3 o_dlC;\n"
-"out vec3 o_slP;\n"
-"out vec3 o_slC;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_dlP;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_dlC;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_slP;\n"
+"out "NIA_GLSL_PRECISION" vec3 o_slC;\n"
 
-"out float o_lightFactor;\n"
+"out "NIA_GLSL_PRECISION" float o_lightFactor;\n"
 
 "void main(){\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
@@ -51,21 +51,21 @@ NIA_STATIC char* basicVertexShader = ""
 "";
 
 NIA_STATIC char* basicFragmentShader = ""
-"#version 440 core\n"
+NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out vec4 finalColor;\n"
+"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
 
-"in vec4 o_color;\n"
+"in "NIA_GLSL_PRECISION" vec4 o_color;\n"
 
-"in vec2 o_uv;\n"
+"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
 
-"in vec3 o_dlP;\n"
-"in vec3 o_dlC;\n"
-"in vec3 o_slP;\n"
-"in vec3 o_slC;\n"
-"in float o_lightFactor;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_dlP;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_dlC;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_slP;\n"
+"in "NIA_GLSL_PRECISION" vec3 o_slC;\n"
+"in "NIA_GLSL_PRECISION" float o_lightFactor;\n"
 
-"uniform sampler2D tex;\n"
+"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
 
 "void main(){\n"
 "   float finalDiffuseFactor = max(o_lightFactor, 0.3);\n"
@@ -134,7 +134,8 @@ NIA_INTERNAL void niaShader::compileShader(GLuint shader){
         GLsizei logLength = 0;
         GLchar log[1024] = {0};
         NIA_GL_CALL(glGetShaderInfoLog(shader, 1024, &logLength, log));
-        NIA_ERROR("%s\n", log);
+        NIA_ERROR("From file "__FILE__"\n");
+        NIA_ERROR("\t%s\n", log);
     }
 }
 
