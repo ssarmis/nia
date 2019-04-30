@@ -69,7 +69,7 @@ void* niaGetProcAddress(const char* name){
     }
     return wglGetProcAddress(name);
 #elif defined __unix__
-    return glXGetProcAddress(name);
+    return (void*)glXGetProcAddress((const GLubyte*)name);
 #endif
 }
 

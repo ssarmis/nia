@@ -1,3 +1,5 @@
+#ifdef _WIN32 //tmp
+
 #ifndef _NIA_NIA_TEXTURE_STREAMING_H_
 #define _NIA_NIA_TEXTURE_STREAMING_H_
 
@@ -28,3 +30,4 @@ public:
 };
 
 #endif // _NIA_NIA_TEXTURE_STREAMING_H_
+#endif

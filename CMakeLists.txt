@@ -42,8 +42,7 @@ if (UNIX)
         ./src/nia_renderer_gl.cpp
         ./src/nia_batch_renderer_gl.cpp
         ./src/nia_font_renderer_gl.cpp
-        ./src/arch/linux/nia_window.cpp
-        ./src/arch/linux/nia_renderer.cpp)
+        ./src/arch/linux/nia_window.cpp)
 endif (UNIX)
 
 if (WIN32)

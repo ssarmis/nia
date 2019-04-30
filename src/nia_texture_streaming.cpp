@@ -1,3 +1,5 @@
+#ifdef _WIN32 //tmp
+
 #include "nia_texture_streaming.h"
 #include "nia_wgl.h"
 
@@ -100,3 +102,4 @@ NIA_CALL void niaTextureStreaming::updateTexture(const textureLiveLoadingChunk& 
     }
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
+#endif

@@ -35,9 +35,20 @@ build_lib:
 
 # @cmake -Bbuild -H$(ROOT) -G "Visual Studio 15 2017" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 ifeq ($(DEBUG),)
+# windows or not
+ifeq ($(OS),Windows_NT)
 	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 else
+	@cmake -Bbuild -H$(ROOT) -G "Unix Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+endif
+
+else
+# windows or not
+ifeq ($(OS),Windows_NT)
 	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
+else
+	@cmake -Bbuild -H$(ROOT) -G "Unix Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
+endif
 endif
 	@make -C build
 

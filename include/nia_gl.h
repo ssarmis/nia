@@ -6,10 +6,11 @@
 #ifdef _WIN32
 #   include "arch/win32/khronos/glcorearb.h"
 #   include <windows.h>
-#   include <nia_wgl.h>
+#   include "nia_wgl.h"
 #elif defined  __unix__
+#   undef GL_VERSION_1_1
 #   include <GL/glcorearb.h>
-#   include <nia_xgl.h>
+#   include "nia_xgl.h"
 #endif
 
 NIA_EXTERN NIA_CALL PFNGLDRAWBUFFERPROC _nia_glDrawBuffer;

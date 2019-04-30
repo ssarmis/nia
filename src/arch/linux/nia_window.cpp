@@ -2,6 +2,8 @@
 
 #include "arch/linux/nia_window.h"
 
+#include "nia_xgl.h"
+
 #include <stdio.h>
 
 bool                    niaWindow::closed;
@@ -55,11 +57,11 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
 }
 
 NIA_CALL void niaWindow::enableAdaptiveVsync(){
-    glXSwapIntervalEXT(-1);
+    glXSwapIntervalEXT(display, window, -1);
 }
 
 NIA_CALL void niaWindow::enableVsync(){
-    glXSwapIntervalEXT(1);
+    glXSwapIntervalEXT(display, window, 1);
 }
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){

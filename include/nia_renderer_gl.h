@@ -3,8 +3,6 @@
 #ifndef _NIA_RENDERER_GL_WIN32_H_
 #define _NIA_RENDERER_GL_WIN32_H_
 
-#include <windows.h>
-
 #include "nia_mesh.h"
 #include "nia_sprite.h"
 #include "nia_matrix.h"

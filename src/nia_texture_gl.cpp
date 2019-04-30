@@ -31,7 +31,9 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
             }
         }
     }
+#ifdef _WIN32
     niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE);
+#endif
 }
 
 NIA_CALL niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){

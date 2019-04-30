@@ -2,12 +2,12 @@
 
 #include "nia_xgl.h"
 
-PFNXGLSWAPINTERVALEXTPROC _nia_xglSwapIntervalEXT = NULL;
+PFNGLXSWAPINTERVALEXTPROC _nia_glXSwapIntervalEXT = NULL;
 
 NIA_CALL bool niaInitXGL(){
     bool extensionLoadCheck = true; 
 
-    extensionLoadCheck = ((xglSwapIntervalEXT = (PFNXGLSWAPINTERVALEXTPROC)glXGetProcAddress("xglSwapIntervalEXT")) && extensionLoadCheck);
+    extensionLoadCheck = ((glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddress("glXSwapIntervalEXT")) && extensionLoadCheck);
 
     return extensionLoadCheck;
 }
