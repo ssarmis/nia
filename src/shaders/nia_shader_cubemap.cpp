@@ -7,10 +7,10 @@ NIA_STATIC char* basicCubeMapVertexShader = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 
-"out "NIA_GLSL_PRECISION" vec3 o_uv;\n"
+"out vec3 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
+"uniform mat4 mP;\n"
+"uniform mat4 mV;\n"
 
 "void main(){\n"
 "   gl_Position = mP * mV * vec4(pos, 1.0);\n"
@@ -21,11 +21,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 NIA_STATIC char* basicCubeMapFragmentShader = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
+"out vec4 finalColor;\n"
 
-"in "NIA_GLSL_PRECISION" vec3 o_uv;\n"
+"in  vec3 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" samplerCube tex;\n"
+"uniform samplerCube tex;\n"
 
 "void main(){\n"
 "   finalColor = texture(tex, o_uv);\n"

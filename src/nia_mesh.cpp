@@ -68,13 +68,15 @@ NIA_CALL niaMesh::niaMesh(const char* filename){
         u32 vert = parser.getFaces()[index].data[0];
         u32 tex = parser.getFaces()[index].data[1];
         u32 norm = parser.getFaces()[index].data[2];
+        if(!tex){
+            tex = 1;
+        }
 
         indices.add((u16)(vert - 1));// TODO fix f a//b
 
         vertexies[vert - 1].nx = parser.getNormals()[norm - 1].x;
         vertexies[vert - 1].ny = parser.getNormals()[norm - 1].y;
         vertexies[vert - 1].nz = parser.getNormals()[norm - 1].z;
-
         vertexies[vert - 1].u = parser.getUVS()[tex - 1].x;
         vertexies[vert - 1].v = parser.getUVS()[tex - 1].y;
     }

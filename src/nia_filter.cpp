@@ -21,11 +21,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
 
-"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"out vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -37,11 +37,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 const char* greyScaleFragment = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
+"out vec4 finalColor;\n"
 
-"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"in  vec2 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
+"uniform sampler2D tex;\n"
 
 "void main(){\n"
 "   float avg = (texture(tex, o_uv).x + texture(tex, o_uv).y + texture(tex, o_uv).z) / 3;"
@@ -74,11 +74,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
 
-"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"out vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -90,11 +90,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 const char* invertFragment = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
+"out vec4 finalColor;\n"
 
-"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"in  vec2 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
+"uniform sampler2D tex;\n"
 
 "void main(){\n"
 "   float r = 1.0 - texture(tex, o_uv).r;\n"
@@ -127,11 +127,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
 
-"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"out vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 position = vec4(pos, 1.0);\n"
@@ -143,11 +143,11 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 const char* boxBlurFragment = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
+"out vec4 finalColor;\n"
 
-"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"in  vec2 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
+"uniform sampler2D tex;\n"
 
 "vec2 pos = o_uv;\n"
 

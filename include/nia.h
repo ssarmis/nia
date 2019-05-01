@@ -1,6 +1,8 @@
 #ifndef _NIA_H_
 #define _NIA_H_
 
+#define NIA_RENDERER_GL
+
 #include "nia_constants.h"
 
 #include "nia_mesh.h"

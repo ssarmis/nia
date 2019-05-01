@@ -83,6 +83,7 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(r32 number) const {
 NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
     niaMatrix4 result = niaMatrix4(0);
 
+#ifdef _WIN32
     for(int i = 0; i < 4; ++i){ // TODO unroll this for eficiency
         const __m128 r0 = {m[0 + i * 4], m[1 + i * 4], m[2 + i * 4], m[3 + i * 4]};
         const __m128 c0 = {other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4]};
@@ -104,7 +105,17 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
 
         _mm_store_ps(result.m + i * sizeof(r32), tmp);
     }
-
+#elif defined __unix__
+    for(u8 i = 0; i < 4; ++i){
+        for(u8 ii = 0; ii < 4; ++ii){
+            r32 sum = 0;
+            for(u8 k = 0; k < 4; ++k){
+                sum += other.m[i + k * 4] * m[k + ii * 4];
+            }
+            result.m[i + ii * 4] = sum;
+        }
+    }
+#endif
     return result;
 }
 

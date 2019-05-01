@@ -9,13 +9,13 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec2 uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" mat4 mP;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mT;\n"
-"uniform "NIA_GLSL_PRECISION" mat4 mV;\n"
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 o_color;\n"
+"out vec4 o_color;\n"
 
-"out "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"out vec2 o_uv;\n"
 
 "void main(){\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
@@ -28,13 +28,13 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 NIA_STATIC char* basicFragmentShaderFont = ""
 NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
-"out "NIA_GLSL_PRECISION" vec4 finalColor;\n"
+"out vec4 finalColor;\n"
 
-"in "NIA_GLSL_PRECISION" vec4 o_color;\n"
+"in vec4 o_color;\n"
 
-"in "NIA_GLSL_PRECISION" vec2 o_uv;\n"
+"in vec2 o_uv;\n"
 
-"uniform "NIA_GLSL_PRECISION" sampler2D tex;\n"
+"uniform sampler2D tex;\n"
 
 "void main(){\n"
 "   finalColor = texture(tex, o_uv);\n"
@@ -44,7 +44,6 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "   finalColor *=  o_color;"
 "}\n"
 "";
-
 
 NIA_CALL niaShaderFont::niaShaderFont(){
     vertexShader = loadBufferToShader(basicVertexShaderFont, GL_VERTEX_SHADER);
