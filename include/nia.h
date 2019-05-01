@@ -1,7 +1,13 @@
 #ifndef _NIA_H_
 #define _NIA_H_
 
+#ifndef NIA_RENDERER_GL
 #define NIA_RENDERER_GL
+#endif
+
+#ifndef GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
+#endif
 
 #include "nia_constants.h"
 

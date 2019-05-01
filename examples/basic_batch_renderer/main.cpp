@@ -1,7 +1,3 @@
-#define NIA_RENDERER_GL
-
-#define GL_GLEXT_PROTOTYPES
-
 #include "nia.h"
 #include "nia_loader.h"
 
