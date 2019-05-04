@@ -8,6 +8,7 @@
 #define NIA_GLSL_PRECISION  "mediump"
 #elif defined _WIN32
 #define NIA_GLSL_VERSION    "#version 440 core"
+#define NIA_GLSL_PRECISION  "mediump"
 #endif
 
 #define NIA_UNIFORM_PROJECTION              "mP"
