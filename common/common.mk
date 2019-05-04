@@ -4,7 +4,7 @@ ROOT			:= .
 
 # Used for examples
 CC      		:= g++
-CFLAGS 			:= -Wall -g 
+CFLAGS 			:= -Wall -g -Wunused-variable 
 CINCLUDE		:= -I$(PROJECT_ROOT)/include
 
 LIBSPATH		:= $(PROJECT_ROOT)/build

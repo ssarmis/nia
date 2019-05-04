@@ -7,7 +7,7 @@
 
 #include "nia_sprite.h"
 #include "nia_rectangle.h"
-#include "nia_renderer_gl.h"
+#include "renderers/nia_renderer_gl.h"
 
 NIA_CLASS niaBatchRenderer : public niaRenderer {
 public:

@@ -1,6 +1,6 @@
 #ifdef NIA_RENDERER_GL
 
-#include "nia_renderer_gl.h"
+#include "renderers/nia_renderer_gl.h"
 
 #include "nia_gl.h"
 #include "nia_vector.h"

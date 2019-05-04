@@ -1,6 +1,6 @@
 #ifdef NIA_RENDERER_GL
 
-#include "nia_batch_renderer_gl.h"
+#include "renderers/nia_batch_renderer_gl.h"
 
 #include "nia_gl.h"
 #include "nia_vertex.h"

@@ -1,4 +1,4 @@
-#include "nia_font_renderer_gl.h"
+#include "renderers/nia_font_renderer_gl.h"
 
 #include "nia_gl.h"
 #include "nia_vertex.h"
