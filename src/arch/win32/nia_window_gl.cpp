@@ -24,19 +24,31 @@ NIA_CALL niaWindow::niaWindow(){
 NIA_CALL niaWindow::~niaWindow(){
 }
 
+wchar_t* char2wchar(const char* string){
+    wchar_t* result = new wchar_t[nia_strlen(string) + 1];
+    wchar_t* tmp = result;
+
+    while(*string){
+        *(tmp++) = *(string++);
+    }
+
+    result[nia_strlen(string)] = 0;
+    return result;
+}
+
 NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     HINSTANCE hInstance = GetModuleHandle(NULL);
 	WNDCLASS wc      = {0}; 
 	wc.lpfnWndProc   = WndProc;
 	wc.hInstance     = hInstance;
-	wc.lpszClassName = L"Nia window";
+	wc.lpszClassName = (const wchar_t*)char2wchar(title);
 	wc.style = CS_OWNDC;
 
 	if( !RegisterClass(&wc) ){
-        printf("Oopsie\n");
+        NIA_TRACE("Oopsie\n");
     }
 
-	CreateWindowW(wc.lpszClassName, L"Nia window", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
+	CreateWindowW(wc.lpszClassName, (const wchar_t*)char2wchar(title), WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
     closed = false;
 }
 
@@ -111,7 +123,6 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
             }
             break;
         case WM_DESTROY:{
-                printf("Exiting...\n");
                 wglMakeCurrent(NULL, NULL); 
                 wglDeleteContext(glRenderContext);
                 PostQuitMessage(0);
