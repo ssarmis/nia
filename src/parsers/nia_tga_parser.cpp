@@ -25,7 +25,7 @@ NIA_CALL void niaTgaParser::loadFile(const char* filename){
     u32 size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    tgaData.fileData = (u8*)malloc(sizeof(u8) * size);
+    tgaData.fileData = new u8[size];
 
     fread(tgaData.fileData, sizeof(u8), size, file);
 
@@ -73,9 +73,10 @@ NIA_CALL void niaTgaParser::decodeFile(){ // TODO add consume macro
         u8 blue;
     } niaPiexl24;
 
+    tgaData.textureFormat = NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE; // most common for our suported tga formats
+
     switch (tgaData.fileHeader.imageType) {
         case NIA_IMAGE_TYPE_TRUE_COLOR:{
-                // tgaData.pixelData = (u8*)malloc(sizeof(niaPiexl24) * tgaData.fileHeader.width * tgaData.fileHeader.height);
                 tgaData.pixelData = tgaData.fileData;
             }
             break;
@@ -98,4 +99,8 @@ NIA_CALL u32 niaTgaParser::getHeight() const{
 
 NIA_CALL u8*niaTgaParser:: getPixelData() const{
     return tgaData.pixelData;
+}
+
+NIA_CALL textureFormatDetails niaTgaParser::getTextureFormat() const {
+    return tgaData.textureFormat;
 }

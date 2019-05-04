@@ -2,6 +2,7 @@
 #define _NIA_BMP_PARSER_H_
 
 #include "nia_general.h"
+#include "nia_texture_structures.h"
 
 #define NIA_BMP_1_BIT 1
 #define NIA_BMP_4_BIT 4
@@ -9,6 +10,11 @@
 #define NIA_BMP_16_BIT 16
 #define NIA_BMP_24_BIT 24
 #define NIA_BMP_32_BIT 32
+
+#define NIA_BMP_COMPRESSION_0 0
+#define NIA_BMP_COMPRESSION_1 1
+#define NIA_BMP_COMPRESSION_2 2
+#define NIA_BMP_COMPRESSION_3 3
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -39,6 +45,7 @@ typedef struct niaBMPImageHeader{
 } niaBMPImageHeader;
 
 typedef struct niaBMP{
+    textureFormatDetails textureFormat;
     niaBMPHeader fileHeader;  
     niaBMPImageHeader imageHeader;
     u8* fileData;
@@ -62,6 +69,7 @@ public:
     NIA_CALL u32 getHeight() const;
     NIA_CALL u8* getPixelData() const;
     NIA_CALL u8 getBitCount() const;
+    NIA_CALL textureFormatDetails getTextureFormat() const;
 };
 
 #endif // _NIA_BMP_PARSER_H_

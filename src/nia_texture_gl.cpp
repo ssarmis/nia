@@ -9,19 +9,22 @@
 NIA_CALL niaTexture::niaTexture(const char* filename){
     // for now I will assume there will only be .bmp files
     // TODO add extension cheking, header checking, more file formats forsers
+    textureFormatDetails textureFormat;
     const char* tmp = filename;
     while(*tmp){
         if(*tmp++ == '.'){
             switch (*tmp) {
                 case 't':{
                         niaTgaParser parser(filename);
-                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData());
+                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData(), parser.getTextureFormat());
+                        textureFormat = parser.getTextureFormat();
                     }
                     break;
 
                 case 'b':{
                         niaBmpParser parser(filename);
-                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData());
+                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData(), parser.getTextureFormat());
+                        textureFormat = parser.getTextureFormat();
                     }
                     break;
 
@@ -32,7 +35,7 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
         }
     }
 #ifdef _WIN32
-    niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE);
+    niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, textureFormat);
 #endif
 }
 

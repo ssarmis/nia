@@ -2,6 +2,7 @@
 #define _NIA_TGA_PARSER_H_
 
 #include "nia_general.h"
+#include "nia_texture_structures.h"
 
 #pragma pack(push, 1)
 typedef struct niaTGAHeader {
@@ -24,6 +25,7 @@ typedef struct niaTGAHeader {
 #pragma pack(pop)
 
 typedef struct niaTGA{
+    textureFormatDetails textureFormat;
     niaTGAHeader fileHeader;
     u8* fileData;
     u8* pixelData;
@@ -44,6 +46,7 @@ public:
     NIA_CALL u32 getWidth() const;
     NIA_CALL u32 getHeight() const;
     NIA_CALL u8* getPixelData() const;
+    NIA_CALL textureFormatDetails getTextureFormat() const;
 
 };
 
