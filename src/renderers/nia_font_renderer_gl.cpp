@@ -111,7 +111,7 @@ NIA_CALL void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* 
             }
 
             for (u32 i = 0; i < 4; ++i){
-                source[vertex + i].r = 0;
+                source[vertex + i].r = 1;
                 source[vertex + i].g = 0;
                 source[vertex + i].b = 0;
             }

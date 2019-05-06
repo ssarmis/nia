@@ -104,6 +104,25 @@ NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 
     }
 }
 
+NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, const niaVec3f& colors){
+    if (usedRectangles == NIA_BATCH_MAXIMUM_QUADS){
+        NIA_ERROR("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
+    } else {
+        rectangleArray[usedRectangles].x = x;
+        rectangleArray[usedRectangles].y = y;
+
+        rectangleArray[usedRectangles].w = w;
+        rectangleArray[usedRectangles].h = h;
+
+        rectangleArray[usedRectangles].r = colors.x;
+        rectangleArray[usedRectangles].g = colors.y;
+        rectangleArray[usedRectangles].b = colors.z;
+
+        ++usedRectangles;
+        batchUsedIndices += 6;
+    }
+}
+
 NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
     r32 colors[3] = {0, 1, 0};
     renderRectangle(x, y, w, h, colors);
