@@ -151,7 +151,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
 "void main(){\n"
 "   float pixelSize = 1.0 / 800.0;\n"
-"   float radius = 5 * pixelSize;\n"
+"   float radius = 5.0 * pixelSize;\n"
 "   vec3 color;\n"
 "   for(float y = -radius; y <= radius; y += pixelSize){\n"
 "       for(float x = -radius; x <= radius; x += pixelSize){\n"
