@@ -30,7 +30,7 @@ u32 rectVbo = 0;
 #include "nia_texture_gl.h"
 
 NIA_CALL niaRenderer::niaRenderer(){
-    cubeMesh = niaMesh::cube(1024);
+    cubeMesh = niaMesh::cube(100);
     
     NIA_GL_CALL(glGenVertexArrays(1, &rectVao)); // put this inside niaMesh
     NIA_GL_CALL(glBindVertexArray(rectVao));
