@@ -64,6 +64,11 @@ NIA_CALL niaRenderer::niaRenderer(){
 NIA_CALL niaRenderer::~niaRenderer(){
 }
 
+NIA_CALL void niaRenderer::clear(){
+    NIA_GL_CALL(glClearColor(0, 0, 0, 0));
+    NIA_GL_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+}
+
 NIA_CALL void niaRenderer::enableDepthTest(){
     NIA_GL_CALL(glEnable(GL_DEPTH_TEST));
 }
