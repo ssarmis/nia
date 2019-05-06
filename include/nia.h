@@ -23,5 +23,6 @@
 #include "nia_renderer.h"
 #include "nia_transform.h"
 #include "shaders/nia_shader_cubemap.h"
+#include "nia_post_processing_pipeline.h"
 
 #endif //_NIA_H_
