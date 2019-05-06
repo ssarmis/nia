@@ -48,6 +48,11 @@ public:
     NIA_CALL ~niaRenderer();
 
     /**
+     * @brief The function if for clearing the viewport 
+     */
+    NIA_CALL void clear();
+
+    /**
      * @brief The function if for enabling depth test 
      */
     NIA_CALL void enableDepthTest();
