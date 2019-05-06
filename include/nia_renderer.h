@@ -12,7 +12,7 @@
 #   endif
 #elif defined __unix__
 #   ifdef NIA_RENDERER_GL
-#       include "renderers/nia_renderer.h"
+#       include "renderers/nia_renderer_gl.h"
 #   endif
 #endif
 
