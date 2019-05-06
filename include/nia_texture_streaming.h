@@ -1,4 +1,3 @@
-#ifdef _WIN32 //tmp
 
 #ifndef _NIA_NIA_TEXTURE_STREAMING_H_
 #define _NIA_NIA_TEXTURE_STREAMING_H_
@@ -10,6 +9,12 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#elif defined __unix__
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <time.h>
 #endif
 
 #include "nia_texture_structures.h"
@@ -23,11 +28,16 @@ private:
 
 public:
     NIA_CALL static void initializeStream();
-    NIA_CALL static void updateStreams();
+    NIA_CALL static 
+#ifdef _WIN32
+    void
+#elif defined __unix__
+    void*
+#endif
+    updateStreams(void*);
     NIA_CALL static void appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details);
-    NIA_CALL static void updateTexture(const textureLiveLoadingChunk& chunk, HANDLE fileHandle);
+    NIA_CALL static void updateTexture(const textureLiveLoadingChunk& chunk);
 
 };
 
 #endif // _NIA_NIA_TEXTURE_STREAMING_H_
-#endif

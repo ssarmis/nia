@@ -5,6 +5,10 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#elif defined __unix__
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 #include "nia_gl.h"
@@ -21,7 +25,10 @@ NIA_STRUCT textureLiveLoadingChunk {
     u32 textureId;
 #ifdef _WIN32
     FILETIME writeTime;
+#elif defined __unix__
+    struct stat writeStat;
 #endif
+
     i16 writeMinute;
     i16 writeSecond;
 

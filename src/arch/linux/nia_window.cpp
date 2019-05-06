@@ -15,6 +15,7 @@ XSetWindowAttributes    niaWindow::setWindowAttributes;
 Window                  niaWindow::rootWindow;
 Window                  niaWindow::window;
 GLXContext              niaWindow::openglContext;
+GLXContext              niaWindow::openglContextSecond;
 XWindowAttributes       niaWindow::windowAttributes;
 
 NIA_CALL niaWindow::niaWindow(){
@@ -51,6 +52,8 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
     XStoreName(display, window, title);
 
     openglContext = glXCreateContext(display, visualInfo, NULL, GL_TRUE);
+    openglContextSecond = glXCreateContext(display, visualInfo, NULL, GL_TRUE);
+
     glXMakeCurrent(display, window, openglContext);
 
     closed = false;

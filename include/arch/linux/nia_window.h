@@ -15,19 +15,21 @@
 
 NIA_CLASS niaWindow{
 private:
-    static bool closed;
-    static Display*                display;
     static GLint                   attributes[5];
     static XVisualInfo*            visualInfo;
     static Colormap                colorMap;
     static XSetWindowAttributes    setWindowAttributes;
     static Window                  rootWindow;
-    static Window                  window;
-    static GLXContext              openglContext;
     static XWindowAttributes       windowAttributes;
     static XEvent                  event;
 
 public:
+    static bool closed;
+    static Window                  window;
+    static Display*                display;
+    static GLXContext              openglContext;
+    static GLXContext              openglContextSecond;
+
     NIA_CALL niaWindow();
     NIA_CALL ~niaWindow();
 

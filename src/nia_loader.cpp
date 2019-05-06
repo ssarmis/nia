@@ -22,7 +22,7 @@ NIA_CALL void niaLoader::loadEverything(){
     if(!(glLoad && extLoad)){
         NIA_ERROR("Could not load all extensions, please update you drivers.\n");
     }
-#ifdef _WIN32
+// #ifdef _WIN32
     niaTextureStreaming::initializeStream();
-#endif
+// #endif
 }
