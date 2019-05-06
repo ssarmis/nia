@@ -57,11 +57,15 @@ NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
 }
 
 NIA_CALL void niaWindow::enableAdaptiveVsync(){
-    glXSwapIntervalEXT(display, window, -1);
+    if(glXSwapIntervalEXT){
+        glXSwapIntervalEXT(display, window, -1);
+    }
 }
 
 NIA_CALL void niaWindow::enableVsync(){
-    glXSwapIntervalEXT(display, window, 1);
+    if(glXSwapIntervalEXT){
+        glXSwapIntervalEXT(display, window, 1);
+    }
 }
 
 NIA_CALL void niaWindow::handleEvents(niaEvent& event){
