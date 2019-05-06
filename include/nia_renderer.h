@@ -5,6 +5,7 @@
 #include "nia_general.h"
 
 #include "renderers/nia_batch_renderer_gl.h"
+#include "renderers/nia_font_renderer_gl.h"
 
 #ifdef _WIN32
 #   ifdef NIA_RENDERER_GL
