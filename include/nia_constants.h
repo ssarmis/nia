@@ -5,10 +5,10 @@
 
 #ifdef __unix__
 #define NIA_GLSL_VERSION    "#version 300 es"
-#define NIA_GLSL_PRECISION  "mediump"
+#define NIA_GLSL_PRECISION  "highp"
 #elif defined _WIN32
 #define NIA_GLSL_VERSION    "#version 440 core"
-#define NIA_GLSL_PRECISION  "mediump"
+#define NIA_GLSL_PRECISION  "highp"
 #endif
 
 #define NIA_UNIFORM_PROJECTION              "mP"
