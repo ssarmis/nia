@@ -149,15 +149,13 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 
 "uniform sampler2D tex;\n"
 
-"vec2 pos = o_uv;\n"
-
 "void main(){\n"
 "   float pixelSize = 1.0 / 800.0;\n"
 "   float radius = 5 * pixelSize;\n"
 "   vec3 color;\n"
 "   for(float y = -radius; y <= radius; y += pixelSize){\n"
 "       for(float x = -radius; x <= radius; x += pixelSize){\n"
-"           vec2 fxy = pos + vec2(x, y);\n"
+"           vec2 fxy = o_uv + vec2(x, y);\n"
 "           color += texture(tex, fxy).xyz;\n"
 "       }\n"
 "   }\n"
