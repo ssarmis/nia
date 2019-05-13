@@ -2,6 +2,7 @@
 
 #include "parsers/nia_bmp_parser.h"
 #include "parsers/nia_tga_parser.h"
+#include "parsers/nia_png_parser.h"
 
 
 #include "nia_texture_streaming.h"
@@ -28,6 +29,13 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
                     }
                     break;
 
+                case 'p':{
+                        niaPngParser parser(filename);
+                        allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData(), parser.getTextureFormat());
+                        textureFormat = parser.getTextureFormat();
+                    }
+                    break;
+
                 default:{
                     }
                     break;
@@ -35,7 +43,7 @@ NIA_CALL niaTexture::niaTexture(const char* filename){
         }
     }
 #ifdef _WIN32
-    niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, textureFormat);
+    // niaTextureStreaming::appendLiveLoadingTexture(textureId, (char*)filename, textureFormat);
 #endif
 }
 
