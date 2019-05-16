@@ -18,6 +18,7 @@ if (UNIX)
         ./src/parsers/nia_ttf_parser.cpp
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
+        ./src/parsers/nia_png_parser.cpp
         ./src/parsers/nia_obj_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_texture_streaming.cpp
@@ -55,6 +56,7 @@ if (WIN32)
         ./src/parsers/nia_obj_parser.cpp
         ./src/parsers/nia_bmp_parser.cpp
         ./src/parsers/nia_tga_parser.cpp
+        ./src/parsers/nia_png_parser.cpp
         ./src/nia_transform.cpp
         ./src/nia_texture_streaming.cpp
         ./src/nia_loader.cpp
