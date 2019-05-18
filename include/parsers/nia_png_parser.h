@@ -95,68 +95,6 @@ typedef struct niaPNG {
     u8* pixelData;
 } niaPNG;
 
-static inline u8 readBit(niaPNGChunkData* chunk){
-    return (chunk->data[chunk->bitsUsed >> 3] >> ((chunk->bitsUsed++) & 7)) & 1;
-}
-
-static inline u32 readBits(niaPNGChunkData* chunk, u32 amount){
-    u32 result = 0;
-    for(u32 i = 0; i < amount; ++i){
-        result |= readBit(chunk) << i;
-    }
-    return result;
-}
-
-static inline u32 readBitsReversed(niaPNGChunkData* chunk, u32 amount){
-    u32 result = 0;
-    for(int i = amount - 1; i >= 0; --i){
-        result |= readBit(chunk) << i;
-    }
-    return result;
-}
-
-
-static inline u32 lookAtBitsReversed(niaPNGChunkData* chunk, u32 amount){
-    u32 result = readBitsReversed(chunk, amount);
-    chunk->bitsUsed -= amount;
-    return result;
-} 
-
-static inline u32 lookAtBits(niaPNGChunkData* chunk, u32 amount){
-    u32 result = readBits(chunk, amount);
-    chunk->bitsUsed -= amount;
-    return result;
-}
-
-static inline void wasteCurrentByte(niaPNGChunkData* chunk){
-    while(chunk->bitsUsed & 7 != 0){
-        chunk->bitsUsed++;
-    }
-}
-
-static inline void writeToOutput(niaPNGDecompresedOutput* output, u8 data){
-    *(output->data + (output->used++)) = data;
-}
-
-static inline void writeToOutputAmount(niaPNGDecompresedOutput* output, u8* data, u32 amount){
-    while(amount--){
-        *(output->data + (output->used++)) = *(data++);
-    }
-}
-
-static inline void copyDataToOutput(u8* data, niaPNGDecompresedOutput* output, u32 amount){
-    while(amount--){
-        *(output->data + (output->used++)) = *(data++);
-    }
-}
-
-static inline void copyChunkToOutput(niaPNGChunkData* chunk, niaPNGDecompresedOutput* output, u32 amount){
-    while(amount--){
-        *(output->data + (output->used++)) = *(chunk->data + (chunk->bitsUsed >> 3));
-        chunk->bitsUsed += 8;
-    }
-}
-
 NIA_CLASS niaPngParser {
 private:
     niaPNG png;
