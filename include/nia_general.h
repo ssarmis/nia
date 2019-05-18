@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <assert.h>
 
 #include "nia_export.h"
 
@@ -13,6 +14,13 @@
 #define NIA_TRACE(...) fprintf(stdout, __VA_ARGS__)
 #else
 #define NIA_TRACE(...) 
+#endif
+
+
+#ifdef NIA_DEBUG_BUILD
+#define NIA_ASSERT(_exp) assert(_exp)
+#else
+#define NIA_ASSERT(_exp) 
 #endif
 
 
