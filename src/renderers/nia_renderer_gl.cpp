@@ -183,10 +183,10 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh){
     defaultShader.unuseShader();
 }
 
-NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, const niaTexture& texture){
+NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, niaTexture& texture){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
     defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.textureId));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.getTextureId()));
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));

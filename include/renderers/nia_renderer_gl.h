@@ -139,7 +139,7 @@ public:
      * @param mesh The mesh to be rendered
      * @param texture The texture to be applied
      */
-    NIA_CALL void renderMesh(const niaMesh& mesh, const niaTexture& texture);
+    NIA_CALL void renderMesh(const niaMesh& mesh, niaTexture& texture);
 
     /**
      * @brief Function for rendering an already loaded mesh with some texture
