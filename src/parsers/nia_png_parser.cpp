@@ -128,9 +128,9 @@ NIA_CALL niaPngParser::niaPngParser(const char* filename){
     loadFile(filename);
     iterateHeader();
 
-    png.textureFormat = NIA_TEXTURE_FORMAT_RGBA_RGBA_UBYTE;
-    png.decompressedOutput.used = 0;
-    png.decompressedOutput.data = new u8[png.ihdr.width * png.ihdr.height * 4 * 4]; // ok change this thing sometime
+    textureFormat = NIA_TEXTURE_FORMAT_RGBA_RGBA_UBYTE;
+    decompressedOutput.used = 0;
+    decompressedOutput.data = new u8[ihdr.width * ihdr.height * 4 * 4]; // ok change this thing sometime
 
     decompressChunks();
     defilterData();
@@ -138,16 +138,16 @@ NIA_CALL niaPngParser::niaPngParser(const char* filename){
 
 NIA_CALL niaPngParser::~niaPngParser(){}
 
-NIA_CALL niaPNG niaPngParser::loadFile(const char* filename){
+NIA_CALL void niaPngParser::loadFile(const char* filename){
     FILE* file = fopen(filename, "rb");
 
     fseek(file, 0, SEEK_END);
     u32 size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    png.pngData = new u8[size];
+    pngData = new u8[size];
 
-    fread(png.pngData, sizeof(u8), size, file);
+    fread(pngData, sizeof(u8), size, file);
 
     fclose(file);
 }
@@ -175,13 +175,13 @@ static niaPNGChunkData* chunkDataInit(niaPNGCompressedStream* stream, u32 size, 
 }
 
 NIA_CALL void niaPngParser::iterateHeader(){
-    u8* source = png.pngData;
+    u8* source = pngData;
 
     WASTE(source, NIA_PNG_SIGNATURE_SIZE);
 
     niaPNGHeader header;
 
-    compressedStreamInit(&png.stream);
+    compressedStreamInit(&stream);
     
     u8 done = 0;
 
@@ -201,26 +201,26 @@ NIA_CALL void niaPngParser::iterateHeader(){
         NIA_TRACE("%s\n", a);
 
         if(compareHeader("IHDR", header.type)){
-            CONSUME(header.data, niaPNGHeaderIHDR, png.ihdr);
-            png.ihdr.width = SWAP32(png.ihdr.width);
-            png.ihdr.height = SWAP32(png.ihdr.height);
-            NIA_TRACE("Bitdepth: %d\n", png.ihdr.bitDepth);
-            NIA_TRACE("Color type: %d\n", png.ihdr.colorType);
+            CONSUME(header.data, niaPNGHeaderIHDR, ihdr);
+            ihdr.width = SWAP32(ihdr.width);
+            ihdr.height = SWAP32(ihdr.height);
+            NIA_TRACE("Bitdepth: %d\n", ihdr.bitDepth);
+            NIA_TRACE("Color type: %d\n", ihdr.colorType);
         } else if(compareHeader("IEND", header.type)){
             done = 1;
         } else if(compareHeader("IDAT", header.type)){
-            niaPNGChunkData* chunk = chunkDataInit(&png.stream, header.length, header.data);        
+            niaPNGChunkData* chunk = chunkDataInit(&stream, header.length, header.data);        
             WASTE(header.data, header.length);
         } else if(compareHeader("pHYs", header.type)){
-            CONSUME(header.data, niaPNGHeaderPHYS, png.phys);
-            png.phys.xPPU = SWAP32(png.phys.xPPU);
-            png.phys.yPPU = SWAP32(png.phys.yPPU);
+            CONSUME(header.data, niaPNGHeaderPHYS, phys);
+            phys.xPPU = SWAP32(phys.xPPU);
+            phys.yPPU = SWAP32(phys.yPPU);
         } else if(compareHeader("tIME", header.type)){
-            CONSUME(header.data, niaPNGHeaderTIME, png.time);
-            png.time.year = SWAP16(png.time.year);
+            CONSUME(header.data, niaPNGHeaderTIME, time);
+            time.year = SWAP16(time.year);
             
-            NIA_TRACE("\t%d-%d-%d, %d:%d:%d\n", png.time.year, png.time.month, png.time.day,
-                    png.time.hour, png.time.minute, png.time.second);
+            NIA_TRACE("\t%d-%d-%d, %d:%d:%d\n", time.year, time.month, time.day,
+                    time.hour, time.minute, time.second);
         } else if(compareHeader("tEXt", header.type)){
             u8* keyword = header.data;
             NIA_TRACE("\t%s\n", keyword);
@@ -256,7 +256,7 @@ NIA_CALL void niaPngParser::methodNoCompression(niaPNGChunkData* chunk){
         NIA_ERROR("Saddly there was an error while trying to process the file.\n");
         return;
     }
-    copyChunkToOutput(chunk, &png.decompressedOutput, len);
+    copyChunkToOutput(chunk, &decompressedOutput, len);
 }
 
 static i16 getSymbolIfCodeIsReal(u32 code, u16 length, niaPNGHuffmanTable* table){
@@ -411,7 +411,7 @@ NIA_CALL void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     for(;;){
         u32 symbol = decodeHuffmanSymbol(&litLengthAlphabet, chunk);
         if(symbol < 256){
-            writeToOutput(&(png.decompressedOutput), symbol);
+            writeToOutput(&(decompressedOutput), symbol);
         } else {
             if(symbol == 256){
                 break;
@@ -428,15 +428,15 @@ NIA_CALL void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
                 u32 extraDistanceBitsAmount = distanceExtraBits[distanceIndex];
                 u32 extraDistanceBits = readBits(chunk, extraDistanceBitsAmount);
                 u32 finalDistance = distance + extraDistanceBits;
-                writeToOutputAmount(&(png.decompressedOutput),
-                             (png.decompressedOutput.data + (png.decompressedOutput.used - finalDistance)), finalLength);
+                writeToOutputAmount(&(decompressedOutput),
+                             (decompressedOutput.data + (decompressedOutput.used - finalDistance)), finalLength);
             }
         }
     }
 }
 
 NIA_CALL void niaPngParser::decompressChunks(){
-    niaPNGChunkData* current = png.stream.head;
+    niaPNGChunkData* current = stream.head;
     while(current){
         u8 compressionMethod = readBits(current, 4);
         u8 compressionInfo = readBits(current, 4);
@@ -485,16 +485,16 @@ NIA_CALL void niaPngParser::decompressChunks(){
 }
 
 NIA_CALL void niaPngParser::defilterData(){
-    switch(png.ihdr.filterMethod){
+    switch(ihdr.filterMethod){
         case NIA_PNG_FILTER0:{
-                png.pixelData = new u8[png.ihdr.width * png.ihdr.height * 4];
+                pixelData = new u8[ihdr.width * ihdr.height * 4];
 
                 u32 pixelOffset = 0;
                 u32 dataOffset = 1;
 
-                for(int y = 0; y < png.ihdr.height; ++y){
-                    for(int i = 0; i < png.ihdr.width * 4; ++i){
-                        png.pixelData[pixelOffset++] = png.decompressedOutput.data[dataOffset++];
+                for(int y = 0; y < ihdr.height; ++y){
+                    for(int i = 0; i < ihdr.width * 4; ++i){
+                        pixelData[pixelOffset++] = decompressedOutput.data[dataOffset++];
                     }
                     ++dataOffset;
                 }
@@ -520,17 +520,17 @@ NIA_CALL void niaPngParser::defilterData(){
 }
 
 NIA_CALL u32 niaPngParser::getWidth(){
-    return png.ihdr.height;
+    return ihdr.height;
 }
 
 NIA_CALL u32 niaPngParser::getHeight(){
-    return png.ihdr.height;
+    return ihdr.height;
 }
 
 NIA_CALL u8* niaPngParser::getPixelData() const {
-    return png.pixelData;
+    return pixelData;
 }
 
 NIA_CALL textureFormatDetails niaPngParser::getTextureFormat() const {
-    return png.textureFormat;
+    return textureFormat;
 }

@@ -21,7 +21,7 @@ static u8 pngSignature[NIA_PNG_SIGNATURE_SIZE] = {137, 80, 78, 71, 13, 10, 26, 1
 
 #pragma pack(push, 1)
 
-typedef struct niaPNGHeaderTIME {
+NIA_STRUCT niaPNGHeaderTIME {
     u16 year;
     u8 month;
     u8 day;
@@ -30,13 +30,13 @@ typedef struct niaPNGHeaderTIME {
     u8 second;
 } niaPNGHeaderTIME;
 
-typedef struct niaPNGHeaderPHYS {
+NIA_STRUCT niaPNGHeaderPHYS {
     u32 xPPU;
     u32 yPPU;
     u8 unitSpecifier;
 } niaPNGHeaderPHYS;
 
-typedef struct niaPNGHeaderIHDR {
+NIA_STRUCT niaPNGHeaderIHDR {
     u32 width;
     u32 height;
     u8 bitDepth;
@@ -46,7 +46,7 @@ typedef struct niaPNGHeaderIHDR {
     u8 interlanceMethod;
 } niaPNGHeaderIHDR;
 
-typedef struct niaPNGHuffmanEntry {
+NIA_STRUCT niaPNGHuffmanEntry {
     u8 codeLength;
     u16 code;
     u16 symbol;
@@ -54,62 +54,62 @@ typedef struct niaPNGHuffmanEntry {
 #pragma pack(pop)
 
 
-typedef struct niaPNGHuffmanTable {
+NIA_STRUCT niaPNGHuffmanTable {
     niaPNGHuffmanEntry* entries;
     u16 numberOfEntries;
     u16* lengthCount[16 + 1];
 } niaPNGHuffmanTable;
 
-typedef struct niaPNGHeader {
+NIA_STRUCT niaPNGHeader {
     u32 length;
     u32 type;
     u8* data;
     u32 crc;
 } niaPNGHeader;
 
-typedef struct niaPNGDecompresedOutput {
+NIA_STRUCT niaPNGDecompresedOutput {
     u32 used;
     u8* data;
 } niaPNGDecompresedOutput;
 
-typedef struct niaPNGChunkData {
+NIA_STRUCT niaPNGChunkData {
     u32 size;
     u32 bitsUsed;
     u8* data;
     struct niaPNGChunkData* next;
 } niaPNGChunkData;
 
-typedef struct niaPNGCompressedStream {
+NIA_STRUCT niaPNGCompressedStream {
     struct niaPNGChunkData* head;
     struct niaPNGChunkData* tail;
 } niaPNGCompressedStream;
 
-typedef struct niaPNG {
+NIA_CLASS niaPngParser {
+private:
     niaPNGHeaderIHDR ihdr;
     niaPNGHeaderTIME time;
     niaPNGHeaderPHYS phys;
+
     niaPNGDecompresedOutput decompressedOutput;
     niaPNGCompressedStream stream;
     textureFormatDetails textureFormat;
+
     u8* pngData;
     u8* pixelData;
-} niaPNG;
 
-NIA_CLASS niaPngParser {
-private:
-    niaPNG png;
     NIA_CALL void methodDynamicHuffman(niaPNGChunkData* chunk);
     NIA_CALL void methodNoCompression(niaPNGChunkData* chunk);
 
+    NIA_CALL void iterateHeader();
+    NIA_CALL void decompressChunks();
+    NIA_CALL void defilterData();
 public:
+
     NIA_CALL niaPngParser();
     NIA_CALL niaPngParser(const char* filename);
     NIA_CALL ~niaPngParser();
 
-    NIA_CALL niaPNG loadFile(const char* filename);
-    NIA_CALL void iterateHeader();
-    NIA_CALL void decompressChunks();
-    NIA_CALL void defilterData();
+    NIA_CALL void loadFile(const char* filename);
     NIA_CALL u32 getWidth();
     NIA_CALL u32 getHeight();
     NIA_CALL u8* getPixelData() const;
