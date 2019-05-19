@@ -1,10 +1,17 @@
-## Run Nia benchmark
-```make run```
+## Nia benchmark
+### Run benchmark using GCC
+```g++ -o a nia.cpp -L../../build -I../../include -lnia -lX11 -lGL -lbenchmark -lpthread; ./a```
 
-## Run SDL benchmark 
+## SDL benchmark
+### Installing on Ubuntu
+```sudo apt-get install libsdl2-dev```
+### Run benchmark using GCC
 ```g++ -o a sdl.cpp -DSDL_BENCHMARK -lSDL2main -lSDL2 -lbenchmark -lpthread; ./a```
 
-## Run SFML benchmark
+## SFML benchmark
+### Installing on Ubuntu
+```sudo apt-get install libsfml-dev```
+### Run benchmark using GCC
 ```g++ -o a sfml.cpp -DSFML_BENCHMARK -lsfml-graphics -lsfml-window -lsfml-system -lbenchmark -lpthread; ./a```
 
 ## Run Glut benchmark
