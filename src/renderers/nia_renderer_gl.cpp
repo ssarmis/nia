@@ -13,14 +13,13 @@
 //  2  +---+  1
 
 #define createAndBufferVertexies(_x, _y, _z, _w, _h, _colors) {\
-    niaVertex v0 = {_x     , _y     , _z, _colors[0], _colors[1], _colors[2]};\
-    niaVertex v1 = {_x + _w, _y + _h, _z, _colors[0], _colors[1], _colors[2]};\
-    niaVertex v2 = {_x     , _y + _h, _z, _colors[0], _colors[1], _colors[2]};\
-    niaVertex v3 = {_x + _w, _y     , _z, _colors[0], _colors[1], _colors[2]};\
-    NIA_GL_CALL(glNamedBufferSubData(rectVbo, 0                    , sizeof(niaVertex), &v0));\
-    NIA_GL_CALL(glNamedBufferSubData(rectVbo, sizeof(niaVertex) * 1, sizeof(niaVertex), &v1));\
-    NIA_GL_CALL(glNamedBufferSubData(rectVbo, sizeof(niaVertex) * 2, sizeof(niaVertex), &v2));\
-    NIA_GL_CALL(glNamedBufferSubData(rectVbo, sizeof(niaVertex) * 3, sizeof(niaVertex), &v3));\
+    niaVertex v[4] ={ \
+                    {_x     , _y     , _z, _colors[0], _colors[1], _colors[2]},\
+                    {_x + _w, _y + _h, _z, _colors[0], _colors[1], _colors[2]},\
+                    {_x     , _y + _h, _z, _colors[0], _colors[1], _colors[2]},\
+                    {_x + _w, _y     , _z, _colors[0], _colors[1], _colors[2]}\
+    };\
+    NIA_GL_CALL(glNamedBufferSubData(rectVbo, 0, sizeof(niaVertex) * 4, v));\
 }
 
 u32 rectVao = 0;
@@ -55,10 +54,6 @@ NIA_CALL niaRenderer::niaRenderer(){
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
     NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
-
-    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-    NIA_GL_CALL(glBindVertexArray(0));
 }
 
 NIA_CALL niaRenderer::~niaRenderer(){
@@ -164,11 +159,11 @@ NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 color
 
 NIA_CALL void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){ // TODO add unbinding for vaos
     createAndBufferVertexies(x, y, z, w, h, colors);
+
     NIA_GL_CALL(glBindVertexArray(rectVao));
     defaultShader.useShader();
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
 
-    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
     defaultShader.unuseShader();
 }
@@ -178,7 +173,6 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh){
     defaultShader.useShader();
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
     
-    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
     defaultShader.unuseShader();
 }
