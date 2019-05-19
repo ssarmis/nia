@@ -83,6 +83,10 @@ NIA_CALL niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber)
                             if(frameNumber > parser.getNumberOfFrames()){
                                 frameNumber = parser.getNumberOfFrames();
                             }
+
+                            if(frameNumber <= 0){
+                                frameNumber = 1;
+                            }
                             allocateTexture(parser.getWidth(), parser.getHeight(), parser.getFrames()[frameNumber - 1].data, parser.getTextureFormat()); 
                         }
                         

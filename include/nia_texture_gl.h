@@ -31,7 +31,6 @@ public:
     GLuint textureId;
     NIA_CALL niaTexture();
     NIA_CALL niaTexture(const char* filename, u32 flag = NIA_TEXTURE_NO_FLAG, u16 frameNumber = 0);
-    NIA_CALL niaTexture(const char* filename);
     NIA_CALL niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details);
     NIA_CALL ~niaTexture();
 
