@@ -148,6 +148,8 @@ public:
      */
     NIA_CALL void renderMesh(const niaMesh& mesh, GLuint textureId);
 
+    NIA_CALL void renderRectangleRaw(r32 x, r32 y, r32 w, r32 h, niaTexture& texture);
+    
     /**
      * @brief Function for rendering an already loaded mesh, but without any predefined shaders being used
      * @param mesh The mesh to be rendered
@@ -174,7 +176,7 @@ public:
      * @param texture A cube texture to be rendered as a reflection onto the mesh
      */
     NIA_CALL void renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
-    
+
     NIA_CALL void renderSprite(const niaSprite& sprite);
     
     friend class niaScene;

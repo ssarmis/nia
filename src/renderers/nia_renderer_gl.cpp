@@ -198,6 +198,18 @@ NIA_CALL void niaRenderer::renderMesh(const niaMesh& mesh, GLuint textureId){
 }
 
 // The NO-raw functions will NOT call the RAW fuction because we don't know if the compiler will optimize the calls
+NIA_CALL void niaRenderer::renderRectangleRaw(r32 x, r32 y, r32 w, r32 h, niaTexture& texture){
+    r32 colors[] = {1, 1, 1};
+    r32 z = 0;
+    createAndBufferVertexies(x, y, z, w, h, colors);
+
+    NIA_GL_CALL(glBindVertexArray(rectVao));
+    // defaultShader.useShader();
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.getTextureId()));
+
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
+    // defaultShader.unuseShader();
+}
 
 NIA_CALL void niaRenderer::renderMeshRaw(const niaMesh& mesh){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
