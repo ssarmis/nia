@@ -18,7 +18,7 @@ static void BM_RENDER_RECTANGLE(benchmark::State& state){
     while(state.KeepRunning()){
         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
         SDL_RenderFillRect(renderer, &r);
-        SDL_RenderPresent(renderer);
+        // SDL_RenderPresent(renderer);
     }
 }
 BENCHMARK(BM_RENDER_RECTANGLE);

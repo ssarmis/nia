@@ -1,4 +1,4 @@
-#ifdef SFML_BENCHMARK
+// #ifdef SFML_BENCHMARK
 #include <SFML/Graphics.hpp>
 #include "../benchmark/include/benchmark/benchmark.h"
 
@@ -10,10 +10,22 @@ static void BM_RENDER_RECTANGLE(benchmark::State& state){
 
     while(state.KeepRunning()){
         window.draw(shape);
-        window.display();
+        // window.display();
     }
 }
 BENCHMARK(BM_RENDER_RECTANGLE);
+
+static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
+    sf::Texture texture;
+    sf::Sprite sprite;
+    texture.loadFromFile("test.bmp");
+    sprite.setTexture(texture);
+    while(state.KeepRunning()){
+        window.draw(sprite);
+        // window.display();
+    }
+}
+BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE);
 
 
 int main(int argc, char* argv[]){
@@ -24,4 +36,4 @@ int main(int argc, char* argv[]){
 
     return 0;
 }
-#endif
+// #endif
