@@ -1,4 +1,6 @@
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
 
 #ifndef _NIA_GENERAL_H_
 #define _NIA_GENERAL_H_
@@ -75,7 +77,7 @@ typedef float r32;
 typedef double r64;
 
 NIA_INLINE r64 nia_cot(r64 angle){
-  return (1.0 / tanf(angle));
+  return (r64)(1.0 / tanf(angle));
 }
 
 NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
@@ -86,7 +88,7 @@ NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
 }
 
 NIA_INLINE u32 nia_strlen(const char* str){
-    u32 result;
+    u32 result = 0;
     while(*str++){
         ++result;
     }

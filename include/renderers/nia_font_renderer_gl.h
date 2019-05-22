@@ -13,12 +13,12 @@ private:
     niaTTFParser* fontParser;
 
 public:
-    NIA_CALL niaFontRenderer();
-    NIA_CALL niaFontRenderer(const char* filename);
-    NIA_CALL ~niaFontRenderer();
+    niaFontRenderer();
+    niaFontRenderer(const char* filename);
+    ~niaFontRenderer();
 
-    NIA_CALL void renderString(r32 x, r32 y, r32 size, const char* string); // <   these 2 are the same
-    NIA_CALL void render(r32 x, r32 y, r32 size, const char* string);       // <
+    void renderString(r32 x, r32 y, r32 size, const char* string); // <   these 2 are the same
+    void render(r32 x, r32 y, r32 size, const char* string);       // <
 };
 
 #endif //_NIA_FONT_RENDERER_GL_H_

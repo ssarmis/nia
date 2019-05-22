@@ -10,7 +10,7 @@
 
 textureLiveLoadingStream niaTextureStreaming::liveLoadingStream;
 
-NIA_CALL void niaTextureStreaming::initializeStream(){
+void niaTextureStreaming::initializeStream(){
     liveLoadingStream.head = NULL;
     liveLoadingStream.tail = NULL;
 
@@ -23,7 +23,7 @@ NIA_CALL void niaTextureStreaming::initializeStream(){
 #endif
 }
 
-NIA_CALL 
+
 #ifdef _WIN32
     void
 #elif defined __unix__
@@ -90,7 +90,7 @@ NIA_CALL
     }
 }
 
-NIA_CALL void niaTextureStreaming::appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details){
+void niaTextureStreaming::appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details){
     textureLiveLoadingChunk* chunk = new textureLiveLoadingChunk;
 
     chunk->textureId = textureId;
@@ -115,7 +115,7 @@ NIA_CALL void niaTextureStreaming::appendLiveLoadingTexture(u32 textureId, char*
     chunk->next = NULL;
 }
 
-NIA_CALL void niaTextureStreaming::updateTexture(const textureLiveLoadingChunk& chunk){
+void niaTextureStreaming::updateTexture(const textureLiveLoadingChunk& chunk){
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, chunk.textureId));
     
 

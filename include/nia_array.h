@@ -11,18 +11,18 @@ private:
     T* data;
 
 public:
-    NIA_CALL niaArray();
-    NIA_CALL niaArray(u32 limit);
-    NIA_CALL ~niaArray();
+    niaArray();
+    niaArray(u32 limit);
+    ~niaArray();
 
-    NIA_CALL void add(T element);
-    NIA_CALL void remove(u32 index);
+    void add(T element);
+    void remove(u32 index);
     
-    NIA_CALL void clean();
-    NIA_CALL T* getData();
-    NIA_CALL u32 getSize() const;
+    void clean();
+    T* getData();
+    u32 getSize() const;
     
-    NIA_CALL T& operator[](u32 index) const;
+    T& operator[](u32 index) const;
 };
 
 template class niaArray<int>;

@@ -6,8 +6,8 @@
 
 NIA_CLASS niaShaderQuad : public niaShader{
 public:
-    NIA_CALL niaShaderQuad();
-    NIA_CALL ~niaShaderQuad();
+    niaShaderQuad();
+    ~niaShaderQuad();
 };
 
 #endif //_NIA_SHADER_QUAD_H_

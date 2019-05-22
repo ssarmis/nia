@@ -9,7 +9,7 @@
 // GL_TEXTURE_CUBE_MAP_POSITIVE_Z	Back
 // GL_TEXTURE_CUBE_MAP_NEGATIVE_Z	Front
 
-NIA_CALL niaCubeTexture::niaCubeTexture(const char* textures[6]){
+niaCubeTexture::niaCubeTexture(const char* textures[6]){
 
     NIA_GL_CALL(glGenTextures(1, &textureId));
 
@@ -61,10 +61,10 @@ NIA_CALL niaCubeTexture::niaCubeTexture(const char* textures[6]){
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 }
 
-NIA_CALL niaCubeTexture::niaCubeTexture(){
+niaCubeTexture::niaCubeTexture(){
 }
 
-NIA_CALL niaCubeTexture::~niaCubeTexture(){
+niaCubeTexture::~niaCubeTexture(){
 }
 
 NIA_INTERNAL void niaCubeTexture::allocateTexture(u32 width, u32 height, u8* data, u32 side){ // TODO add ability to change depth

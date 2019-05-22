@@ -78,14 +78,14 @@ NIA_STATIC void setupBatchBuffers(){
     NIA_GL_CALL(glBindVertexArray(0));
 }
 
-NIA_CALL niaBatchRenderer::niaBatchRenderer(){
+niaBatchRenderer::niaBatchRenderer(){
     setupBatchBuffers();
 }
 
-NIA_CALL niaBatchRenderer::~niaBatchRenderer(){
+niaBatchRenderer::~niaBatchRenderer(){
 }
 
-NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]){
+void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]){
     if (usedRectangles == NIA_BATCH_MAXIMUM_QUADS){
         NIA_ERROR("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
     } else {
@@ -104,7 +104,7 @@ NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 
     }
 }
 
-NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, const niaVec3f& colors){
+void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, const niaVec3f& colors){
     if (usedRectangles == NIA_BATCH_MAXIMUM_QUADS){
         NIA_ERROR("The amount of rectangles requested to be drawn is too much(over %d)\n", NIA_BATCH_MAXIMUM_QUADS);
     } else {
@@ -123,7 +123,7 @@ NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, cons
     }
 }
 
-NIA_CALL void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
+void niaBatchRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
     r32 colors[3] = {0, 1, 0};
     renderRectangle(x, y, w, h, colors);
 }
@@ -154,7 +154,7 @@ NIA_INTERNAL void niaBuildVertex(niaBasicVertex* source, const niaRectangle& rec
     *vertex += 4;
 }
 
-NIA_CALL void niaBatchRenderer::executeRender(){
+void niaBatchRenderer::executeRender(){
     NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, batchVbo));
     niaBasicVertex* source = (niaBasicVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     

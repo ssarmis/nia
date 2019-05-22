@@ -7,8 +7,8 @@
 
 NIA_CLASS niaShaderCubeMap : public niaShader{
 public:
-    NIA_CALL niaShaderCubeMap();
-    NIA_CALL ~niaShaderCubeMap();
+    niaShaderCubeMap();
+    ~niaShaderCubeMap();
 };
 
 #endif //_NIA_SHADER_CUBE_MAP_H_

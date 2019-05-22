@@ -21,9 +21,9 @@
 }
 
 
-NIA_CALL niaTTFParser::niaTTFParser():fileSize(0), initialPointer(NULL), data(NULL){}
+niaTTFParser::niaTTFParser():fileSize(0), initialPointer(NULL), data(NULL){}
 
-NIA_CALL niaTTFParser::niaTTFParser(const char* filename){
+niaTTFParser::niaTTFParser(const char* filename){
     if(filename){
         if(loadFile(filename)){
             NIA_ERROR("Could not read %s, aborting font.\n", filename);
@@ -44,13 +44,13 @@ NIA_CALL niaTTFParser::niaTTFParser(const char* filename){
     }
 }
 
-NIA_CALL niaTTFParser::~niaTTFParser(){
+niaTTFParser::~niaTTFParser(){
     delete [] initialPointer;
     delete [] glyphOffsets;
     delete [] glyphBuffer;
 }
 
-NIA_CALL int niaTTFParser::loadFile(const char* filename){
+int niaTTFParser::loadFile(const char* filename){
     FILE* file = fopen(filename, "rb");
 
     if(!file){
@@ -71,7 +71,7 @@ NIA_CALL int niaTTFParser::loadFile(const char* filename){
     return 0;
 }
 
-NIA_CALL int niaTTFParser::readTableDirectory(){
+int niaTTFParser::readTableDirectory(){
     niaTTFDirectoryFolder folders;
     CONSUME(niaTTFDirectoryFolder, data, folders);
     
@@ -107,9 +107,10 @@ NIA_CALL int niaTTFParser::readTableDirectory(){
             essentialHeadersPointers[NIA_TTF_CMAP_POINTER] = (initialPointer + offset);
         }
     } while(entries--);
+	return 0;
 }
 
-NIA_CALL int niaTTFParser::readEssentialHeaders(){
+int niaTTFParser::readEssentialHeaders(){
     niaTTFHeadHeader headerHeader;
     CONSUME(niaTTFHeadHeader, essentialHeadersPointers[NIA_TTF_HEAD_POINTER], headerHeader);
 
@@ -140,7 +141,7 @@ NIA_CALL int niaTTFParser::readEssentialHeaders(){
     return 0;
 }
 
-NIA_CALL int niaTTFParser::readHorizontalHeader(){
+int niaTTFParser::readHorizontalHeader(){
     u8* clone = essentialHeadersPointers[NIA_TTF_HHEA_POINTER];
     niaTTFHHeaHeader hheaHeader;
     CONSUME(niaTTFHHeaHeader, clone, hheaHeader);
@@ -151,7 +152,7 @@ NIA_CALL int niaTTFParser::readHorizontalHeader(){
 }
 
 r32 scale = 1;
-NIA_CALL int niaTTFParser::readGlyphHeaders(){
+int niaTTFParser::readGlyphHeaders(){
     // scale = 64.0 / (r32)(ascent - descent);
     u32* width = new u32[numberOfGlyphs];
     u32* height = new u32[numberOfGlyphs];
@@ -209,13 +210,14 @@ NIA_CALL int niaTTFParser::readGlyphHeaders(){
 
     delete [] width;
     delete [] height;
+	return 0;
 }
 
 r32 absf(r32 value){
     return value < 0 ? -value : value;
 }
 
-NIA_CALL void scanAndFill(u8* bitmap, u32 width, u32 height){
+void scanAndFill(u8* bitmap, u32 width, u32 height){
     u32 scanLine = 0;
 
     while(scanLine < height){
@@ -284,7 +286,7 @@ void drawLine(u8* bitmap, const niaTTFPoint& A, const niaTTFPoint& B, i16 xOffse
     }
 }
 
-NIA_CALL int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTFGlyphHeader& glyphHeader, u32 width, u32 height, r32 scale){
+int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTFGlyphHeader& glyphHeader, u32 width, u32 height, r32 scale){
     i16 numberOfContours = SWAP16(glyphHeader.numberOfContours);
 
     if(numberOfContours < 0){
@@ -434,11 +436,11 @@ NIA_CALL int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, con
 
     // clean the mess
     flags.clean();
-    delete [] points;
-    delete [] endPtsOfContours;
+    delete[] points;
+    delete[] endPtsOfContours;
 }
 
-NIA_CALL int niaTTFParser::generateTextureAtlas(){
+int niaTTFParser::generateTextureAtlas(){
     u32 entries = numberOfGlyphs;
     u32 offset = 0;
 
@@ -531,9 +533,10 @@ NIA_CALL int niaTTFParser::generateTextureAtlas(){
     }
 
     texture = niaTexture(pixels, width, height, NIA_TEXTURE_FORMAT_R8_RED_UBYTE);
+	return 0;
 }
 
-NIA_CALL int niaTTFParser::readGlyphMetrics(){
+int niaTTFParser::readGlyphMetrics(){
     u32 index;
     // fill in details for bearings and advances
     if(essentialHeadersPointers[NIA_TTF_HHEA_POINTER]){
@@ -569,9 +572,10 @@ NIA_CALL int niaTTFParser::readGlyphMetrics(){
             getGlyph(index++)->metrics.verticalAdvance = SWAP16(metric.advanceHeight);
         }
     }
+	return 0;
 }
 
-NIA_CALL int niaTTFParser::mapCharactersToIndexes(){
+int niaTTFParser::mapCharactersToIndexes(){
     u8* source5 = essentialHeadersPointers[NIA_TTF_CMAP_POINTER];
     niaTTFCmapHeader cmapHeader;
     CONSUME(niaTTFCmapHeader, source5, cmapHeader);
@@ -644,4 +648,5 @@ NIA_CALL int niaTTFParser::mapCharactersToIndexes(){
             }
         }
     }
+	return 0;
 }

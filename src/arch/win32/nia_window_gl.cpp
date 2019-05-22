@@ -18,10 +18,10 @@ HDC niaWindow::deviceContext;
 HGLRC niaWindow::glRenderContext;
 HGLRC niaWindow::glRenderContextSecond;
 
-NIA_CALL niaWindow::niaWindow(){
+niaWindow::niaWindow(){
 }
 
-NIA_CALL niaWindow::~niaWindow(){
+niaWindow::~niaWindow(){
 }
 
 wchar_t* char2wchar(const char* string){
@@ -36,30 +36,30 @@ wchar_t* char2wchar(const char* string){
     return result;
 }
 
-NIA_CALL void niaWindow::createWindow(u32 width, u32 height, const char* title){
+void niaWindow::createWindow(u32 width, u32 height, const char* title){
     HINSTANCE hInstance = GetModuleHandle(NULL);
 	WNDCLASS wc      = {0}; 
 	wc.lpfnWndProc   = WndProc;
 	wc.hInstance     = hInstance;
-	wc.lpszClassName = (const wchar_t*)char2wchar(title);
+	wc.lpszClassName = L"Something";
 	wc.style = CS_OWNDC;
 
-	if( !RegisterClass(&wc) ){
+	if(!RegisterClass(&wc)){
         NIA_TRACE("Oopsie\n");
     }
-
-	CreateWindowW(wc.lpszClassName, (const wchar_t*)char2wchar(title), WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
+// (const wchar_t*)char2wchar(title)
+	CreateWindowW(wc.lpszClassName, L"Something", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, width, height, 0, 0, hInstance, 0);
     closed = false;
 }
 
-NIA_CALL void niaWindow::handleEvents(niaEvent& event){
+void niaWindow::handleEvents(niaEvent& event){
     while (PeekMessageW(&event.msg, NULL, 0, 0, PM_REMOVE)) {
         TranslateMessage(&event.msg);
         DispatchMessageW(&event.msg);
     }
 }
 
-NIA_CALL void niaWindow::enableAdaptiveVsync(){
+void niaWindow::enableAdaptiveVsync(){
     if(wglSwapIntervalEXT){
         wglSwapIntervalEXT(-1);
     } else {
@@ -67,7 +67,7 @@ NIA_CALL void niaWindow::enableAdaptiveVsync(){
     }
 }
 
-NIA_CALL void niaWindow::enableVsync(){
+void niaWindow::enableVsync(){
     if(wglSwapIntervalEXT){
         wglSwapIntervalEXT(1);
     } else {
@@ -75,11 +75,11 @@ NIA_CALL void niaWindow::enableVsync(){
     }
 }
 
-NIA_CALL bool niaWindow::isClosed() const {
+bool niaWindow::isClosed() const {
     return closed;
 }
 
-NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {  
+LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) { 
         case WM_CREATE:{
                 PIXELFORMATDESCRIPTOR pfd = {
@@ -107,17 +107,8 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
                 glRenderContextSecond = wglCreateContext(deviceContext);
 
                 BOOL error = wglShareLists(glRenderContext, glRenderContextSecond);
-                // if(error == FALSE){
-                //     DWORD errorCode = GetLastError();
-                //     LPVOID lpMsgBuf;
-                //     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                //         NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),(LPTSTR) &lpMsgBuf, 0, NULL);
-                //     MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
-                //     LocalFree(lpMsgBuf);
-                //     wglDeleteContext(glRenderContextSecond);
-                // }
-
-                if (!wglMakeCurrent(deviceContext, glRenderContext)){
+                
+				if (!wglMakeCurrent(deviceContext, glRenderContext)){
                     NIA_ERROR("Failed to create context, return with error code %d\n", GetLastError());
                 }
             }
@@ -133,7 +124,7 @@ NIA_CALL LRESULT CALLBACK niaWindow::WndProc(HWND hWnd, UINT message, WPARAM wPa
     return DefWindowProc(hWnd, message, wParam, lParam);  
 }  
 
-NIA_CALL void niaWindow::swapBuffers(){
+void niaWindow::swapBuffers(){
     SwapBuffers(deviceContext);
 }
 

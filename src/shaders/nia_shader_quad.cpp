@@ -2,7 +2,8 @@
 
 
 NIA_STATIC char* basicQaudVertex = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
@@ -25,7 +26,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicQaudFragment = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -42,7 +44,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 
-NIA_CALL niaShaderQuad::niaShaderQuad(){
+niaShaderQuad::niaShaderQuad(){
     vertexShader = loadBufferToShader(basicQaudVertex, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicQaudFragment, GL_FRAGMENT_SHADER);
 
@@ -51,5 +53,5 @@ NIA_CALL niaShaderQuad::niaShaderQuad(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderQuad::~niaShaderQuad(){
+niaShaderQuad::~niaShaderQuad(){
 }

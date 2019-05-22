@@ -4,7 +4,8 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicReflectiveVertexShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
@@ -37,7 +38,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicReflectiveFragmentShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -51,7 +53,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "}\n"
 "";
 
-NIA_CALL niaShaderReflective::niaShaderReflective(){
+niaShaderReflective::niaShaderReflective(){
     vertexShader = loadBufferToShader(basicReflectiveVertexShader, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicReflectiveFragmentShader, GL_FRAGMENT_SHADER);
 
@@ -60,5 +62,5 @@ NIA_CALL niaShaderReflective::niaShaderReflective(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderReflective::~niaShaderReflective(){
+niaShaderReflective::~niaShaderReflective(){
 }

@@ -2,12 +2,11 @@
 
 #include <stdio.h>
 
-#include <xmmintrin.h>
 
 #include "nia_constants.h"
 
 // mat 4
-NIA_CALL niaMatrix4::niaMatrix4(r32 data){
+niaMatrix4::niaMatrix4(r32 data){
     // nia_memset((u8*)m, 0, MAT_4_SIZE * sizeof(r32));
     // unrolling this is faster
 
@@ -22,10 +21,10 @@ NIA_CALL niaMatrix4::niaMatrix4(r32 data){
     m[15] = data;
 }
 
-NIA_CALL niaMatrix4::~niaMatrix4(){
+niaMatrix4::~niaMatrix4(){
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::add(r32 number) const{
+niaMatrix4 niaMatrix4::add(r32 number) const{
     niaMatrix4 result = *this;
 
     _mm_store_ps(result.m, _mm_add_ps(_mm_load_ps(result.m), _mm_set1_ps(number)));
@@ -36,7 +35,7 @@ NIA_CALL niaMatrix4 niaMatrix4::add(r32 number) const{
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::add(const niaMatrix4& other) const{
+niaMatrix4 niaMatrix4::add(const niaMatrix4& other) const{
     niaMatrix4 result = *this;
 
     _mm_store_ps(result.m, _mm_add_ps(_mm_load_ps(result.m), _mm_load_ps(other.m)));
@@ -47,7 +46,7 @@ NIA_CALL niaMatrix4 niaMatrix4::add(const niaMatrix4& other) const{
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::sub(r32 number) const{
+niaMatrix4 niaMatrix4::sub(r32 number) const{
     niaMatrix4 result = *this;
 
     _mm_store_ps(result.m, _mm_sub_ps(_mm_load_ps(result.m), _mm_set1_ps(number)));
@@ -58,7 +57,7 @@ NIA_CALL niaMatrix4 niaMatrix4::sub(r32 number) const{
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::sub(const niaMatrix4& other) const{
+niaMatrix4 niaMatrix4::sub(const niaMatrix4& other) const{
     niaMatrix4 result = *this;
 
     _mm_store_ps(result.m, _mm_sub_ps(_mm_load_ps(result.m), _mm_load_ps(other.m)));
@@ -69,7 +68,7 @@ NIA_CALL niaMatrix4 niaMatrix4::sub(const niaMatrix4& other) const{
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::mul(r32 number) const {
+niaMatrix4 niaMatrix4::mul(r32 number) const {
     niaMatrix4 result = *this;
 
     _mm_store_ps(result.m, _mm_mul_ps(_mm_load_ps(result.m), _mm_set1_ps(number)));
@@ -80,7 +79,7 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(r32 number) const {
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
+niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
     niaMatrix4 result = niaMatrix4(0);
 
 #ifdef _WIN32
@@ -91,16 +90,22 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
         const __m128 c2 = {other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4]};
         const __m128 c3 = {other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]};
         
-        const __m128 f0 = _mm_mul_ps(r0, c0);
-        const __m128 f1 = _mm_mul_ps(r0, c1);
-        const __m128 f2 = _mm_mul_ps(r0, c2);
-        const __m128 f3 = _mm_mul_ps(r0, c3);
+		const __m128 f0 = _mm_mul_ps(r0, c0);
+		const __m128 f1 = _mm_mul_ps(r0, c1);
+		const __m128 f2 = _mm_mul_ps(r0, c2);
+		const __m128 f3 = _mm_mul_ps(r0, c3);
 
-        r32 f00 = f0[0] + f0[1] + f0[2] + f0[3];
-        r32 f10 = f1[0] + f1[1] + f1[2] + f1[3];
-        r32 f20 = f2[0] + f2[1] + f2[2] + f2[3];
-        r32 f30 = f3[0] + f3[1] + f3[2] + f3[3];
-
+#if defined _MSC_VER
+        r32 f00 = f0.m128_f32[0] + f0.m128_f32[1] + f0.m128_f32[2] + f0.m128_f32[3];
+        r32 f10 = f1.m128_f32[0] + f1.m128_f32[1] + f1.m128_f32[2] + f1.m128_f32[3];
+        r32 f20 = f2.m128_f32[0] + f2.m128_f32[1] + f2.m128_f32[2] + f2.m128_f32[3];
+        r32 f30 = f3.m128_f32[0] + f3.m128_f32[1] + f3.m128_f32[2] + f3.m128_f32[3];
+#else
+		r32 f00 = f0[0] + f0[1] + f0[2] + f0[3];
+		r32 f10 = f1[0] + f1[1] + f1[2] + f1[3];
+		r32 f20 = f2[0] + f2[1] + f2[2] + f2[3];
+		r32 f30 = f3[0] + f3[1] + f3[2] + f3[3];
+#endif
         const __m128 tmp = {f00, f10, f20, f30};
 
         _mm_store_ps(result.m + i * sizeof(r32), tmp);
@@ -119,13 +124,13 @@ NIA_CALL niaMatrix4 niaMatrix4::mul(const niaMatrix4& other) const{
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::scale(r32 amount){
+niaMatrix4 niaMatrix4::scale(r32 amount){
     niaMatrix4 result(amount);
     result.m[15] = 1;
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::rotate(r32 angle, niaAxis axis){
+niaMatrix4 niaMatrix4::rotate(r32 angle, niaAxis axis){
     niaMatrix4 result(1);
 
     switch (axis) {
@@ -161,7 +166,7 @@ NIA_CALL niaMatrix4 niaMatrix4::rotate(r32 angle, niaAxis axis){
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::perspective(r32 fov, r32 aspectRatio, r32 near, r32 far){
+niaMatrix4 niaMatrix4::perspective(r32 fov, r32 aspectRatio, r32 near, r32 far){
     niaMatrix4 result(0.0);
 
     r32 fovRad = fov * 180.0 / NIA_PI;
@@ -192,7 +197,7 @@ NIA_CALL niaMatrix4 niaMatrix4::perspective(r32 fov, r32 aspectRatio, r32 near, 
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far){
+niaMatrix4 niaMatrix4::orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far){
     niaMatrix4 result(1.0);
 
     result.m[0] = 2.0 / (right - left);
@@ -206,32 +211,32 @@ NIA_CALL niaMatrix4 niaMatrix4::orthographic(r32 left, r32 right, r32 top, r32 b
     return result;
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::identity(){
+niaMatrix4 niaMatrix4::identity(){
     return niaMatrix4(1.0);
 }
 
-NIA_CALL void niaMatrix4::add_self(r32 number){
+void niaMatrix4::add_self(r32 number){
     _mm_store_ps(m, _mm_add_ps(_mm_load_ps(m), _mm_set1_ps(number)));
     _mm_store_ps(m + 4, _mm_add_ps(_mm_load_ps(m + 4), _mm_set1_ps(number)));
     _mm_store_ps(m + 8, _mm_add_ps(_mm_load_ps(m + 8), _mm_set1_ps(number)));
     _mm_store_ps(m + 12, _mm_add_ps(_mm_load_ps(m + 12), _mm_set1_ps(number)));
 }
 
-NIA_CALL void niaMatrix4::sub_self(r32 number){
+void niaMatrix4::sub_self(r32 number){
     _mm_store_ps(m, _mm_sub_ps(_mm_load_ps(m), _mm_set1_ps(number)));
     _mm_store_ps(m + 4, _mm_sub_ps(_mm_load_ps(m + 4), _mm_set1_ps(number)));
     _mm_store_ps(m + 8, _mm_sub_ps(_mm_load_ps(m + 8), _mm_set1_ps(number)));
     _mm_store_ps(m + 12, _mm_sub_ps(_mm_load_ps(m + 12), _mm_set1_ps(number)));
 }
 
-NIA_CALL void niaMatrix4::mul_self(r32 number){
+void niaMatrix4::mul_self(r32 number){
     _mm_store_ps(m, _mm_mul_ps(_mm_load_ps(m), _mm_set1_ps(number)));
     _mm_store_ps(m + 4, _mm_mul_ps(_mm_load_ps(m + 4), _mm_set1_ps(number)));
     _mm_store_ps(m + 8, _mm_mul_ps(_mm_load_ps(m + 8), _mm_set1_ps(number)));
     _mm_store_ps(m + 12, _mm_mul_ps(_mm_load_ps(m + 12), _mm_set1_ps(number)));
 }
 
-NIA_CALL void niaMatrix4::scale_self(r32 amount){
+void niaMatrix4::scale_self(r32 amount){
     // niaMatrix4 old = *this;
 
     m[0] = amount;
@@ -241,7 +246,7 @@ NIA_CALL void niaMatrix4::scale_self(r32 amount){
     // *this = old.mul(*this);
 }
 
-NIA_CALL void niaMatrix4::rotate_self(r32 angle, niaAxis axis){
+void niaMatrix4::rotate_self(r32 angle, niaAxis axis){
     switch (axis) {
         case NIA_AXIS_X:{
                 m[5] = cos(angle);
@@ -272,7 +277,7 @@ NIA_CALL void niaMatrix4::rotate_self(r32 angle, niaAxis axis){
     }
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::translate(r32 x, r32 y, r32 z){
+niaMatrix4 niaMatrix4::translate(r32 x, r32 y, r32 z){
     niaMatrix4 result;
 
     result.m[3] = x;
@@ -282,7 +287,7 @@ NIA_CALL niaMatrix4 niaMatrix4::translate(r32 x, r32 y, r32 z){
     return result;
 }
 
-NIA_CALL bool niaMatrix4::compareMat4(const niaMatrix4& left, const niaMatrix4& right){
+bool niaMatrix4::compareMat4(const niaMatrix4& left, const niaMatrix4& right){
     for(u8 i = 0; i < MAT_4_SIZE; ++i){
         if (left.m[i] != right.m[i]){
             return false;
@@ -338,7 +343,7 @@ NIA_CALL bool niaMatrix4::compareMat4(const niaMatrix4& left, const niaMatrix4& 
     return true;
 }
 
-NIA_CALL void niaMatrix4::printMat4(const niaMatrix4& mat) {
+void niaMatrix4::printMat4(const niaMatrix4& mat) {
     for(u8 i = 0; i < 4; ++i){
         for(u8 ii = 0; ii < 4; ++ii){
             printf("%f ", mat.m[ii + i * 4]);
@@ -347,7 +352,7 @@ NIA_CALL void niaMatrix4::printMat4(const niaMatrix4& mat) {
     }
 }
 
-NIA_CALL niaMatrix4 niaMatrix4::lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up){
+niaMatrix4 niaMatrix4::lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up){
     niaMatrix4 result(0.0);
 
     niaVector3<r32> zx = position.sub(target).normal();

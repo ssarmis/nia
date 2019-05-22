@@ -16,15 +16,15 @@ private:
     u8* source;
 
 public:
-    NIA_CALL niaObjParser(const char* filename);
-    NIA_CALL ~niaObjParser();
+    niaObjParser(const char* filename);
+    ~niaObjParser();
 
-    NIA_CALL u32 parse();
+    u32 parse();
 
-    NIA_CALL niaArray<niaVector3<r32> >& getVertexies();
-    NIA_CALL niaArray<niaVector3<r32> >& getNormals();
-    NIA_CALL niaArray<niaVector2<r32> >& getUVS();
-    NIA_CALL niaArray<niaVector3<u32> >& getFaces();
+    niaArray<niaVector3<r32> >& getVertexies();
+    niaArray<niaVector3<r32> >& getNormals();
+    niaArray<niaVector2<r32> >& getUVS();
+    niaArray<niaVector3<u32> >& getFaces();
 };
 
 #endif //_NIA_OBJ_PARSER_H_

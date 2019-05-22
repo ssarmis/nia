@@ -10,17 +10,17 @@ private:
     GLuint textureId;
 
 public:
-    NIA_CALL niaFrameBuffer(r32 width, r32 height, GLenum attachment);
-    NIA_CALL niaFrameBuffer();
-    NIA_CALL ~niaFrameBuffer();
+    niaFrameBuffer(r32 width, r32 height, GLenum attachment);
+    niaFrameBuffer();
+    ~niaFrameBuffer();
     
-    NIA_CALL void bind();
-    NIA_CALL void unbind();
+    void bind();
+    void unbind();
 
-    NIA_CALL static void bindFrameBuffer(GLuint frameBufferId);
-    NIA_CALL static void unbindFrameBuffer();
+    static void bindFrameBuffer(GLuint frameBufferId);
+    static void unbindFrameBuffer();
 
-    NIA_CALL GLuint getTextureId();
+    GLuint getTextureId();
 };
 
 #endif // _NIA_FRAME_BUFFER_H_

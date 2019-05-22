@@ -4,7 +4,8 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicVertexShaderBatch = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec2 uv;\n"
@@ -26,7 +27,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicFragmentShaderBatch = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "out vec4 finalColor;\n"
 
 "in vec4 o_color;\n"
@@ -41,7 +43,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 
-NIA_CALL niaShaderBatch::niaShaderBatch(){
+niaShaderBatch::niaShaderBatch(){
     vertexShader = loadBufferToShader(basicVertexShaderBatch, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicFragmentShaderBatch, GL_FRAGMENT_SHADER);
 
@@ -50,5 +52,5 @@ NIA_CALL niaShaderBatch::niaShaderBatch(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderBatch::~niaShaderBatch(){
+niaShaderBatch::~niaShaderBatch(){
 }

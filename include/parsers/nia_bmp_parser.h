@@ -58,18 +58,18 @@ NIA_CLASS niaBmpParser { // make a parser class
 private:
     niaBMP bmpData;
 
-    NIA_CALL void decodeFile();
+    void decodeFile();
 
 public:
-    NIA_CALL niaBmpParser(const char* filename);
-    NIA_CALL ~niaBmpParser();
+    niaBmpParser(const char* filename);
+    ~niaBmpParser();
 
-    NIA_CALL void loadFile(const char* filename);
-    NIA_CALL u32 getWidth() const;
-    NIA_CALL u32 getHeight() const;
-    NIA_CALL u8* getPixelData() const;
-    NIA_CALL u8 getBitCount() const;
-    NIA_CALL textureFormatDetails getTextureFormat() const;
+    void loadFile(const char* filename);
+    u32 getWidth() const;
+    u32 getHeight() const;
+    u8* getPixelData() const;
+    u8 getBitCount() const;
+    textureFormatDetails getTextureFormat() const;
 };
 
 #endif // _NIA_BMP_PARSER_H_

@@ -5,11 +5,20 @@
 extern "C"{
 #endif
 
+
 #ifdef _WIN32
-#   if defined NIA_LIBRARY_BUILD
-#       define NIA_EXPORT __declspec(dllexport)
-#   else
-#       define NIA_EXPORT __declspec(dllimport)
+#   if defined _MSC_VER
+#      if defined NIA_LIBRARY_BUILD
+#           define NIA_EXPORT __declspec(dllexport)
+#       else
+#           define NIA_EXPORT __declspec(dllimport)
+#       endif
+#   elif defined __GNUC__
+#      if defined NIA_LIBRARY_BUILD
+#           define NIA_EXPORT __attribute__((visibility("default")))
+#       else
+#           define NIA_EXPORT __attribute__((visibility("default")))
+#       endif
 #   endif
 #else
 #   if defined NIA_LIBRARY_BUILD

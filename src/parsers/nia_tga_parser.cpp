@@ -4,15 +4,15 @@
 
 #define NIA_IMAGE_TYPE_TRUE_COLOR   2
 
-NIA_CALL niaTgaParser::niaTgaParser(const char* filename){
+niaTgaParser::niaTgaParser(const char* filename){
     loadFile(filename);
     decodeFile();
 }
 
-NIA_CALL niaTgaParser::~niaTgaParser(){
+niaTgaParser::~niaTgaParser(){
 }
 
-NIA_CALL void niaTgaParser::loadFile(const char* filename){
+void niaTgaParser::loadFile(const char* filename){
     tgaData.fileData = NULL;
     FILE* file = fopen(filename, "rb");
 
@@ -32,7 +32,7 @@ NIA_CALL void niaTgaParser::loadFile(const char* filename){
     fclose(file);
 }
 
-NIA_CALL void niaTgaParser::decodeFile(){ // TODO add consume macro
+void niaTgaParser::decodeFile(){ // TODO add consume macro
     if(!tgaData.fileData){
         return;
     }
@@ -89,18 +89,18 @@ NIA_CALL void niaTgaParser::decodeFile(){ // TODO add consume macro
 
 }
 
-NIA_CALL u32 niaTgaParser::getWidth() const{
+u32 niaTgaParser::getWidth() const{
     return tgaData.fileHeader.width;
 }
 
-NIA_CALL u32 niaTgaParser::getHeight() const{
+u32 niaTgaParser::getHeight() const{
     return tgaData.fileHeader.height;
 }
 
-NIA_CALL u8*niaTgaParser:: getPixelData() const{
+u8*niaTgaParser:: getPixelData() const{
     return tgaData.pixelData;
 }
 
-NIA_CALL textureFormatDetails niaTgaParser::getTextureFormat() const {
+textureFormatDetails niaTgaParser::getTextureFormat() const {
     return tgaData.textureFormat;
 }

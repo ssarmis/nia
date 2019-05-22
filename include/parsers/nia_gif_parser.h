@@ -94,21 +94,21 @@ private:
 
     textureFormatDetails textureFormat;
 
-    NIA_CALL void loadFile(const char* filename);
-    NIA_CALL void decodeFile();
-    NIA_CALL void decodeImageData(u8* colorTable);
+    void loadFile(const char* filename);
+    void decodeFile();
+    void decodeImageData(u8* colorTable);
 
 public:
-    NIA_CALL niaGifParser();
-    NIA_CALL niaGifParser(const char* filename);
-    NIA_CALL ~niaGifParser();
+    niaGifParser();
+    niaGifParser(const char* filename);
+    ~niaGifParser();
 
-    NIA_CALL u32 getWidth();
-    NIA_CALL u32 getHeight();
-    NIA_CALL u8* getPixelData() const;
-    NIA_CALL textureFormatDetails getTextureFormat() const;
-    NIA_CALL niaGIFFrame* getFrames();
-    NIA_CALL u32 getNumberOfFrames();
+    u32 getWidth();
+    u32 getHeight();
+    u8* getPixelData() const;
+    textureFormatDetails getTextureFormat() const;
+    niaGIFFrame* getFrames();
+    u32 getNumberOfFrames();
 };
 
 #endif

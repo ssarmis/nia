@@ -13,8 +13,8 @@ public:
 
     niaTexture texture;
 
-    NIA_CALL niaSprite();
-    NIA_CALL ~niaSprite();
+    niaSprite();
+    ~niaSprite();
 };
 
 #endif //_NIA_SPRITE_H_

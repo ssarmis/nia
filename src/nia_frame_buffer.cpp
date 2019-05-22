@@ -1,6 +1,6 @@
 #include "nia_frame_buffer.h"
 
-NIA_CALL niaFrameBuffer::niaFrameBuffer(r32 width, r32 height, GLenum attachment){
+niaFrameBuffer::niaFrameBuffer(r32 width, r32 height, GLenum attachment){
     NIA_GL_CALL(glGenFramebuffers(1, &frameBufferId));
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId));
 
@@ -37,29 +37,29 @@ NIA_CALL niaFrameBuffer::niaFrameBuffer(r32 width, r32 height, GLenum attachment
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-NIA_CALL niaFrameBuffer::niaFrameBuffer(){
+niaFrameBuffer::niaFrameBuffer(){
 }
 
-NIA_CALL niaFrameBuffer::~niaFrameBuffer(){
+niaFrameBuffer::~niaFrameBuffer(){
     // TODO remove frame buffer
 }
 
-NIA_CALL void niaFrameBuffer::bind(){
+void niaFrameBuffer::bind(){
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId));
 }
 
-NIA_CALL void niaFrameBuffer::unbind(){
+void niaFrameBuffer::unbind(){
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-NIA_CALL void niaFrameBuffer::bindFrameBuffer(GLuint frameBufferId){
+void niaFrameBuffer::bindFrameBuffer(GLuint frameBufferId){
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId));
 }
 
-NIA_CALL void niaFrameBuffer::unbindFrameBuffer(){
+void niaFrameBuffer::unbindFrameBuffer(){
     NIA_GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-NIA_CALL GLuint niaFrameBuffer::getTextureId(){
+GLuint niaFrameBuffer::getTextureId(){
     return textureId;
 }

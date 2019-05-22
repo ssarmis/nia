@@ -20,7 +20,7 @@ public:
     /**
      * @brief Function for loading everything needed for Nia to work properly
      */
-    NIA_CALL static void loadEverything();
+    static void loadEverything();
 };
 
 #endif // _NIA_LOADER_H_

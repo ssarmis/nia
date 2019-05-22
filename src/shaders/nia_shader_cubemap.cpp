@@ -4,7 +4,8 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicCubeMapVertexShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 
 "out vec3 o_uv;\n"
@@ -19,7 +20,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicCubeMapFragmentShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -32,7 +34,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "}\n"
 "";
 
-NIA_CALL niaShaderCubeMap::niaShaderCubeMap(){
+niaShaderCubeMap::niaShaderCubeMap(){
     vertexShader = loadBufferToShader(basicCubeMapVertexShader, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicCubeMapFragmentShader, GL_FRAGMENT_SHADER);
 
@@ -41,7 +43,7 @@ NIA_CALL niaShaderCubeMap::niaShaderCubeMap(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderCubeMap::~niaShaderCubeMap(){
+niaShaderCubeMap::~niaShaderCubeMap(){
     // TODO free source files loaded in memory after using them
     NIA_GL_CALL(glDeleteShader(vertexShader));
     NIA_GL_CALL(glDeleteShader(fragmentShader));

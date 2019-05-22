@@ -7,8 +7,8 @@
 
 NIA_CLASS niaShaderReflective : public niaShader{
 public:
-    NIA_CALL niaShaderReflective();
-    NIA_CALL ~niaShaderReflective();
+    niaShaderReflective();
+    ~niaShaderReflective();
 };
 
 #endif //_NIA_SHADER_REFLECTIVE_H_

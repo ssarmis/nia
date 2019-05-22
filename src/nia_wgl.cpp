@@ -4,7 +4,7 @@
 
 PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT = NULL;
 
-NIA_CALL bool niaInitWGL(){
+bool niaInitWGL(){
     bool extensionLoadCheck = true; 
 
     extensionLoadCheck = ((wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT")) && extensionLoadCheck);

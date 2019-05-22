@@ -97,23 +97,23 @@ private:
     u8* pngData;
     u8* pixelData;
 
-    NIA_CALL void methodDynamicHuffman(niaPNGChunkData* chunk);
-    NIA_CALL void methodNoCompression(niaPNGChunkData* chunk);
+    void methodDynamicHuffman(niaPNGChunkData* chunk);
+    void methodNoCompression(niaPNGChunkData* chunk);
 
-    NIA_CALL void iterateHeader();
-    NIA_CALL void decompressChunks();
-    NIA_CALL void defilterData();
+    void iterateHeader();
+    void decompressChunks();
+    void defilterData();
 public:
 
-    NIA_CALL niaPngParser();
-    NIA_CALL niaPngParser(const char* filename);
-    NIA_CALL ~niaPngParser();
+    niaPngParser();
+    niaPngParser(const char* filename);
+    ~niaPngParser();
 
-    NIA_CALL void loadFile(const char* filename);
-    NIA_CALL u32 getWidth();
-    NIA_CALL u32 getHeight();
-    NIA_CALL u8* getPixelData() const;
-    NIA_CALL textureFormatDetails getTextureFormat() const ;
+    void loadFile(const char* filename);
+    u32 getWidth();
+    u32 getHeight();
+    u8* getPixelData() const;
+    textureFormatDetails getTextureFormat() const ;
 };
 
 #endif

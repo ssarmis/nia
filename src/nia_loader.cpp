@@ -11,7 +11,7 @@
 #endif
 
 
-NIA_CALL void niaLoader::loadEverything(){
+void niaLoader::loadEverything(){
     bool glLoad = niaInitGL();
 #ifdef _WIN32
     bool extLoad = niaInitWGL();

@@ -27,16 +27,16 @@ private:
     static textureLiveLoadingStream liveLoadingStream;
 
 public:
-    NIA_CALL static void initializeStream();
-    NIA_CALL static 
+    static void initializeStream();
+    static 
 #ifdef _WIN32
     void
 #elif defined __unix__
     void*
 #endif
     updateStreams(void*);
-    NIA_CALL static void appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details);
-    NIA_CALL static void updateTexture(const textureLiveLoadingChunk& chunk);
+    static void appendLiveLoadingTexture(u32 textureId, char* filename, const textureFormatDetails& details);
+    static void updateTexture(const textureLiveLoadingChunk& chunk);
 
 };
 

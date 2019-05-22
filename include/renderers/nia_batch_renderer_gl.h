@@ -12,15 +12,15 @@
 
 NIA_CLASS niaBatchRenderer : public niaRenderer {
 public:
-    NIA_CALL niaBatchRenderer();
-    NIA_CALL ~niaBatchRenderer();
+    niaBatchRenderer();
+    ~niaBatchRenderer();
 
-    NIA_CALL void renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]);
-    NIA_CALL void renderRectangle(r32 x, r32 y, r32 w, r32 h, const niaVec3f& colors);
-    NIA_CALL void renderRectangle(r32 x, r32 y, r32 w, r32 h);
-    NIA_CALL void renderSprite(const niaSprite& sprite);
+    void renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]);
+    void renderRectangle(r32 x, r32 y, r32 w, r32 h, const niaVec3f& colors);
+    void renderRectangle(r32 x, r32 y, r32 w, r32 h);
+    void renderSprite(const niaSprite& sprite);
 
-    NIA_CALL void executeRender();
+    void executeRender();
 };
 
 

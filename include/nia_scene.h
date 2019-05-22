@@ -32,21 +32,21 @@ protected:
 
     niaCubeTexture cubeTexture;
 
-    NIA_CALL void setSkyBoxTextures(const char* textures[6]);
+    void setSkyBoxTextures(const char* textures[6]);
 
-    NIA_CALL void setAttributeVec2(u32 attribute, const niaVector2<r32>& vector);
-    NIA_CALL void setAttributeVec3(u32 attribute, const niaVector3<r32>& vector);
-    NIA_CALL void setAttributeMat4(u32 attribute, const niaMatrix4& matrix);
+    void setAttributeVec2(u32 attribute, const niaVector2<r32>& vector);
+    void setAttributeVec3(u32 attribute, const niaVector3<r32>& vector);
+    void setAttributeMat4(u32 attribute, const niaMatrix4& matrix);
 
 public:
     niaFrameBuffer frameBuffer;
-    NIA_CALL niaScene();
-    NIA_CALL ~niaScene();
+    niaScene();
+    ~niaScene();
 
-    NIA_CALL void bind(niaRenderer* renderer);
-    NIA_CALL void unbind(niaRenderer* renderer);
+    void bind(niaRenderer* renderer);
+    void unbind(niaRenderer* renderer);
 
-    NIA_CALL niaFrameBuffer getFrameBuffer() const; // consider using references
+    niaFrameBuffer getFrameBuffer() const; // consider using references
 };
 
 
