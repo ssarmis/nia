@@ -16,36 +16,36 @@ protected:
     niaMesh quad;
 
 public:
-    niaFilter();
-    niaFilter(const char* sourceVertex, const char* sourceFragment);
-    ~niaFilter();
+    NIA_CALL niaFilter();
+    NIA_CALL niaFilter(const char* sourceVertex, const char* sourceFragment);
+    NIA_CALL ~niaFilter();
 
-    virtual void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out) = 0;
-    void renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in);
+    virtual void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out) = 0;
+    void NIA_CALL renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in);
 };
 
 NIA_CLASS niaFilterGreyScale : public niaFilter{
 public:
-    niaFilterGreyScale();
-    ~niaFilterGreyScale();
+    NIA_CALL niaFilterGreyScale();
+    NIA_CALL ~niaFilterGreyScale();
 
-    void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 NIA_CLASS niaFilterInvert : public niaFilter{
 public:
-    niaFilterInvert();
-    ~niaFilterInvert();
+    NIA_CALL niaFilterInvert();
+    NIA_CALL ~niaFilterInvert();
 
-    void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 NIA_CLASS niaFilterBoxBlur : public niaFilter{
 public:
-    niaFilterBoxBlur();
-    ~niaFilterBoxBlur();
+    NIA_CALL niaFilterBoxBlur();
+    NIA_CALL ~niaFilterBoxBlur();
 
-    void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 

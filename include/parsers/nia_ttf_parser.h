@@ -225,19 +225,19 @@ private:
 public:
     niaTexture texture;
 
-    niaTTFParser();
-    niaTTFParser(const char* filename);
-    ~niaTTFParser();
+    NIA_CALL niaTTFParser();
+    NIA_CALL niaTTFParser(const char* filename);
+    NIA_CALL ~niaTTFParser();
 
-    int loadFile(const char* filename);
-    int readTableDirectory();
-    int readEssentialHeaders();
-    int readHorizontalHeader();
-    int generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTFGlyphHeader& glyphHeader, u32 width, u32 height, r32 scale);
-    int generateTextureAtlas();
-    int readGlyphHeaders();
-    int readGlyphMetrics();
-    int mapCharactersToIndexes();
+    int NIA_CALL loadFile(const char* filename);
+    int NIA_CALL readTableDirectory();
+    int NIA_CALL readEssentialHeaders();
+    int NIA_CALL readHorizontalHeader();
+    int NIA_CALL generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTFGlyphHeader& glyphHeader, u32 width, u32 height, r32 scale);
+    int NIA_CALL generateTextureAtlas();
+    int NIA_CALL readGlyphHeaders();
+    int NIA_CALL readGlyphMetrics();
+    int NIA_CALL mapCharactersToIndexes();
 
     inline niaGlyph* getGlyph(u16 index){
         if(index >= numberOfGlyphs){

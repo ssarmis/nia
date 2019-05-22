@@ -149,17 +149,17 @@ public:
     T z;
     T w;
     
-    niaVector4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0);
-    ~niaVector4();
+    NIA_CALL niaVector4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0);
+    NIA_CALL ~niaVector4();
 
-    niaVector4 add(const niaVector4& other) const;
-    niaVector4 add(const T& t) const;
+    niaVector4 NIA_CALL add(const niaVector4& other) const;
+    niaVector4 NIA_CALL add(const T& t) const;
 
-    niaVector4 sub(const niaVector4& other) const;
-    niaVector4 sub(const T& t) const;
+    niaVector4 NIA_CALL sub(const niaVector4& other) const;
+    niaVector4 NIA_CALL sub(const T& t) const;
 
-    niaVector4 mul(const niaVector4& other) const;
-    niaVector4 mul(const T& t) const;
+    niaVector4 NIA_CALL mul(const niaVector4& other) const;
+    niaVector4 NIA_CALL mul(const T& t) const;
 };
 
 // vector 2

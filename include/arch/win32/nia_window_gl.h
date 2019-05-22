@@ -23,7 +23,7 @@
  */
 NIA_CLASS niaWindow{
 private:
-	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 public:
     static bool closed;
@@ -33,12 +33,12 @@ public:
     /**
      * @brief Constructor
      */
-    niaWindow();
+    NIA_CALL niaWindow();
 
     /**
      * @brief Destructor
      */
-    ~niaWindow();
+    NIA_CALL ~niaWindow();
 
     /**
      * @brief The function for creating a window and the opengl context 
@@ -46,37 +46,38 @@ public:
      * @param height An unsigned value representing the window height.
      * @param title The title of the window.
      */
-    void createWindow(u32 width, u32 height, const char* title); // additional flags later on
+    void NIA_CALL createWindow(u32 width, u32 height, const char* title); // additional flags later on
 
     /**
      * @brief The function for creating a window and the opengl context 
      * @param event An niaEvent instance used to store the current event message.
      */
-	void handleEvents(niaEvent& event);
+    void NIA_CALL handleEvents(niaEvent& event);
 
     /**
      * @brief Function for enabling adaptive vsync(if supported)
      */
-    void enableAdaptiveVsync();
+    void NIA_CALL enableAdaptiveVsync();
 
     /**
      * @brief Function for enabling vsync(if supported)
      */
-    void enableVsync();
+    void NIA_CALL enableVsync();
 
     /**
      * @brief Function for swapping the window buffers
      */
-    void swapBuffers();
+    void NIA_CALL swapBuffers();
 
     /**
      * @brief Function that returns if the window is closed or not
      * @return If the window is closed
      */
-    bool isClosed() const;
+    bool NIA_CALL isClosed() const;
 
     friend class niaRenderer;
 };
+
 
 #endif //NIA_RENDERER_GL
 #endif //_NIA_WINDOW_GL_WIN32_H_

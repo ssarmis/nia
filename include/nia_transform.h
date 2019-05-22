@@ -11,16 +11,16 @@ private:
     niaMatrix4 transform;
 
 public:
-    niaTransform();
-    ~niaTransform();
+    NIA_CALL niaTransform();
+    NIA_CALL ~niaTransform();
 
-    void clear();
+    void NIA_CALL clear();
 
-    void scale(r32 amount);
-    void translate(const niaVector3<r32>& position);
-    void rotate(r32 amount, niaAxis axis);
+    void NIA_CALL scale(r32 amount);
+    void NIA_CALL translate(const niaVector3<r32>& position);
+    void NIA_CALL rotate(r32 amount, niaAxis axis);
 
-    niaMatrix4 getTransformation() const;
+    niaMatrix4 NIA_CALL getTransformation() const;
 };
 
 #endif // _NIA_TRANSFORM_H_

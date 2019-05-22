@@ -6,13 +6,9 @@
 
 NIA_CLASS niaShaderFilter : public niaShader {
 public:
-    int a;
-    int b;
-    int c;
-
-    niaShaderFilter();
-    niaShaderFilter(const char* sourceCodeVertex, const char* sourceCodeFragment);
-    ~niaShaderFilter();
+    NIA_CALL niaShaderFilter();
+    NIA_CALL niaShaderFilter(const char* sourceCodeVertex, const char* sourceCodeFragment);
+    NIA_CALL ~niaShaderFilter();
 };
 
 

@@ -13,7 +13,7 @@
 NIA_EXTERN PFNWGLSWAPINTERVALEXTPROC _nia_wglSwapIntervalEXT;
 #define wglSwapIntervalEXT _nia_wglSwapIntervalEXT
 
-bool niaInitWGL();
+bool NIA_CALL niaInitWGL();
 
 #endif // _NIA_WGL_H_
 #endif

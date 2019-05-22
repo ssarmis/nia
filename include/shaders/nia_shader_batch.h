@@ -6,8 +6,8 @@
 
 NIA_CLASS niaShaderBatch : public niaShader{
 public:
-    niaShaderBatch();
-    ~niaShaderBatch();
+    NIA_CALL niaShaderBatch();
+    NIA_CALL ~niaShaderBatch();
 };
 
 #endif //_NIA_SHADER_QUAD_H_

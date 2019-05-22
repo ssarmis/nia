@@ -43,10 +43,10 @@ public:
     niaScene();
     ~niaScene();
 
-    void bind(niaRenderer* renderer);
-    void unbind(niaRenderer* renderer);
+    void NIA_CALL bind(niaRenderer* renderer);
+    void NIA_CALL unbind(niaRenderer* renderer);
 
-    niaFrameBuffer getFrameBuffer() const; // consider using references
+    niaFrameBuffer NIA_CALL getFrameBuffer() const; // consider using references
 };
 
 

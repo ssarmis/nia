@@ -44,18 +44,18 @@ protected:
     niaCubeTexture defaultCubeTexture;
 
 public:
-    niaRenderer();
-    ~niaRenderer();
+    NIA_CALL niaRenderer();
+    NIA_CALL ~niaRenderer();
 
     /**
      * @brief The function if for clearing the viewport 
      */
-    void clear();
+    void NIA_CALL clear();
 
     /**
      * @brief The function if for enabling depth test 
      */
-     void enableDepthTest();
+     void NIA_CALL enableDepthTest();
 
     /**
      * @brief Function for rendering a simple rectangle on the screen 
@@ -64,7 +64,7 @@ public:
      * @param w A floating point number for the width of the rectangle.
      * @param h A floating point number for the height of the rectangle.
      */
-     void renderRectangle(r32 x, r32 y, r32 w, r32 h); // TODO maybe make this virtual
+     void NIA_CALL renderRectangle(r32 x, r32 y, r32 w, r32 h); // TODO maybe make this virtual
 
     /**
      * @brief Function for rendering a simple rectangle on the screen 
@@ -74,7 +74,7 @@ public:
      * @param h A floating point number for the height of the rectangle.
      * @param colors A floating point array of 3 components (red, green, blue) all in a 0 - 1 range.
      */
-     void renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]);
+     void NIA_CALL renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]);
 
     /**
      * @brief Function for rendering a simple rectangle on the screen 
@@ -85,21 +85,21 @@ public:
      * @param h A floating point number for the height of the rectangle.
      * @param colors A floating point array of 3 components (red, green, blue) all in a 0 - 1 range.
      */
-     void renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]);
+     void NIA_CALL renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]);
 
     /**
      * @brief Function for submiting a transformation to the next mesh that will be drawn
      * @param transformation The transformation to be applied.
      * @param transposed Specifies if you have the transformations in a transposed form(this defaults to true).
      */
-     void submitTransformation(const niaTransform& transformation, bool transpose = true);
+     void NIA_CALL submitTransformation(const niaTransform& transformation, bool transpose = true);
 
     /**
      * @brief Function for submiting the view for the screen/scene
      * @param view A 4x4 matrix that is the view matrix
      * @param transposed Specifies if you have the matrix in a transposed form(this defaults to true).
      */
-     void submitView(const niaMatrix4& view, bool transpose = true);
+     void NIA_CALL submitView(const niaMatrix4& view, bool transpose = true);
 
     /**
      * @brief Function for enabling an orthographic view for the current renderer 
@@ -110,7 +110,7 @@ public:
      * @param near A floating point indicating the near limit
      * @param far A floating point indicating the far limit
      */
-     void pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far); // future, custom matrix
+     void NIA_CALL pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far); // future, custom matrix
 
     /**
      * @brief Function for enabling the perspective view for the current renderer 
@@ -119,63 +119,63 @@ public:
      * @param near A floating point indicating the near limit
      * @param far A floating point indicating the far limit
      */
-     void pushPerspectiveView(r32 fov, r32 aspectRatio, r32 near, r32 far);
+     void NIA_CALL pushPerspectiveView(r32 fov, r32 aspectRatio, r32 near, r32 far);
 
     /**
      * @brief Function for rendering an already loaded cube texture 
      * @param texture A cube texture to be rendered
      */
     // TODO add texture support for rectangles as well, maybe they will be sprites
-     void renderSkyBox(const niaCubeTexture& texture);
+     void NIA_CALL renderSkyBox(const niaCubeTexture& texture);
 
     /**
      * @brief Function for rendering an already loaded mesh
      * @param mesh The mesh to be rendered
      */
-     void renderMesh(const niaMesh& mesh);
+     void NIA_CALL renderMesh(const niaMesh& mesh);
 
     /**
      * @brief Function for rendering an already loaded mesh with some texture
      * @param mesh The mesh to be rendered
      * @param texture The texture to be applied
      */
-     void renderMesh(const niaMesh& mesh, niaTexture& texture);
+     void NIA_CALL renderMesh(const niaMesh& mesh, niaTexture& texture);
 
     /**
      * @brief Function for rendering an already loaded mesh with some texture
      * @param mesh The mesh to be rendered
      * @param textureId An unsinged int number representing an opengl texture id
      */
-     void renderMesh(const niaMesh& mesh, GLuint textureId);
+     void NIA_CALL renderMesh(const niaMesh& mesh, GLuint textureId);
 
     /**
      * @brief Function for rendering an already loaded mesh, but without any predefined shaders being used
      * @param mesh The mesh to be rendered
      */
-     void renderMeshRaw(const niaMesh& mesh); // for these we asuume the shader was already bounded
+     void NIA_CALL renderMeshRaw(const niaMesh& mesh); // for these we asuume the shader was already bounded
 
     /**
      * @brief Function for rendering an already loaded mesh with a texture, but without any predefined shaders being used
      * @param mesh The mesh to be rendered
      * @param texture The texture to be applied
      */
-     void renderMeshRaw(const niaMesh& mesh, const niaTexture& texture);
+     void NIA_CALL renderMeshRaw(const niaMesh& mesh, const niaTexture& texture);
     
     /**
      * @brief Function for rendering an already loaded mesh with a texture, but without any predefined shaders being used
      * @param mesh The mesh to be rendered
      * @param textureId An unsinged int number representing an opengl texture id
      */
-     void renderMeshRaw(const niaMesh& mesh, GLuint textureId);
+     void NIA_CALL renderMeshRaw(const niaMesh& mesh, GLuint textureId);
 
     /**
      * @brief Function for rendering a mesh with a reflective shader applied
      * @param mesh The mesh to be rendered
      * @param texture A cube texture to be rendered as a reflection onto the mesh
      */
-     void renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
+     void NIA_CALL renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
     
-     void renderSprite(const niaSprite& sprite);
+     void NIA_CALL renderSprite(const niaSprite& sprite);
     
     friend class niaScene;
 };

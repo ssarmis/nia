@@ -15,7 +15,7 @@ NIA_EXTERN NIA_CALL PFNGLXSWAPINTERVALEXTPROC _nia_glXSwapIntervalEXT;
                     
 #define glXSwapIntervalEXT _nia_glXSwapIntervalEXT
 
-NIA_CALL bool niaInitXGL();
+NIA_CALL bool NIA_CALL niaInitXGL();
 
 #endif
 #endif

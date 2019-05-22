@@ -21,19 +21,19 @@ protected:
     NIA_INTERNAL void buildProgram(GLuint vertexShader, GLuint fragmentShader);
 
 public:
-    niaShader(const char* vertexShaderFilename, const char* fragmentShaderFilename);
-    niaShader();
-    ~niaShader();
+    NIA_CALL niaShader(const char* vertexShaderFilename, const char* fragmentShaderFilename);
+    NIA_CALL niaShader();
+    NIA_CALL ~niaShader();
 
-    GLuint getProgram() const;
-    GLuint getVertexShader() const;
-    GLuint getFragmentShader() const;
+    GLuint NIA_CALL getProgram() const;
+    GLuint NIA_CALL getVertexShader() const;
+    GLuint NIA_CALL getFragmentShader() const;
 
-    void setUniformVec3(const char* name, const niaVector3<r32>& vec);
-    void setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
+    void NIA_CALL setUniformVec3(const char* name, const niaVector3<r32>& vec);
+    void NIA_CALL setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
 
-    void useShader();
-    void unuseShader();
+    void NIA_CALL useShader();
+    void NIA_CALL unuseShader();
 };
 
 #endif // _NIA_BATCH_RENDERER_H_

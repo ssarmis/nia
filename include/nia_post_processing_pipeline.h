@@ -18,18 +18,18 @@ private:
     niaArray<niaFilter*> filterBuffer;
 
 public:
-    niaPostProcessingPipeline(r32 width, r32 height, const niaFrameBuffer& frameBuffer);
-    niaPostProcessingPipeline(r32 width, r32 height, const niaScene& scene);
-    ~niaPostProcessingPipeline();
+    NIA_CALL niaPostProcessingPipeline(r32 width, r32 height, const niaFrameBuffer& frameBuffer);
+    NIA_CALL niaPostProcessingPipeline(r32 width, r32 height, const niaScene& scene);
+    NIA_CALL ~niaPostProcessingPipeline();
 
-    void addFilter(niaFilter* filter);
-    void removeFilter(u32 index);
+    void NIA_CALL addFilter(niaFilter* filter);
+    void NIA_CALL removeFilter(u32 index);
 
-    void processPipeline(niaRenderer* renderer);
+    void NIA_CALL processPipeline(niaRenderer* renderer);
 
-    GLuint getFrameBufferTextureId();
+    GLuint NIA_CALL getFrameBufferTextureId();
 
-    void flush();
+    void NIA_CALL flush();
 };
 
 #endif //_NIA_POST_PROCESSING_PIPELINE_H_

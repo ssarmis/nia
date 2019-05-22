@@ -99,16 +99,16 @@ private:
     void decodeImageData(u8* colorTable);
 
 public:
-    niaGifParser();
-    niaGifParser(const char* filename);
-    ~niaGifParser();
+    NIA_CALL niaGifParser();
+    NIA_CALL niaGifParser(const char* filename);
+    NIA_CALL ~niaGifParser();
 
-    u32 getWidth();
-    u32 getHeight();
-    u8* getPixelData() const;
-    textureFormatDetails getTextureFormat() const;
-    niaGIFFrame* getFrames();
-    u32 getNumberOfFrames();
+    u32 NIA_CALL getWidth();
+    u32 NIA_CALL getHeight();
+    u8* NIA_CALL getPixelData() const;
+    textureFormatDetails NIA_CALL getTextureFormat() const;
+    niaGIFFrame* NIA_CALL getFrames();
+    u32 NIA_CALL getNumberOfFrames();
 };
 
 #endif

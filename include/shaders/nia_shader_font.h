@@ -6,8 +6,8 @@
 
 NIA_CLASS niaShaderFont : public niaShader{
 public:
-    niaShaderFont();
-    ~niaShaderFont();
+    NIA_CALL niaShaderFont();
+    NIA_CALL ~niaShaderFont();
 };
 
 #endif //_NIA_SHADER_QUAD_H_

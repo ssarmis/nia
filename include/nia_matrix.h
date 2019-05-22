@@ -73,34 +73,34 @@ public:
         r32 m[MAT_4_SIZE]; // for faster SSE
     };
 
-    niaMatrix4(r32 data = 1);
-    ~niaMatrix4();
+    NIA_CALL niaMatrix4(r32 data = 1);
+    NIA_CALL ~niaMatrix4();
 
-    void add_self(r32 number); // to avoind copying when using it for current matrix
-    niaMatrix4 add(r32 number) const;
-    niaMatrix4 add(const niaMatrix4& other) const;
+    void NIA_CALL add_self(r32 number); // to avoind copying when using it for current matrix
+    niaMatrix4 NIA_CALL add(r32 number) const;
+    niaMatrix4 NIA_CALL add(const niaMatrix4& other) const;
 
-    void sub_self(r32 number);
-    niaMatrix4 sub(r32 number) const;
-    niaMatrix4 sub(const niaMatrix4& other) const;
+    void NIA_CALL sub_self(r32 number);
+    niaMatrix4 NIA_CALL sub(r32 number) const;
+    niaMatrix4 NIA_CALL sub(const niaMatrix4& other) const;
 
-    void mul_self(r32 number);
-    niaMatrix4 mul(r32 number) const;
-    niaMatrix4 mul(const niaMatrix4& other) const;
+    void NIA_CALL mul_self(r32 number);
+    niaMatrix4 NIA_CALL mul(r32 number) const;
+    niaMatrix4 NIA_CALL mul(const niaMatrix4& other) const;
 
-    void scale_self(r32 amount);
-    void rotate_self(r32 angle, niaAxis axis);
+    void NIA_CALL scale_self(r32 amount);
+    void NIA_CALL rotate_self(r32 angle, niaAxis axis);
 
-    static bool compareMat4(const niaMatrix4& left, const niaMatrix4& right);
-    static niaMatrix4 identity();
-    static niaMatrix4 rotate(r32 angle, niaAxis axis);
-    static niaMatrix4 scale(r32 amount);
-    static niaMatrix4 translate(r32 x, r32 y, r32 z);
-    static niaMatrix4 orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far);
-    static niaMatrix4 perspective(r32 fov, r32 aspectRatio, r32 near, r32 far);
-    static niaMatrix4 lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up);
+    static bool NIA_CALL compareMat4(const niaMatrix4& left, const niaMatrix4& right);
+    static niaMatrix4 NIA_CALL identity();
+    static niaMatrix4 NIA_CALL rotate(r32 angle, niaAxis axis);
+    static niaMatrix4 NIA_CALL scale(r32 amount);
+    static niaMatrix4 NIA_CALL translate(r32 x, r32 y, r32 z);
+    static niaMatrix4 NIA_CALL orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far);
+    static niaMatrix4 NIA_CALL perspective(r32 fov, r32 aspectRatio, r32 near, r32 far);
+    static niaMatrix4 NIA_CALL lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up);
 
-    static void printMat4(const niaMatrix4& mat);
+    static void NIA_CALL printMat4(const niaMatrix4& mat);
 };
 
 #endif// _NIA_MATRIX_H_

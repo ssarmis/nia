@@ -9,8 +9,8 @@
 
 NIA_CLASS niaEvent {
 public:
-    niaEvent();
-    ~niaEvent();
+    NIA_CALL niaEvent();
+    NIA_CALL ~niaEvent();
 
     MSG msg;
 };
