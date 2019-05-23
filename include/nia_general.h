@@ -15,7 +15,7 @@
 #ifdef _MSC_VER
 #define NIA_ALIGN(_x) __declspec(align(_x))
 #elif __GNUC__
-#define NIA_ALIGN(_x) __attribute__((aligned(_x)));
+#define NIA_ALIGN(_x) __attribute__((aligned(_x)))
 #endif
 
 

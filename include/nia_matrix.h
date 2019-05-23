@@ -69,9 +69,8 @@ NIA_STRUCT nia__m128 {
 
 NIA_CLASS niaMatrix4 {
 public:
-	NIA_ALIGN(16) union {
-        r32 m[MAT_4_SIZE]; // for faster SSE
-    };
+	
+    NIA_ALIGN(16) r32 m[MAT_4_SIZE];
 
     NIA_CALL niaMatrix4(r32 data = 1);
     NIA_CALL ~niaMatrix4();
