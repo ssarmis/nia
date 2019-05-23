@@ -55,8 +55,6 @@ PFNGLTEXPARAMETERFVPROC _nia_glTexParameterfv = NULL;
 PFNGLGENERATEMIPMAPPROC _nia_glGenerateMipmap = NULL;
 PFNGLTEXIMAGE2DPROC _nia_glTexImage2D = NULL;
 
-#include <wingdi.h>
-
 #ifdef _WIN32
 NIA_INTERNAL PROC WINAPI niaGetProcAddress(const char* name){
 #elif defined __unix__

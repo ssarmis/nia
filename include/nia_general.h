@@ -12,6 +12,13 @@
 
 #include "nia_export.h"
 
+#ifdef _MSC_VER
+#define NIA_ALIGN(_x) __declspec(align(_x))
+#elif __GNUC__
+#define NIA_ALIGN(_x) __attribute__((aligned(_x)));
+#endif
+
+
 #ifdef NIA_DEBUG_BUILD
 #define NIA_TRACE(...) fprintf(stdout, __VA_ARGS__)
 #else
