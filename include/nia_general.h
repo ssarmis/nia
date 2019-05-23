@@ -69,7 +69,13 @@ static char* GL_ERRORS[] = {
 #define NIA_INLINE inline
 
 #define NIA_EXTERN extern
+
+#ifdef _MSC_VER
 #define NIA_INTERNAL
+#elif __GNUC__
+#define NIA_INTERNAL __attribute__((visibility("internal")))
+#endif
+
 #define NIA_STATIC static
 
 typedef int8_t i8;
