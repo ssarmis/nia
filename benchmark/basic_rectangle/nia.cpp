@@ -1,5 +1,6 @@
 #if 1
 #include "nia.h"
+#include "args.h"
 
 #include "../benchmark/include/benchmark/benchmark.h"
 
@@ -10,11 +11,13 @@ static void BM_RENDER_RECTANGLE(benchmark::State& state){
 
     glDrawBuffer(GL_FRONT);
     while(state.KeepRunning()){
-        renderer.renderRectangle(0, 0, 100, 100);
+        for(int i = 0 ; i < state.range(0); ++i){
+            renderer.renderRectangle(0, 0, 100, 100);
+        }
         // window->swapBuffers();
     }
 }
-BENCHMARK(BM_RENDER_RECTANGLE);
+BENCHMARK(BM_RENDER_RECTANGLE)BM_ARGS;
 
 static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
     niaRenderer renderer;
@@ -22,25 +25,29 @@ static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
     niaTexture texture("test.bmp");
     niaShader shader;
     while(state.KeepRunning()){
-        shader.useShader();
-        // renderer.renderMesh(mesh, texture);
-        renderer.renderRectangleRaw(0, 0, 100, 100, texture);
-        shader.unuseShader();
+        for(int i = 0 ; i < state.range(0); ++i){
+            shader.useShader();
+            // renderer.renderMesh(mesh, texture);
+            renderer.renderRectangleRaw(0, 0, 100, 100, texture);
+            shader.unuseShader();
+        }
         // window->swapBuffers();
     }
 }
-BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE);
+// BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE)BM_ARGS;
 
 niaTexture* texture;
 static void BM_RENDER_ANIMATED_TEXTURED_RECTANGLE(benchmark::State& state){
     niaRenderer renderer;
     niaMesh mesh = niaMesh::quad(1.0);
     while(state.KeepRunning()){
-        renderer.renderMesh(mesh, *texture);
+        for(int i = 0 ; i < state.range(0); ++i){
+            renderer.renderMesh(mesh, *texture);
+        }
         // window->swapBuffers();
     }
 }
-BENCHMARK(BM_RENDER_ANIMATED_TEXTURED_RECTANGLE);
+// BENCHMARK(BM_RENDER_ANIMATED_TEXTURED_RECTANGLE)BM_ARGS;
 
 // static void BM_RENDER_ANIMATED_TEXTURED_RECTANGLE(benchmark::State& state){
 //     niaRenderer renderer;

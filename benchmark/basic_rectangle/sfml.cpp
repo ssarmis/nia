@@ -1,5 +1,6 @@
 // #ifdef SFML_BENCHMARK
 #include <SFML/Graphics.hpp>
+#include "args.h"
 #include "../benchmark/include/benchmark/benchmark.h"
 
 sf::RenderWindow window;
@@ -9,11 +10,12 @@ static void BM_RENDER_RECTANGLE(benchmark::State& state){
     shape.setFillColor(sf::Color::Green);
 
     while(state.KeepRunning()){
-        window.draw(shape);
-        // window.display();
+        for(int i = 0 ; i < state.range(0); ++i){
+            window.draw(shape);
+        }
     }
 }
-BENCHMARK(BM_RENDER_RECTANGLE);
+BENCHMARK(BM_RENDER_RECTANGLE)BM_ARGS;
 
 static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
     sf::Texture texture;
@@ -21,11 +23,12 @@ static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
     texture.loadFromFile("test.bmp");
     sprite.setTexture(texture);
     while(state.KeepRunning()){
-        window.draw(sprite);
-        // window.display();
+        for(int i = 0 ; i < state.range(0); ++i){
+            window.draw(sprite);
+        }
     }
 }
-BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE);
+BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE)BM_ARGS;
 
 
 int main(int argc, char* argv[]){
