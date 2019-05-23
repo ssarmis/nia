@@ -28,7 +28,107 @@ u32 rectVbo = 0;
 
 #include "nia_texture_gl.h"
 
+typedef struct NIA_INTERNAL renderCache {
+    u32 cachedHash;
+    u32 cachedVaoId;
+    u32 cachedTextureId;
+    u32 cachedIndicesId;
+} renderCache;
+
+renderCache localRenderCache;
+
+#define FNV_PRIME 16777619
+#define FNV_OFFSET_BASIS 2166136261
+
+typedef union NIA_INTERNAL r32_u32 {
+    r32 r32value;
+    u32 u32value;
+} r32_u32;
+
+#define HASH_ROUND(_hash, _byte) {\
+    _hash ^= _byte;\
+    _hash *= FNV_PRIME;\
+}
+
+NIA_INLINE u32 NIA_INTERNAL computeHash(r32 x, r32 y,
+                                        r32 z, r32 w,
+                                        r32 h, r32 colors[3],
+                                        u32 vaoId, u32 textureId, u32 veoId){ // FNV-1a hash
+    u32 result = FNV_OFFSET_BASIS;
+
+    {
+        r32_u32 tmp;
+        tmp.r32value = x;
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = y;
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = z;
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = w;
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = h;
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = colors[0];
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = colors[1];
+        HASH_ROUND(result, tmp.u32value);
+
+        tmp.r32value = colors[2];
+        HASH_ROUND(result, tmp.u32value);
+    }
+    
+    HASH_ROUND(result, vaoId);
+    HASH_ROUND(result, textureId);
+    HASH_ROUND(result, veoId);
+
+    return result;
+}
+
+NIA_INLINE void NIA_INTERNAL cacheInit(renderCache* cache){
+    cache->cachedHash = 0xdead;
+    cache->cachedVaoId = 0xdead;
+    cache->cachedTextureId = 0xdead;
+    cache->cachedIndicesId = 0xdead;
+}
+
+// To be used later
+NIA_INLINE void NIA_INTERNAL cacheSetHash(renderCache* cache, u32 hash){
+    cache->cachedHash = hash;
+}
+
+NIA_INLINE u32 NIA_INTERNAL cacheGetHash(renderCache* cache){
+    return cache->cachedHash;
+}
+
+NIA_INLINE void NIA_INTERNAL cacheStoreVaoId(renderCache* cache, u32 vaoId){
+    cache->cachedVaoId = vaoId;
+}
+
+NIA_INLINE void NIA_INTERNAL cacheStoreTextureId(renderCache* cache, u32 textureId){
+    cache->cachedTextureId = textureId;
+}
+
+NIA_INLINE void NIA_INTERNAL cacheStoreIndicesId(renderCache* cache, u32 indicesId){
+    cache->cachedIndicesId = indicesId;
+}
+///////////////
+
+#define CACHE_CHECK(_cache, _cached_variable, _variable, _call){\
+    if(_cache._cached_variable != _variable){\
+        (_call);\
+        _cache._cached_variable = _variable;\
+    }\
+}
+
 niaRenderer::niaRenderer(){
+    cacheInit(&localRenderCache);
+
     cubeMesh = niaMesh::cube(100);
     
     NIA_GL_CALL(glGenVertexArrays(1, &rectVao)); // put this inside niaMesh
@@ -51,9 +151,11 @@ niaRenderer::niaRenderer(){
                  0, 3, 1};
 
     NIA_GL_CALL(glGenBuffers(1, &rectVeo));
-
+    // printf("%d \n", rectVeo);
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
     NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 niaRenderer::~niaRenderer(){
@@ -157,12 +259,18 @@ void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]){
     renderRectangle(x, y, 0, w, h, colors);
 }
 
-void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){ // TODO add unbinding for vaos
-    createAndBufferVertexies(x, y, z, w, h, colors);
+void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[3]){
+    u32 hash = computeHash(x, y, z, w, h, colors, rectVao, defaultTexture.textureId, rectVeo);
 
-    NIA_GL_CALL(glBindVertexArray(rectVao));
     defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+
+    CACHE_CHECK(localRenderCache, cachedHash, hash, {
+        createAndBufferVertexies(x, y, z, w, h, colors);
+        NIA_GL_CALL(glBindVertexArray(rectVao));
+        NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+        
+        NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
+    });
 
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
     defaultShader.unuseShader();
