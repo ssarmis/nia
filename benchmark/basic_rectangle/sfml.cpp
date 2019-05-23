@@ -30,7 +30,6 @@ static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
 }
 BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE)BM_ARGS;
 
-
 int main(int argc, char* argv[]){
     window.create(sf::VideoMode(200, 200), "SFML benchmark");
 

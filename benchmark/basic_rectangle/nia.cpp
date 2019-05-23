@@ -34,7 +34,7 @@ static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
         // window->swapBuffers();
     }
 }
-// BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE)BM_ARGS;
+BENCHMARK(BM_RENDER_TEXTURED_RECTANGLE)BM_ARGS;
 
 niaTexture* texture;
 static void BM_RENDER_ANIMATED_TEXTURED_RECTANGLE(benchmark::State& state){
@@ -47,7 +47,7 @@ static void BM_RENDER_ANIMATED_TEXTURED_RECTANGLE(benchmark::State& state){
         // window->swapBuffers();
     }
 }
-// BENCHMARK(BM_RENDER_ANIMATED_TEXTURED_RECTANGLE)BM_ARGS;
+BENCHMARK(BM_RENDER_ANIMATED_TEXTURED_RECTANGLE)BM_ARGS;
 
 // static void BM_RENDER_ANIMATED_TEXTURED_RECTANGLE(benchmark::State& state){
 //     niaRenderer renderer;

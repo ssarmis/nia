@@ -24,7 +24,7 @@ static void BM_RENDER_RECTANGLE(benchmark::State& state){
         // SDL_RenderPresent(renderer);
     }
 }
-// BENCHMARK(BM_RENDER_RECTANGLE)BM_ARGS;
+BENCHMARK(BM_RENDER_RECTANGLE)BM_ARGS;
 
 static void BM_RENDER_TEXTURED_RECTANGLE(benchmark::State& state){
     if(!renderer){
