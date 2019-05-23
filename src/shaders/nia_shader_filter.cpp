@@ -1,9 +1,9 @@
 #include "shaders/nia_shader_filter.h"
 
-NIA_CALL niaShaderFilter::niaShaderFilter(){
+niaShaderFilter::niaShaderFilter(){
 }
 
-NIA_CALL niaShaderFilter::niaShaderFilter(const char* sourceCodeVertex, const char* sourceCodeFragment){
+niaShaderFilter::niaShaderFilter(const char* sourceCodeVertex, const char* sourceCodeFragment){
     vertexShader = loadBufferToShader(sourceCodeVertex, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(sourceCodeFragment, GL_FRAGMENT_SHADER);
 
@@ -12,5 +12,5 @@ NIA_CALL niaShaderFilter::niaShaderFilter(const char* sourceCodeVertex, const ch
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderFilter::~niaShaderFilter(){
+niaShaderFilter::~niaShaderFilter(){
 }

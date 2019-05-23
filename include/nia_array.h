@@ -15,14 +15,14 @@ public:
     NIA_CALL niaArray(u32 limit);
     NIA_CALL ~niaArray();
 
-    NIA_CALL void add(T element);
-    NIA_CALL void remove(u32 index);
+    void NIA_CALL add(T element);
+    void NIA_CALL remove(u32 index);
     
-    NIA_CALL void clean();
-    NIA_CALL T* getData();
-    NIA_CALL u32 getSize() const;
+    void NIA_CALL clean();
+    T* NIA_CALL getData();
+    u32 NIA_CALL getSize() const;
     
-    NIA_CALL T& operator[](u32 index) const;
+    T& NIA_CALL operator[](u32 index) const;
 };
 
 template class niaArray<int>;

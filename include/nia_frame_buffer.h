@@ -14,13 +14,13 @@ public:
     NIA_CALL niaFrameBuffer();
     NIA_CALL ~niaFrameBuffer();
     
-    NIA_CALL void bind();
-    NIA_CALL void unbind();
+    void NIA_CALL bind();
+    void NIA_CALL unbind();
 
-    NIA_CALL static void bindFrameBuffer(GLuint frameBufferId);
-    NIA_CALL static void unbindFrameBuffer();
+    static void NIA_CALL bindFrameBuffer(GLuint frameBufferId);
+    static void NIA_CALL unbindFrameBuffer();
 
-    NIA_CALL GLuint getTextureId();
+    GLuint NIA_CALL getTextureId();
 };
 
 #endif // _NIA_FRAME_BUFFER_H_

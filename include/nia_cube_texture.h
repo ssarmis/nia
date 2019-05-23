@@ -10,6 +10,7 @@ private:
 
 public:
     GLuint textureId;
+    
     NIA_CALL niaCubeTexture();
     NIA_CALL niaCubeTexture(const char* textures[6]);
     NIA_CALL ~niaCubeTexture();

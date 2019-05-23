@@ -20,8 +20,8 @@ public:
     NIA_CALL niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaVector3<r32>* normals, niaVector2<r32>* uvs, u16* indices, u32 vertexies, u32 indicesAmount);
     NIA_CALL ~niaMesh();
 
-    NIA_CALL static niaMesh cube(r32 size);
-    NIA_CALL static niaMesh quad(r32 size);
+    static niaMesh NIA_CALL cube(r32 size);
+    static niaMesh NIA_CALL quad(r32 size);
 };
 
 #endif // _NIA_MESH_H_

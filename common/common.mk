@@ -4,7 +4,7 @@ ROOT			:= .
 
 # Used for examples
 CC      		:= g++
-CFLAGS 			:= -Wall -g -Wunused-variable 
+CFLAGS 			:= -Wall -g -Wunused-variable
 CINCLUDE		:= -I$(PROJECT_ROOT)/include
 
 LIBSPATH		:= $(PROJECT_ROOT)/build
@@ -41,27 +41,36 @@ build_lib:
 ifeq ($(DEBUG),)
 # windows or not
 ifeq ($(OS),Windows_NT)
-	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+	@cmake -Bbuild -H$(ROOT) -G "Visual Studio 15" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+	# @cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+	# @mingw32-make -C build/
 else
 	@cmake -Bbuild -H$(ROOT) -G "Unix Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+	@make -C build
 endif
 
 else
 # windows or not
 ifeq ($(OS),Windows_NT)
-	@cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
+	@cmake -Bbuild -H$(ROOT) -G "Visual Studio 15" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+	# @cmake -Bbuild -H$(ROOT) -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
+	# @mingw32-make -C build
 else
 	@cmake -Bbuild -H$(ROOT) -G "Unix Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DCMAKE_BUILD_TYPE=Debug
-endif
-endif
 	@make -C build
+endif
+endif
 
 # For examples
 run: 
 	@$(MAKE) $(APP)
 
 test_lib:
+ifeq ($(OS),Windows_NT)
+	@mingw32-make run -C examples/basic_batch_renderer/
+else
 	@make run -C examples/basic_batch_renderer/
+endif
 
 $(OBJS): $(SRCS)
 	@$(CC) -c $(SRCS) $(CFLAGS)	$(CINCLUDE)

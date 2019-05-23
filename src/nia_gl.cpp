@@ -67,69 +67,76 @@ void* niaGetProcAddress(const char* name){
     if (result){
         return result;
     }
-    return wglGetProcAddress(name);
+	result = wglGetProcAddress(name);
+	return result;
 #elif defined __unix__
     return (void*)glXGetProcAddress((const GLubyte*)name);
 #endif
 }
 
-NIA_CALL bool niaInitGL(){
+#define checkPrint(_x, _s) {\
+	if(!(_x)){\
+		NIA_ERROR(_s"\n");\
+	}\
+}
+
+bool niaInitGL(){
     bool extensionLoadCheck = true; 
 
-    extensionLoadCheck = ((glDrawBuffer = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffer")) && extensionLoadCheck);
+    checkPrint(extensionLoadCheck = ((glDrawBuffer = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffer")) && extensionLoadCheck), "glDrawBuffer");
 
-    extensionLoadCheck = ((glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) niaGetProcAddress("glGenFramebuffers")) && extensionLoadCheck);
-    extensionLoadCheck = ((glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) niaGetProcAddress("glBindFramebuffer")) && extensionLoadCheck);
-    extensionLoadCheck = ((glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC) niaGetProcAddress("glFramebufferTexture")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDeleteFramebuffers = (PFNGLDELETEBUFFERSPROC) niaGetProcAddress("glDeleteFramebuffers")) && extensionLoadCheck);
-    extensionLoadCheck = ((glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) niaGetProcAddress("glCheckFramebufferStatus")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDrawBuffers = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffers")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) niaGetProcAddress("glGenFramebuffers")) && extensionLoadCheck), "glGenFramebuffers");
+	checkPrint(extensionLoadCheck = ((glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) niaGetProcAddress("glBindFramebuffer")) && extensionLoadCheck), "glBindFramebuffer");
+	checkPrint(extensionLoadCheck = ((glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC) niaGetProcAddress("glFramebufferTexture")) && extensionLoadCheck), "glFramebufferTexture");
+	checkPrint(extensionLoadCheck = ((glDeleteFramebuffers = (PFNGLDELETEBUFFERSPROC) niaGetProcAddress("glDeleteFramebuffers")) && extensionLoadCheck), "glDeleteFramebuffers");
+	checkPrint(extensionLoadCheck = ((glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) niaGetProcAddress("glCheckFramebufferStatus")) && extensionLoadCheck), "glCheckFramebufferStatus");
+	checkPrint(extensionLoadCheck = ((glDrawBuffers = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffers")) && extensionLoadCheck), "glDrawBuffers");
 
-    extensionLoadCheck = ((glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) niaGetProcAddress("glGetUniformLocation")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUniform1d = (PFNGLUNIFORM1DPROC) niaGetProcAddress("glUniform1d")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUniform1f = (PFNGLUNIFORM1FPROC) niaGetProcAddress("glUniform1f")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUniform3f = (PFNGLUNIFORM3FPROC) niaGetProcAddress("glUniform3f")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC) niaGetProcAddress("glUniformMatrix4fv")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) niaGetProcAddress("glGetUniformLocation")) && extensionLoadCheck), "glGetUniformLocation");
+	checkPrint(extensionLoadCheck = ((glUniform1d = (PFNGLUNIFORM1DPROC) niaGetProcAddress("glUniform1d")) && extensionLoadCheck), "glUniform1d");
+	checkPrint(extensionLoadCheck = ((glUniform1f = (PFNGLUNIFORM1FPROC) niaGetProcAddress("glUniform1f")) && extensionLoadCheck), "glUniform1f");
+	checkPrint(extensionLoadCheck = ((glUniform3f = (PFNGLUNIFORM3FPROC) niaGetProcAddress("glUniform3f")) && extensionLoadCheck), "glUniform3f");
+	checkPrint(extensionLoadCheck = ((glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC) niaGetProcAddress("glUniformMatrix4fv")) && extensionLoadCheck), "glUniformMatrix4fv");
 
-    extensionLoadCheck = ((glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) niaGetProcAddress("glBindVertexArray")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC) niaGetProcAddress("glDisableVertexAttribArray")) && extensionLoadCheck);
-    extensionLoadCheck = ((glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC) niaGetProcAddress("glEnableVertexAttribArray")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) niaGetProcAddress("glGenVertexArrays")) && extensionLoadCheck);
-    extensionLoadCheck = ((glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC) niaGetProcAddress("glVertexAttribPointer")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC) niaGetProcAddress("glGetAttribLocation")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDrawElements = (PFNGLDRAWELEMENTSPROC) niaGetProcAddress("glDrawElements")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) niaGetProcAddress("glBindVertexArray")) && extensionLoadCheck), "glBindVertexArray");
+	checkPrint(extensionLoadCheck = ((glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC) niaGetProcAddress("glDisableVertexAttribArray")) && extensionLoadCheck), "glDisableVertexAttribArray");
+	checkPrint(extensionLoadCheck = ((glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC) niaGetProcAddress("glEnableVertexAttribArray")) && extensionLoadCheck), "glEnableVertexAttribArray");
+	checkPrint(extensionLoadCheck = ((glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) niaGetProcAddress("glGenVertexArrays")) && extensionLoadCheck), "glGenVertexArrays");
+	checkPrint(extensionLoadCheck = ((glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC) niaGetProcAddress("glVertexAttribPointer")) && extensionLoadCheck), "glVertexAttribPointer");
+	checkPrint(extensionLoadCheck = ((glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC) niaGetProcAddress("glGetAttribLocation")) && extensionLoadCheck), "glGetAttribLocation");
+	checkPrint(extensionLoadCheck = ((glDrawElements = (PFNGLDRAWELEMENTSPROC) niaGetProcAddress("glDrawElements")) && extensionLoadCheck), "glDrawElements");
 
-    extensionLoadCheck = ((glGenBuffers = (PFNGLGENBUFFERSPROC) niaGetProcAddress("glGenBuffers")) && extensionLoadCheck);
-    extensionLoadCheck = ((glBindBuffer = (PFNGLBINDBUFFERPROC) niaGetProcAddress("glBindBuffer")) && extensionLoadCheck);
-    extensionLoadCheck = ((glBufferData = (PFNGLBUFFERDATAPROC) niaGetProcAddress("glBufferData")) && extensionLoadCheck);
-    extensionLoadCheck = ((glMapBuffer = (PFNGLMAPBUFFERPROC) niaGetProcAddress("glMapBuffer")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUnmapBuffer = (PFNGLUNMAPBUFFERPROC) niaGetProcAddress("glUnmapBuffer")) && extensionLoadCheck);
-    extensionLoadCheck = ((glBufferSubData = (PFNGLBUFFERSUBDATAPROC) niaGetProcAddress("glBufferSubData")) && extensionLoadCheck);
-    extensionLoadCheck = ((glNamedBufferSubData = (PFNGLNAMEDBUFFERSUBDATAPROC) niaGetProcAddress("glNamedBufferSubData")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glGenBuffers = (PFNGLGENBUFFERSPROC) niaGetProcAddress("glGenBuffers")) && extensionLoadCheck), "glGenBuffers");
+	checkPrint(extensionLoadCheck = ((glBindBuffer = (PFNGLBINDBUFFERPROC) niaGetProcAddress("glBindBuffer")) && extensionLoadCheck), "glBindBuffer");
+	checkPrint(extensionLoadCheck = ((glBufferData = (PFNGLBUFFERDATAPROC) niaGetProcAddress("glBufferData")) && extensionLoadCheck), "glBufferData");
+	checkPrint(extensionLoadCheck = ((glMapBuffer = (PFNGLMAPBUFFERPROC) niaGetProcAddress("glMapBuffer")) && extensionLoadCheck), "glMapBuffer");
+	checkPrint(extensionLoadCheck = ((glUnmapBuffer = (PFNGLUNMAPBUFFERPROC) niaGetProcAddress("glUnmapBuffer")) && extensionLoadCheck), "glUnmapBuffer");
+	checkPrint(extensionLoadCheck = ((glBufferSubData = (PFNGLBUFFERSUBDATAPROC) niaGetProcAddress("glBufferSubData")) && extensionLoadCheck), "glBufferSubData");
+	checkPrint(extensionLoadCheck = ((glNamedBufferSubData = (PFNGLNAMEDBUFFERSUBDATAPROC) niaGetProcAddress("glNamedBufferSubData")) && extensionLoadCheck), "glNamedBufferSubData");
 
-    extensionLoadCheck = ((glCreateProgram = (PFNGLCREATEPROGRAMPROC) niaGetProcAddress("glCreateProgram")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) niaGetProcAddress("glGetProgramInfoLog")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGetProgramiv = (PFNGLGETPROGRAMIVPROC) niaGetProcAddress("glGetProgramiv")) && extensionLoadCheck);
-    extensionLoadCheck = ((glLinkProgram = (PFNGLLINKPROGRAMPROC) niaGetProcAddress("glLinkProgram")) && extensionLoadCheck);
-    extensionLoadCheck = ((glUseProgram = (PFNGLUSEPROGRAMPROC) niaGetProcAddress("glUseProgram")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDeleteProgram = (PFNGLDELETEPROGRAMPROC) niaGetProcAddress("glDeleteProgram")) && extensionLoadCheck);
-    extensionLoadCheck = ((glValidateProgram = (PFNGLVALIDATEPROGRAMPROC) niaGetProcAddress("glValidateProgram")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glCreateProgram = (PFNGLCREATEPROGRAMPROC) niaGetProcAddress("glCreateProgram")) && extensionLoadCheck), "glCreateProgram");
+	checkPrint(extensionLoadCheck = ((glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) niaGetProcAddress("glGetProgramInfoLog")) && extensionLoadCheck), "glGetProgramInfoLog");
+	checkPrint(extensionLoadCheck = ((glGetProgramiv = (PFNGLGETPROGRAMIVPROC) niaGetProcAddress("glGetProgramiv")) && extensionLoadCheck), "glGetProgramiv");
+	checkPrint(extensionLoadCheck = ((glLinkProgram = (PFNGLLINKPROGRAMPROC) niaGetProcAddress("glLinkProgram")) && extensionLoadCheck), "glLinkProgram");
+	checkPrint(extensionLoadCheck = ((glUseProgram = (PFNGLUSEPROGRAMPROC) niaGetProcAddress("glUseProgram")) && extensionLoadCheck), "glUseProgram");
+	checkPrint(extensionLoadCheck = ((glDeleteProgram = (PFNGLDELETEPROGRAMPROC) niaGetProcAddress("glDeleteProgram")) && extensionLoadCheck), "glDeleteProgram");
+	checkPrint(extensionLoadCheck = ((glValidateProgram = (PFNGLVALIDATEPROGRAMPROC) niaGetProcAddress("glValidateProgram")) && extensionLoadCheck), "glValidateProgram");
     
-    extensionLoadCheck = ((glAttachShader = (PFNGLATTACHSHADERPROC) niaGetProcAddress("glAttachShader")) && extensionLoadCheck);
-    extensionLoadCheck = ((glCompileShader = (PFNGLCOMPILESHADERPROC) niaGetProcAddress("glCompileShader")) && extensionLoadCheck);
-    extensionLoadCheck = ((glCreateShader = (PFNGLCREATESHADERPROC) niaGetProcAddress("glCreateShader")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDeleteShader = (PFNGLDELETESHADERPROC) niaGetProcAddress("glDeleteShader")) && extensionLoadCheck);
-    extensionLoadCheck = ((glDetachShader = (PFNGLDETACHSHADERPROC) niaGetProcAddress("glDetachShader")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) niaGetProcAddress("glGetShaderInfoLog")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGetShaderiv = (PFNGLGETSHADERIVPROC) niaGetProcAddress("glGetShaderiv")) && extensionLoadCheck);
-    extensionLoadCheck = ((glShaderSource = (PFNGLSHADERSOURCEPROC) niaGetProcAddress("glShaderSource")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glAttachShader = (PFNGLATTACHSHADERPROC) niaGetProcAddress("glAttachShader")) && extensionLoadCheck), "glAttachShader");
+	checkPrint(extensionLoadCheck = ((glCompileShader = (PFNGLCOMPILESHADERPROC) niaGetProcAddress("glCompileShader")) && extensionLoadCheck), "glCompileShader");
+	checkPrint(extensionLoadCheck = ((glCreateShader = (PFNGLCREATESHADERPROC) niaGetProcAddress("glCreateShader")) && extensionLoadCheck), "glCreateShader");
+	checkPrint(extensionLoadCheck = ((glDeleteShader = (PFNGLDELETESHADERPROC) niaGetProcAddress("glDeleteShader")) && extensionLoadCheck), "glDeleteShader");
+	checkPrint(extensionLoadCheck = ((glDetachShader = (PFNGLDETACHSHADERPROC) niaGetProcAddress("glDetachShader")) && extensionLoadCheck), "glDetachShader");
+	checkPrint(extensionLoadCheck = ((glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) niaGetProcAddress("glGetShaderInfoLog")) && extensionLoadCheck), "glGetShaderInfoLog");
+	checkPrint(extensionLoadCheck = ((glGetShaderiv = (PFNGLGETSHADERIVPROC) niaGetProcAddress("glGetShaderiv")) && extensionLoadCheck), "glGetShaderiv");
+	checkPrint(extensionLoadCheck = ((glShaderSource = (PFNGLSHADERSOURCEPROC) niaGetProcAddress("glShaderSource")) && extensionLoadCheck), "glShaderSource");
 
-    extensionLoadCheck = ((glGenTextures = (PFNGLGENTEXTURESPROC) niaGetProcAddress("glGenTextures")) && extensionLoadCheck);
-    extensionLoadCheck = ((glBindTexture = (PFNGLBINDTEXTUREPROC) niaGetProcAddress("glBindTexture")) && extensionLoadCheck);
-    extensionLoadCheck = ((glTexParameteri = (PFNGLTEXPARAMETERIPROC) niaGetProcAddress("glTexParameteri")) && extensionLoadCheck);
-    extensionLoadCheck = ((glTexParameterfv = (PFNGLTEXPARAMETERFVPROC) niaGetProcAddress("glTexParameterfv")) && extensionLoadCheck);
-    extensionLoadCheck = ((glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) niaGetProcAddress("glGenerateMipmap")) && extensionLoadCheck);
-    extensionLoadCheck = ((glTexImage2D = (PFNGLTEXIMAGE2DPROC) niaGetProcAddress("glTexImage2D")) && extensionLoadCheck);
+	checkPrint(extensionLoadCheck = ((glGenTextures = (PFNGLGENTEXTURESPROC) niaGetProcAddress("glGenTextures")) && extensionLoadCheck), "glGenTextures");
+	checkPrint(extensionLoadCheck = ((glBindTexture = (PFNGLBINDTEXTUREPROC) niaGetProcAddress("glBindTexture")) && extensionLoadCheck), "glBindTexture");
+	checkPrint(extensionLoadCheck = ((glTexParameteri = (PFNGLTEXPARAMETERIPROC) niaGetProcAddress("glTexParameteri")) && extensionLoadCheck), "glTexParameteri");
+	checkPrint(extensionLoadCheck = ((glTexParameterfv = (PFNGLTEXPARAMETERFVPROC) niaGetProcAddress("glTexParameterfv")) && extensionLoadCheck), "glTexParameterfv");
+	checkPrint(extensionLoadCheck = ((glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) niaGetProcAddress("glGenerateMipmap")) && extensionLoadCheck), "glGenerateMipmap");
+	checkPrint(extensionLoadCheck = ((glTexImage2D = (PFNGLTEXIMAGE2DPROC) niaGetProcAddress("glTexImage2D")) && extensionLoadCheck), "glTexImage2D");
 
     return extensionLoadCheck;
 }

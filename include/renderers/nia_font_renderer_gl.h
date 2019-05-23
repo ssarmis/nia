@@ -17,8 +17,8 @@ public:
     NIA_CALL niaFontRenderer(const char* filename);
     NIA_CALL ~niaFontRenderer();
 
-    NIA_CALL void renderString(r32 x, r32 y, r32 size, const char* string); // <   these 2 are the same
-    NIA_CALL void render(r32 x, r32 y, r32 size, const char* string);       // <
+    void NIA_CALL renderString(r32 x, r32 y, r32 size, const char* string); // <   these 2 are the same
+    void NIA_CALL render(r32 x, r32 y, r32 size, const char* string);       // <
 };
 
 #endif //_NIA_FONT_RENDERER_GL_H_

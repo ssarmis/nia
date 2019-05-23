@@ -38,7 +38,7 @@ void writeGIFFramesToTextureChain(niaGIFFrame* frame, niaAnimatedTextureChain* t
     }
 }
 
-NIA_CALL niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber){
+niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber){
     // for now I will assume there will only be .bmp files
     // TODO add extension cheking, header checking, more file formats forsers
     isAnimated = flag & NIA_TEXTURE_ANIMATED;
@@ -90,7 +90,7 @@ NIA_CALL niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber)
                             allocateTexture(parser.getWidth(), parser.getHeight(), parser.getFrames()[frameNumber - 1].data, parser.getTextureFormat()); 
                         }
                         
-                        canBeStreamed = !canBeStreamed;
+                        canBeStreamed = false; // it would rather take a long time to reload everything, can be done, will be, but not now
                     }
                     break;
 
@@ -107,12 +107,12 @@ NIA_CALL niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber)
 #endif
 }
 
-NIA_CALL niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){
+niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){
     isAnimated = false;
     allocateTexture(width, height, data, details); // data should be first, but whatever
 }
 
-NIA_CALL niaTexture::niaTexture(){
+niaTexture::niaTexture(){
     u8 pixels[] = {
         255, 255, 255,
         255, 255, 255
@@ -121,7 +121,7 @@ NIA_CALL niaTexture::niaTexture(){
     allocateTexture(1, 1, pixels);
 }
 
-NIA_CALL niaTexture::~niaTexture(){
+niaTexture::~niaTexture(){
 }
 
 NIA_INTERNAL void niaTexture::allocateTexture(u32 width, u32 height, u8* data, const textureFormatDetails& details){ // TODO add ability to change depth
@@ -154,7 +154,7 @@ niaTexture* getNextTextureInChain(niaAnimatedTextureChain* textureChain){
     return textureChain->current->texture;
 }
 
-NIA_CALL u32 niaTexture::getTextureId() {
+u32 niaTexture::getTextureId() {
     if(isAnimated){
         return (*getNextTextureInChain(&textureChain)).textureId;
     }

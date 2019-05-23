@@ -1,15 +1,15 @@
 #include "parsers/nia_bmp_parser.h"
 #include <malloc.h>
 
-NIA_CALL niaBmpParser::niaBmpParser(const char* filename){
+niaBmpParser::niaBmpParser(const char* filename){
     loadFile(filename);
     decodeFile();
 }
 
-NIA_CALL niaBmpParser::~niaBmpParser(){ // TODO free buffers
+niaBmpParser::~niaBmpParser(){ // TODO free buffers
 }
 
-NIA_CALL void niaBmpParser::loadFile(const char* filename){
+void niaBmpParser::loadFile(const char* filename){
     bmpData.fileData = NULL;
     FILE* file = fopen(filename, "rb");
 
@@ -34,7 +34,7 @@ NIA_CALL void niaBmpParser::loadFile(const char* filename){
                     (((_x) & 0x0000ff00) << 8) | \
                     (((_x) & 0x000000ff) << 16))
 
-NIA_CALL void niaBmpParser::decodeFile(){
+void niaBmpParser::decodeFile(){
     u8* source = bmpData.fileData;
     if(!source){
         return;
@@ -140,22 +140,22 @@ NIA_CALL void niaBmpParser::decodeFile(){
     }
 }
 
-NIA_CALL u32 niaBmpParser::getWidth() const {
+u32 niaBmpParser::getWidth() const {
     return bmpData.imageHeader.width;
 }
 
-NIA_CALL u32 niaBmpParser::getHeight() const {
+u32 niaBmpParser::getHeight() const {
     return bmpData.imageHeader.height;
 }
 
-NIA_CALL u8* niaBmpParser::getPixelData() const {
+u8* niaBmpParser::getPixelData() const {
     return bmpData.pixelData;
 }
 
-NIA_CALL u8 niaBmpParser::getBitCount() const {
+u8 niaBmpParser::getBitCount() const {
     return bmpData.imageHeader.bitCount;
 }
 
-NIA_CALL textureFormatDetails niaBmpParser::getTextureFormat() const {
+textureFormatDetails niaBmpParser::getTextureFormat() const {
     return bmpData.textureFormat;
 }

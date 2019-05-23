@@ -4,7 +4,8 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicVertexShaderFont = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec2 uv;\n"
@@ -26,7 +27,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicFragmentShaderFont = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -45,7 +47,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "}\n"
 "";
 
-NIA_CALL niaShaderFont::niaShaderFont(){
+niaShaderFont::niaShaderFont(){
     vertexShader = loadBufferToShader(basicVertexShaderFont, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicFragmentShaderFont, GL_FRAGMENT_SHADER);
 
@@ -54,5 +56,5 @@ NIA_CALL niaShaderFont::niaShaderFont(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShaderFont::~niaShaderFont(){
+niaShaderFont::~niaShaderFont(){
 }

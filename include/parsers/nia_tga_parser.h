@@ -36,17 +36,17 @@ NIA_CLASS niaTgaParser {
 private:
     niaTGA tgaData;
 
-    NIA_CALL void decodeFile();
+    void decodeFile();
 
 public:
     NIA_CALL niaTgaParser(const char* filename);
     NIA_CALL ~niaTgaParser();
 
-    NIA_CALL void loadFile(const char* filename);
-    NIA_CALL u32 getWidth() const;
-    NIA_CALL u32 getHeight() const;
-    NIA_CALL u8* getPixelData() const;
-    NIA_CALL textureFormatDetails getTextureFormat() const;
+    void NIA_CALL loadFile(const char* filename);
+    u32 NIA_CALL getWidth() const;
+    u32 NIA_CALL getHeight() const;
+    u8* NIA_CALL getPixelData() const;
+    textureFormatDetails NIA_CALL getTextureFormat() const;
 
 };
 

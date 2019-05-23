@@ -20,8 +20,8 @@ public:
     NIA_CALL niaFilter(const char* sourceVertex, const char* sourceFragment);
     NIA_CALL ~niaFilter();
 
-    NIA_CALL virtual void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out) = 0;
-    NIA_CALL void renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in);
+    virtual void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out) = 0;
+    void NIA_CALL renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in);
 };
 
 NIA_CLASS niaFilterGreyScale : public niaFilter{
@@ -29,7 +29,7 @@ public:
     NIA_CALL niaFilterGreyScale();
     NIA_CALL ~niaFilterGreyScale();
 
-    NIA_CALL void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 NIA_CLASS niaFilterInvert : public niaFilter{
@@ -37,7 +37,7 @@ public:
     NIA_CALL niaFilterInvert();
     NIA_CALL ~niaFilterInvert();
 
-    NIA_CALL void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 NIA_CLASS niaFilterBoxBlur : public niaFilter{
@@ -45,7 +45,7 @@ public:
     NIA_CALL niaFilterBoxBlur();
     NIA_CALL ~niaFilterBoxBlur();
 
-    NIA_CALL void process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
+    void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out);
 };
 
 

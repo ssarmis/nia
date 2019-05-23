@@ -4,7 +4,8 @@
 #include <malloc.h>
 
 NIA_STATIC char* basicVertexShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
 "layout(location = 2) in vec3 normal;\n"
@@ -51,7 +52,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 NIA_STATIC char* basicFragmentShader = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -74,7 +76,7 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "}\n"
 "";
 
-NIA_CALL niaShader::niaShader(const char* vertexShaderFilename, const char* fragmentShaderFilename){
+niaShader::niaShader(const char* vertexShaderFilename, const char* fragmentShaderFilename){
     vertexShader = loadSourceToShader(vertexShaderFilename, GL_VERTEX_SHADER);
     fragmentShader = loadSourceToShader(fragmentShaderFilename, GL_FRAGMENT_SHADER);
 
@@ -83,7 +85,7 @@ NIA_CALL niaShader::niaShader(const char* vertexShaderFilename, const char* frag
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShader::niaShader(){
+niaShader::niaShader(){
     vertexShader = loadBufferToShader(basicVertexShader, GL_VERTEX_SHADER);
     fragmentShader = loadBufferToShader(basicFragmentShader, GL_FRAGMENT_SHADER);
 
@@ -92,7 +94,7 @@ NIA_CALL niaShader::niaShader(){
     buildProgram(vertexShader, fragmentShader);
 }
 
-NIA_CALL niaShader::~niaShader(){
+niaShader::~niaShader(){
     // TODO free source files loaded in memory after using them
     NIA_GL_CALL(glDeleteShader(vertexShader));
     NIA_GL_CALL(glDeleteShader(fragmentShader));
@@ -165,33 +167,33 @@ NIA_INTERNAL void niaShader::buildProgram(GLuint vertexShader, GLuint fragmentSh
     }
 }
 
-NIA_CALL GLuint niaShader::getProgram() const {
+GLuint niaShader::getProgram() const {
     return program;
 }
 
-NIA_CALL GLuint niaShader::getVertexShader() const {
+GLuint niaShader::getVertexShader() const {
     return vertexShader;
 }
 
-NIA_CALL GLuint niaShader::getFragmentShader() const {
+GLuint niaShader::getFragmentShader() const {
     return fragmentShader;
 }
 
 
-NIA_CALL void niaShader::useShader(){
+void niaShader::useShader(){
     NIA_GL_CALL(glUseProgram(program));
 }
 
-NIA_CALL void niaShader::unuseShader(){
+void niaShader::unuseShader(){
     NIA_GL_CALL(glUseProgram(0));
 }
 
-NIA_CALL void niaShader::setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose){
+void niaShader::setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose){
     GLint id = glGetUniformLocation(program, name); // cache these
     NIA_GL_CALL(glUniformMatrix4fv(id, 1, transpose, mat.m));
 }
 
-NIA_CALL void niaShader::setUniformVec3(const char* name, const niaVector3<r32>& vec){
+void niaShader::setUniformVec3(const char* name, const niaVector3<r32>& vec){
     GLint id = glGetUniformLocation(program, name);
     NIA_GL_CALL(glUniform3f(id, vec.x, vec.y, vec.z));
 }

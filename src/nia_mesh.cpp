@@ -6,11 +6,11 @@
 
 #include "nia_constants.h"
 
-NIA_CALL niaMesh::niaMesh(){
+niaMesh::niaMesh(){
 }
 
 // TODO Make parser a base class and obj parser a derived one...
-NIA_CALL niaMesh::niaMesh(const char* filename){
+niaMesh::niaMesh(const char* filename){
     // Lets assume for now we only get .obj files, no checking, nothing
     niaObjParser parser(filename);
 
@@ -109,13 +109,13 @@ NIA_CALL niaMesh::niaMesh(const char* filename){
     delete[] vertexies;
 }
 
-NIA_CALL niaMesh::niaMesh(niaVertex* verts){
+niaMesh::niaMesh(niaVertex* verts){
 }
 
-NIA_CALL niaMesh::~niaMesh(){
+niaMesh::~niaMesh(){
 }
 
-NIA_CALL niaMesh::niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaVector3<r32>* normals, niaVector2<r32>* uvs, u16* indices, u32 vertexies, u32 indicesAmount){
+niaMesh::niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaVector3<r32>* normals, niaVector2<r32>* uvs, u16* indices, u32 vertexies, u32 indicesAmount){
     // TODO clean code and make it more reusable
     NIA_GL_CALL(glGenVertexArrays(1, &vao.id));
     NIA_GL_CALL(glBindVertexArray(vao.id));
@@ -175,11 +175,11 @@ NIA_CALL niaMesh::niaMesh(niaVector3<r32>* coords, niaVector3<r32>* colors, niaV
     verts = indicesAmount;
 }
 
-NIA_CALL niaMesh niaMesh::cube(r32 size){
+niaMesh niaMesh::cube(r32 size){
     niaMesh result;
 
     r32 vertexies[] = {
-        1.000000 * size, -1.000000 * size, -1.000000 * size,
+        1.000000 * size, -1.000000 * size, -1.000000 * size,        
         1.000000 * size, -1.000000 * size, 1.000000 * size,
         -1.000000 * size, -1.000000 * size, 1.000000 * size,
         -1.000000 * size, -1.000000 * size, -1.000000 * size,
@@ -224,8 +224,8 @@ NIA_CALL niaMesh niaMesh::cube(r32 size){
             1,
             1,
 
-            1,
-            1,
+            0,
+            0
         };
 
         NIA_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(niaVertex), sizeof(niaVertex), &v));
@@ -262,7 +262,7 @@ NIA_CALL niaMesh niaMesh::cube(r32 size){
     return result;
 }
 
-NIA_CALL niaMesh niaMesh::quad(r32 size){
+niaMesh niaMesh::quad(r32 size){
     niaMesh result;
     
     r32 vertexies[] = {

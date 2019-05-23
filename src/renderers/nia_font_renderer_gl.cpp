@@ -66,19 +66,19 @@ NIA_STATIC void setupBatchBuffers(){
     NIA_GL_CALL(glBindVertexArray(0));
 }
 
-NIA_CALL niaFontRenderer::niaFontRenderer(){
+niaFontRenderer::niaFontRenderer(){
     setupBatchBuffers();
 }
 
-NIA_CALL niaFontRenderer::niaFontRenderer(const char* filename){
+niaFontRenderer::niaFontRenderer(const char* filename){
     niaFontRenderer();
     fontParser = new niaTTFParser(filename);
 }
 
-NIA_CALL niaFontRenderer::~niaFontRenderer(){
+niaFontRenderer::~niaFontRenderer(){
 }
 
-NIA_CALL void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string){
+void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string){
     NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, batchVbo));
     niaBasicUVVertex* source = (niaBasicUVVertex*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
@@ -183,5 +183,5 @@ NIA_CALL void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* 
 
 
 
-NIA_CALL void niaFontRenderer::render(r32 x, r32 y, r32 size, const char* string){
+void niaFontRenderer::render(r32 x, r32 y, r32 size, const char* string){
 }

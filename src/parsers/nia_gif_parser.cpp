@@ -30,16 +30,16 @@ u32 POWER(u32 base, u32 exponent) {
     return result;
 }
 
-NIA_CALL niaGifParser::niaGifParser(){}
+niaGifParser::niaGifParser(){}
 
-NIA_CALL niaGifParser::niaGifParser(const char* filename){
+niaGifParser::niaGifParser(const char* filename){
     loadFile(filename);
     decodeFile();
 
     textureFormat = NIA_TEXTURE_FORMAT_RGBA_RGBA_UBYTE;
 }
 
-NIA_CALL niaGifParser::~niaGifParser(){}
+niaGifParser::~niaGifParser(){}
 
 
 u16 readBits(niaGIFImageDecodeStreamChunk*& chunk, u8 amount){
@@ -184,7 +184,7 @@ void putColor(u8* colorTable, u8* image, u32* position, u16 colorOffset){
     image[(*position)++] = 0xff;
 }
 
-NIA_CALL void niaGifParser::decodeImageData(u8* colorTable){
+void niaGifParser::decodeImageData(u8* colorTable){
     ++numberOfFrames;
     niaGIFImageDescriptor imageDescriptor;
     CONSUME(data, niaGIFImageDescriptor, imageDescriptor);
@@ -405,7 +405,7 @@ NIA_CALL void niaGifParser::decodeImageData(u8* colorTable){
     }
 }
 
-NIA_CALL void niaGifParser::decodeFile(){
+void niaGifParser::decodeFile(){
     numberOfFrames = 0;
 
     niaGIFHeader header;
@@ -525,7 +525,7 @@ NIA_CALL void niaGifParser::decodeFile(){
     delete[] colorTable;
 }
 
-NIA_CALL void niaGifParser::loadFile(const char* filename){
+void niaGifParser::loadFile(const char* filename){
     FILE* file = fopen(filename, "rb");
 
     NIA_ASSERT(file);
@@ -543,26 +543,26 @@ NIA_CALL void niaGifParser::loadFile(const char* filename){
 }
 
 
-NIA_CALL u32 niaGifParser::getWidth(){
+u32 niaGifParser::getWidth(){
     return width;
 }
 
-NIA_CALL u32 niaGifParser::getHeight(){
+u32 niaGifParser::getHeight(){
     return height;
 }
 
-NIA_CALL u8* niaGifParser::getPixelData() const { // just return the first frame
+u8* niaGifParser::getPixelData() const { // just return the first frame
     return frames[0].data;
 }
 
-NIA_CALL textureFormatDetails niaGifParser::getTextureFormat() const {
+textureFormatDetails niaGifParser::getTextureFormat() const {
     return textureFormat;
 }
 
-NIA_CALL niaGIFFrame* niaGifParser::getFrames(){
+niaGIFFrame* niaGifParser::getFrames(){
     return frames;
 }
 
-NIA_CALL u32 niaGifParser::getNumberOfFrames(){
+u32 niaGifParser::getNumberOfFrames(){
     return numberOfFrames;
 }

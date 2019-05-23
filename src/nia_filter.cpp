@@ -1,23 +1,24 @@
 #include "nia_filter.h"
 
-NIA_CALL niaFilter::niaFilter(){
+niaFilter::niaFilter(){
     quad = niaMesh::quad(1.0);
 }
 
-NIA_CALL niaFilter::niaFilter(const char* sourceVertex, const char* sourceFragment):
+niaFilter::niaFilter(const char* sourceVertex, const char* sourceFragment):
 shader(sourceVertex, sourceFragment){
 }
 
-NIA_CALL niaFilter::~niaFilter(){
+niaFilter::~niaFilter(){
 }
 
-NIA_CALL void niaFilter::renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in){
+void niaFilter::renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in){
     renderer->renderMeshRaw(niaMesh::quad(1.0), in.getTextureId());
 }
 
 /// greyscale
 const char* greyScaleVertex = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
@@ -35,7 +36,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 const char* greyScaleFragment = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -48,15 +50,15 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "   finalColor = vec4(avg, avg, avg, 1);\n"
 "}\n";
 
-NIA_CALL niaFilterGreyScale::niaFilterGreyScale():
+niaFilterGreyScale::niaFilterGreyScale():
 niaFilter(greyScaleVertex, greyScaleFragment){
 }
 
-NIA_CALL niaFilterGreyScale::~niaFilterGreyScale(){
+niaFilterGreyScale::~niaFilterGreyScale(){
     printf("Destroyed\n");
 }
 
-NIA_CALL void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
     shader.useShader();
     renderFrameBuffer(renderer, in);
@@ -70,7 +72,8 @@ NIA_CALL void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer&
 
 /// invert
 const char* invertVertex = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
@@ -88,7 +91,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 const char* invertFragment = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -104,14 +108,14 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "   finalColor = vec4(r, g, b, 1);\n"
 "}\n";
 
-NIA_CALL niaFilterInvert::niaFilterInvert():
+niaFilterInvert::niaFilterInvert():
 niaFilter(invertVertex, invertFragment){
 }
 
-NIA_CALL niaFilterInvert::~niaFilterInvert(){
+niaFilterInvert::~niaFilterInvert(){
 }
 
-NIA_CALL void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
     shader.useShader();
     renderFrameBuffer(renderer, in);
@@ -123,7 +127,8 @@ NIA_CALL void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& in
 
 /// box blur
 const char* boxBlurVertex = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 3) in vec2 uv;\n"
 
@@ -141,7 +146,8 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "";
 
 const char* boxBlurFragment = ""
-NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
@@ -163,14 +169,14 @@ NIA_GLSL_VERSION" \n""precision "NIA_GLSL_PRECISION" float;\n"
 "   finalColor = vec4(color, 1.0);\n"
 "}\n";
 
-NIA_CALL niaFilterBoxBlur::niaFilterBoxBlur():
+niaFilterBoxBlur::niaFilterBoxBlur():
 niaFilter(boxBlurVertex, boxBlurFragment){
 }
 
-NIA_CALL niaFilterBoxBlur::~niaFilterBoxBlur(){
+niaFilterBoxBlur::~niaFilterBoxBlur(){
 }
 
-NIA_CALL void niaFilterBoxBlur::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterBoxBlur::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
     shader.useShader();
     renderFrameBuffer(renderer, in);

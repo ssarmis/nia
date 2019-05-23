@@ -25,15 +25,15 @@ public:
     NIA_CALL niaShader();
     NIA_CALL ~niaShader();
 
-    NIA_CALL GLuint getProgram() const;
-    NIA_CALL GLuint getVertexShader() const;
-    NIA_CALL GLuint getFragmentShader() const;
+    GLuint NIA_CALL getProgram() const;
+    GLuint NIA_CALL getVertexShader() const;
+    GLuint NIA_CALL getFragmentShader() const;
 
-    NIA_CALL void setUniformVec3(const char* name, const niaVector3<r32>& vec);
-    NIA_CALL void setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
+    void NIA_CALL setUniformVec3(const char* name, const niaVector3<r32>& vec);
+    void NIA_CALL setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
 
-    NIA_CALL void useShader();
-    NIA_CALL void unuseShader();
+    void NIA_CALL useShader();
+    void NIA_CALL unuseShader();
 };
 
 #endif // _NIA_BATCH_RENDERER_H_

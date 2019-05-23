@@ -1,7 +1,7 @@
 #include "nia_scene.h"
 #include "nia_renderer.h"
 
-NIA_CALL void niaScene::setAttributeVec2(u32 attribute, const niaVector2<r32>& vector){
+void niaScene::setAttributeVec2(u32 attribute, const niaVector2<r32>& vector){
     switch(attribute){
         case NIA_DIFFUSE_LIGHT_POSITION :{
                 diffuseLightPosition = niaVector3<r32>(vector.x, vector.y, 0);
@@ -19,7 +19,7 @@ NIA_CALL void niaScene::setAttributeVec2(u32 attribute, const niaVector2<r32>& v
     }
 }
 
-NIA_CALL void niaScene::setAttributeVec3(u32 attribute, const niaVector3<r32>& vector){
+void niaScene::setAttributeVec3(u32 attribute, const niaVector3<r32>& vector){
     switch(attribute){
         case NIA_DIFFUSE_LIGHT_POSITION :{
                 diffuseLightPosition = vector;
@@ -37,7 +37,7 @@ NIA_CALL void niaScene::setAttributeVec3(u32 attribute, const niaVector3<r32>& v
     }
 }
 
-NIA_CALL void niaScene::setAttributeMat4(u32 attribute, const niaMatrix4& matrix){
+void niaScene::setAttributeMat4(u32 attribute, const niaMatrix4& matrix){
     switch(attribute){
         case NIA_VIEW :{
             };
@@ -49,19 +49,19 @@ NIA_CALL void niaScene::setAttributeMat4(u32 attribute, const niaMatrix4& matrix
     }
 }
 
-NIA_CALL void niaScene::setSkyBoxTextures(const char* textures[]){
+void niaScene::setSkyBoxTextures(const char* textures[]){
     cubeTexture = niaCubeTexture(textures);
 }
 
-NIA_CALL niaScene::niaScene(){
+niaScene::niaScene(){
     diffuseLightColor = niaVector3<r32>();
     diffuseLightPosition = niaVector3<r32>();
 }
 
-NIA_CALL niaScene::~niaScene(){
+niaScene::~niaScene(){
 }
 
-NIA_CALL void niaScene::bind(niaRenderer* renderer){
+void niaScene::bind(niaRenderer* renderer){
     renderer->defaultShader.useShader();
 
     renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, diffuseLightPosition);
@@ -75,14 +75,14 @@ NIA_CALL void niaScene::bind(niaRenderer* renderer){
     renderer->renderSkyBox(cubeTexture);
 }
 
-// NIA_CALL void niaScene::updateView(niaRenderer* renderer){
+// void niaScene::updateView(niaRenderer* renderer){
     
 // }
 
-NIA_CALL void niaScene::unbind(niaRenderer* renderer){
+void niaScene::unbind(niaRenderer* renderer){
     // renderer->defaultShader.unuseShader();
 }
 
-NIA_CALL niaFrameBuffer niaScene::getFrameBuffer() const {
+niaFrameBuffer niaScene::getFrameBuffer() const {
     return frameBuffer;
 }

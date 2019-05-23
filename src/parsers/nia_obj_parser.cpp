@@ -85,7 +85,7 @@ int wastes = 0;
     }\
 }\
 
-NIA_CALL niaObjParser::niaObjParser(const char* filename){
+niaObjParser::niaObjParser(const char* filename){
     fileSize = 0;
     source = NULL;
 
@@ -107,7 +107,7 @@ NIA_CALL niaObjParser::niaObjParser(const char* filename){
     fclose(file);
 }
 
-NIA_CALL niaObjParser::~niaObjParser(){
+niaObjParser::~niaObjParser(){
     vertexies.clean();
     normals.clean();
     uvs.clean();
@@ -116,7 +116,7 @@ NIA_CALL niaObjParser::~niaObjParser(){
     // free(source); <-- this is busted because we moved the pointer, fix will come soon
 }
 
-NIA_CALL u32 niaObjParser::parse(){
+u32 niaObjParser::parse(){
     if (fileSize <= 0){
         return 1;
     }
@@ -268,18 +268,18 @@ NIA_CALL u32 niaObjParser::parse(){
     return 0;
 }
 
-NIA_CALL niaArray<niaVector3<r32> >& niaObjParser::getVertexies() {
+niaArray<niaVector3<r32> >& niaObjParser::getVertexies() {
     return vertexies;
 }
 
-NIA_CALL niaArray<niaVector3<r32> >& niaObjParser::getNormals() {
+niaArray<niaVector3<r32> >& niaObjParser::getNormals() {
     return normals;
 }
 
-NIA_CALL niaArray<niaVector2<r32> >& niaObjParser::getUVS() {
+niaArray<niaVector2<r32> >& niaObjParser::getUVS() {
     return uvs;
 }
 
-NIA_CALL niaArray<niaVector3<u32> >& niaObjParser::getFaces() {
+niaArray<niaVector3<u32> >& niaObjParser::getFaces() {
     return faces;
 }

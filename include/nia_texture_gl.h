@@ -34,7 +34,7 @@ public:
     NIA_CALL niaTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details);
     NIA_CALL ~niaTexture();
 
-    NIA_CALL u32 getTextureId();
+    u32 NIA_CALL getTextureId();
 };
 
 #endif //_NIA_TEXTURE_GL_H_

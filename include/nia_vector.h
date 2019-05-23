@@ -93,18 +93,18 @@ public:
         };
     };
     
-    NIA_CALL niaVector2(const T& x = 0, const T& y = 0);
-    NIA_CALL niaVector2(const T* data);
-    NIA_CALL ~niaVector2();
+    niaVector2(const T& x = 0, const T& y = 0);
+    niaVector2(const T* data);
+    ~niaVector2();
 
-    NIA_CALL niaVector2 add(const niaVector2& other) const;
-    NIA_CALL niaVector2 add(const T& t) const;
+    niaVector2 add(const niaVector2& other) const;
+    niaVector2 add(const T& t) const;
 
-    NIA_CALL niaVector2 sub(const niaVector2& other) const;
-    NIA_CALL niaVector2 sub(const T& t) const;
+    niaVector2 sub(const niaVector2& other) const;
+    niaVector2 sub(const T& t) const;
 
-    NIA_CALL niaVector2 mul(const niaVector2& other) const;
-    NIA_CALL niaVector2 mul(const T& t) const;
+    niaVector2 mul(const niaVector2& other) const;
+    niaVector2 mul(const T& t) const;
 };
 
 template <typename T>
@@ -119,26 +119,26 @@ public:
         };
     };
 
-    NIA_CALL niaVector3(const T& x = 0, const T& y = 0, const T& z = 0);
-    NIA_CALL niaVector3(const T* data);
-    NIA_CALL ~niaVector3();
+    niaVector3(const T& x = 0, const T& y = 0, const T& z = 0);
+    niaVector3(const T* data);
+    ~niaVector3();
 
-    NIA_CALL niaVector3 add(const niaVector3& other) const;
-    NIA_CALL niaVector3 add(const T& t) const;
+    niaVector3 add(const niaVector3& other) const;
+    niaVector3 add(const T& t) const;
 
-    NIA_CALL niaVector3 sub(const niaVector3& other) const;
-    NIA_CALL niaVector3 sub(const T& t) const;
+    niaVector3 sub(const niaVector3& other) const;
+    niaVector3 sub(const T& t) const;
     
-    NIA_CALL niaVector3 mul(const niaVector3& other) const;
-    NIA_CALL niaVector3 mul(const T& t) const;
+    niaVector3 mul(const niaVector3& other) const;
+    niaVector3 mul(const T& t) const;
 
-    NIA_CALL niaVector3 normal();
-    NIA_CALL r32 dot(const niaVector3& other) const;
+    niaVector3 normal();
+    r32 dot(const niaVector3& other) const;
 
-    NIA_CALL niaVector3 cross(const niaVector3& other) const;
-    static NIA_CALL r32 dot(const niaVector3& left, const niaVector3& right);
+    niaVector3 cross(const niaVector3& other) const;
+    static r32 dot(const niaVector3& left, const niaVector3& right);
 
-    NIA_CALL bool operator==(const niaVector3& other) const;
+    bool operator==(const niaVector3& other) const;
 };
 
 template <typename T>
@@ -152,14 +152,14 @@ public:
     NIA_CALL niaVector4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0);
     NIA_CALL ~niaVector4();
 
-    NIA_CALL niaVector4 add(const niaVector4& other) const;
-    NIA_CALL niaVector4 add(const T& t) const;
+    niaVector4 NIA_CALL add(const niaVector4& other) const;
+    niaVector4 NIA_CALL add(const T& t) const;
 
-    NIA_CALL niaVector4 sub(const niaVector4& other) const;
-    NIA_CALL niaVector4 sub(const T& t) const;
+    niaVector4 NIA_CALL sub(const niaVector4& other) const;
+    niaVector4 NIA_CALL sub(const T& t) const;
 
-    NIA_CALL niaVector4 mul(const niaVector4& other) const;
-    NIA_CALL niaVector4 mul(const T& t) const;
+    niaVector4 NIA_CALL mul(const niaVector4& other) const;
+    niaVector4 NIA_CALL mul(const T& t) const;
 };
 
 // vector 2

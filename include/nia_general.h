@@ -1,4 +1,6 @@
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
 
 #ifndef _NIA_GENERAL_H_
 #define _NIA_GENERAL_H_
@@ -9,6 +11,13 @@
 #include <assert.h>
 
 #include "nia_export.h"
+
+#ifdef _MSC_VER
+#define NIA_ALIGN(_x) __declspec(align(_x))
+#elif __GNUC__
+#define NIA_ALIGN(_x) __attribute__((aligned(_x)));
+#endif
+
 
 #ifdef NIA_DEBUG_BUILD
 #define NIA_TRACE(...) fprintf(stdout, __VA_ARGS__)
@@ -75,7 +84,7 @@ typedef float r32;
 typedef double r64;
 
 NIA_INLINE r64 nia_cot(r64 angle){
-  return (1.0 / tanf(angle));
+  return (r64)(1.0 / tanf(angle));
 }
 
 NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
@@ -86,7 +95,7 @@ NIA_INLINE void nia_memset(u8* dest, u32 value, u32 amount){
 }
 
 NIA_INLINE u32 nia_strlen(const char* str){
-    u32 result;
+    u32 result = 0;
     while(*str++){
         ++result;
     }

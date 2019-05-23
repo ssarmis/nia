@@ -122,9 +122,9 @@ u32 distanceExtraBits[] = {
     11, 11, 12, 12, 13, 13
 };
 
-NIA_CALL niaPngParser::niaPngParser(){}
+niaPngParser::niaPngParser(){}
 
-NIA_CALL niaPngParser::niaPngParser(const char* filename){
+niaPngParser::niaPngParser(const char* filename){
     loadFile(filename);
     iterateHeader();
 
@@ -136,9 +136,9 @@ NIA_CALL niaPngParser::niaPngParser(const char* filename){
     defilterData();
 }
 
-NIA_CALL niaPngParser::~niaPngParser(){}
+niaPngParser::~niaPngParser(){}
 
-NIA_CALL void niaPngParser::loadFile(const char* filename){
+void niaPngParser::loadFile(const char* filename){
     FILE* file = fopen(filename, "rb");
 
     fseek(file, 0, SEEK_END);
@@ -174,7 +174,7 @@ static niaPNGChunkData* chunkDataInit(niaPNGCompressedStream* stream, u32 size, 
     return current;
 }
 
-NIA_CALL void niaPngParser::iterateHeader(){
+void niaPngParser::iterateHeader(){
     u8* source = pngData;
 
     WASTE(source, NIA_PNG_SIGNATURE_SIZE);
@@ -247,7 +247,7 @@ NIA_CALL void niaPngParser::iterateHeader(){
     }
 }
 
-NIA_CALL void niaPngParser::methodNoCompression(niaPNGChunkData* chunk){
+void niaPngParser::methodNoCompression(niaPNGChunkData* chunk){
     wasteCurrentByte(chunk);
     u16 len = readBits(chunk, 16);
     u16 nlen = readBits(chunk, 16);
@@ -328,7 +328,7 @@ static u16 decodeHuffmanSymbol(niaPNGHuffmanTable* table, niaPNGChunkData* chunk
     (_x) ^= (_y);\
 }
 
-NIA_CALL void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
+void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     u32 numberOfLiteralsCodes = readBits(chunk, 5) + 257;
     u32 numberOfDistancesCodes = readBits(chunk, 5) + 1;
     u32 numberOfLengthsCodes = readBits(chunk, 4) + 4;
@@ -435,7 +435,7 @@ NIA_CALL void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     }
 }
 
-NIA_CALL void niaPngParser::decompressChunks(){
+void niaPngParser::decompressChunks(){
     niaPNGChunkData* current = stream.head;
     while(current){
         u8 compressionMethod = readBits(current, 4);
@@ -484,7 +484,7 @@ NIA_CALL void niaPngParser::decompressChunks(){
     }
 }
 
-NIA_CALL void niaPngParser::defilterData(){
+void niaPngParser::defilterData(){
     switch(ihdr.filterMethod){
         case NIA_PNG_FILTER0:{
                 pixelData = new u8[ihdr.width * ihdr.height * 4];
@@ -519,18 +519,18 @@ NIA_CALL void niaPngParser::defilterData(){
     }
 }
 
-NIA_CALL u32 niaPngParser::getWidth(){
+u32 niaPngParser::getWidth(){
     return ihdr.height;
 }
 
-NIA_CALL u32 niaPngParser::getHeight(){
+u32 niaPngParser::getHeight(){
     return ihdr.height;
 }
 
-NIA_CALL u8* niaPngParser::getPixelData() const {
+u8* niaPngParser::getPixelData() const {
     return pixelData;
 }
 
-NIA_CALL textureFormatDetails niaPngParser::getTextureFormat() const {
+textureFormatDetails niaPngParser::getTextureFormat() const {
     return textureFormat;
 }

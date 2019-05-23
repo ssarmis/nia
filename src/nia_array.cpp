@@ -3,14 +3,14 @@
 #include <malloc.h>
 // TODO add asserts and stuff event if this will not be exposed to the user
 template<typename T>
-NIA_CALL niaArray<T>::niaArray(){
+niaArray<T>::niaArray(){
     preallocatedLimit = 0;
     size = 0;
     data = NULL;
 }
 
 template<typename T>
-NIA_CALL niaArray<T>::niaArray(u32 limit){
+niaArray<T>::niaArray(u32 limit){
     size = limit;
     data = new T[limit];
     printf("%d %d\n", limit, preallocatedLimit);
@@ -19,14 +19,14 @@ NIA_CALL niaArray<T>::niaArray(u32 limit){
 }
 
 template<typename T>
-NIA_CALL niaArray<T>::~niaArray(){
+niaArray<T>::~niaArray(){
     if(data){
         delete[] data;
     }
 }
 
 template<typename T>
-NIA_CALL void niaArray<T>::add(T element){
+void niaArray<T>::add(T element){
     if(preallocatedLimit){
         data[size - preallocatedLimit] = element;
         --preallocatedLimit;
@@ -48,7 +48,7 @@ NIA_CALL void niaArray<T>::add(T element){
 }
 
 template<typename T>
-NIA_CALL void niaArray<T>::remove(u32 index){ // TODO add handling for a bunch of cases, but I will do that later...
+void niaArray<T>::remove(u32 index){ // TODO add handling for a bunch of cases, but I will do that later...
     if(!size || index >= size){
         // ignore it, for now I guess
         return;
@@ -73,7 +73,7 @@ NIA_CALL void niaArray<T>::remove(u32 index){ // TODO add handling for a bunch o
 }
 
 template<typename T>
-NIA_CALL void niaArray<T>::clean(){
+void niaArray<T>::clean(){
     // TODO have a clean for pointer values, I guess ?
     if(data){
         delete[] data;
@@ -83,17 +83,17 @@ NIA_CALL void niaArray<T>::clean(){
 }
 
 template<typename T>
-NIA_CALL T* niaArray<T>::getData(){
+T* niaArray<T>::getData(){
     return data;
 }
 
 template<typename T>
-NIA_CALL T& niaArray<T>::operator[](u32 index) const {
+T& niaArray<T>::operator[](u32 index) const {
     // TODO maybe add some handling
     return data[index];
 }
 
 template<typename T>
-NIA_CALL u32 niaArray<T>::getSize() const{
+u32 niaArray<T>::getSize() const{
     return size;
 }

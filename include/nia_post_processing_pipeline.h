@@ -22,14 +22,14 @@ public:
     NIA_CALL niaPostProcessingPipeline(r32 width, r32 height, const niaScene& scene);
     NIA_CALL ~niaPostProcessingPipeline();
 
-    NIA_CALL void addFilter(niaFilter* filter);
-    NIA_CALL void removeFilter(u32 index);
+    void NIA_CALL addFilter(niaFilter* filter);
+    void NIA_CALL removeFilter(u32 index);
 
-    NIA_CALL void processPipeline(niaRenderer* renderer);
+    void NIA_CALL processPipeline(niaRenderer* renderer);
 
-    NIA_CALL GLuint getFrameBufferTextureId();
+    GLuint NIA_CALL getFrameBufferTextureId();
 
-    NIA_CALL void flush();
+    void NIA_CALL flush();
 };
 
 #endif //_NIA_POST_PROCESSING_PIPELINE_H_
