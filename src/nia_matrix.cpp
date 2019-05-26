@@ -130,8 +130,13 @@ niaMatrix4 niaMatrix4::scale(r32 amount){
     return result;
 }
 
+NIA_INLINE r32 degToRad(r32 deg){
+    return deg * 0.01745329;
+}
+
 niaMatrix4 niaMatrix4::rotate(r32 angle, niaAxis axis){
     niaMatrix4 result(1);
+    angle = degToRad(angle);
 
     switch (axis) {
         case NIA_AXIS_X:{
