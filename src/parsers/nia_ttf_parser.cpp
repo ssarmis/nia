@@ -205,6 +205,7 @@ int niaTTFParser::readGlyphHeaders(){
 
         glyph->bitmap = (glyphBuffer + offset);
         offset += width[i] * height[i];
+
         generateGlyphBitmap(glyph->bitmap, glyphPointer, glyphHeader, width[i], height[i], scale);
     }
 
@@ -213,51 +214,130 @@ int niaTTFParser::readGlyphHeaders(){
 	return 0;
 }
 
-r32 absf(r32 value){
+NIA_INLINE r32 absf(r32 value){
     return value < 0 ? -value : value;
 }
 
-void scanAndFill(u8* bitmap, u32 width, u32 height){
-    u32 scanLine = 0;
+typedef struct edge {
+    niaTTFPoint A;
+    niaTTFPoint B;
+    r32 slopeInverse;
+    u16 ymin;
+    u16 ymax;
+    u16 xOfYMax;
+} edge;
 
-    while(scanLine < height){
-        niaArray<i32> edges;
-        niaArray<niaVec2i> pairs;
+typedef struct edgeTable {
+    u32 numberOfEdges;
+    edge edges[1024];
+} edgeTable;
 
-        int old = 0;
+NIA_INLINE void initializeEdgeTable(edgeTable* table){
+    table->numberOfEdges = 0;
+}
 
-        for(int x = 0; x < width; ++x){
-            if(bitmap[x + scanLine * width] != 0){
-                int offset = 0;
-                while(bitmap[x + offset++ + scanLine * width]){
-                    x++;
-                }
-                edges.add(x);
-            }
+NIA_INLINE edge createEdge(const niaTTFPoint& A, const niaTTFPoint& B, i16 xOffset, i16 yOffset){
+    edge result;
+
+    result.A.x = A.x - xOffset;
+    result.A.y = A.y - yOffset;
+    
+    result.B.x = B.x - xOffset;
+    result.B.y = B.y - yOffset;
+    
+    r32 dx = (A.x - B.x);
+    r32 dy = (A.y - B.y);
+    result.slopeInverse = (dy == 0) ? 0 : (dx / dy);
+
+    if(result.A.y <= result.B.y){
+        result.ymin = result.A.y;
+        result.ymax = result.B.y;
+        result.xOfYMax = result.B.x;
+    } else {
+        result.ymin = result.B.y;
+        result.ymax = result.A.y;
+        result.xOfYMax = result.A.x;
+    }
+
+    return result;
+}
+
+NIA_INLINE void addEdgeToTable(edgeTable* table, const edge& e){
+    table->edges[table->numberOfEdges] = e;
+    ++table->numberOfEdges;
+}
+
+NIA_INLINE bool lineOnEdge(const edge& e, u32 line){ // line is just the Y of the scanline
+    return line >= e.ymin && line <= e.ymax;
+}
+
+NIA_INLINE void sortArray(niaArray<u16>* array){
+    for(u16 i = 1; i < array->getSize(); ++i){
+        u16 value = array->getData()[i];
+        while(value < array->getData()[i - 1] && i){
+            u16 aux = array->getData()[i - 1];
+            array->getData()[i - 1] = value;
+            array->getData()[i] = aux;
+            --i;
         }
-
-        if(edges.getSize() > 0){
-            for(int i = 0; i < edges.getSize() - 1; ++i){
-                pairs.add(niaVec2i{edges[i], edges[i + 1]});
-                ++i;
-                if(i == edges.getSize() - 1){
-                    if(edges.getSize() % 2 != 0){
-                        pairs.add(niaVec2i{edges[i - 1], edges[i]});
-                    }
-                }
-            }
-        }
-
-        for(int i = 0; i < pairs.getSize(); ++i){
-            for(int x = pairs[i].x; x < pairs[i].y; ++x){
-                bitmap[x + scanLine * width] = 0xff;
-            }
-        }
-        ++scanLine;
     }
 }
 
-void drawLine(u8* bitmap, const niaTTFPoint& A, const niaTTFPoint& B, i16 xOffset, i16 yOffset, u32 width, u32 height){
+NIA_INLINE u16 valueInArray(const niaArray<u16>& array, u16 value){
+    u16 result = 0;
+    for(int i = 0; i < array.getSize(); ++i){
+        if(array[i] == value){
+            ++result;
+        }
+    }
+    return result;
+}
+
+NIA_INLINE void scanlineFill(u8* bitmap, u32 width, u32 height, edgeTable* table){
+    niaArray<u16> pointsOnScanLine;
+    u32 pairAdvance = 0;
+
+    for(u32 scanLine = 0; scanLine < height; ++scanLine){
+        for(u32 edge = 0; edge < table->numberOfEdges; ++edge){
+            if(table->edges[edge].A.y == table->edges[edge].B.y){
+                continue;
+            }
+            
+            if(lineOnEdge(table->edges[edge], scanLine)){
+                u16 xOfIntersection = (table->edges[edge].ymax - scanLine) * (-table->edges[edge].slopeInverse) + table->edges[edge].xOfYMax;
+
+                if((xOfIntersection == table->edges[edge].A.x && scanLine == table->edges[edge].A.y) ||
+                   (xOfIntersection == table->edges[edge].B.x && scanLine == table->edges[edge].B.y)){
+                    // ugly way of seeing if the current point is actually part of an edge, without searching in the edge table again
+                    if(scanLine != table->edges[edge].ymax){
+                        continue;
+                    }
+                }
+
+                pointsOnScanLine.add(xOfIntersection);
+            }
+        }
+
+        sortArray(&pointsOnScanLine);
+
+        if(pointsOnScanLine.getSize() > 1){
+            if((pointsOnScanLine.getSize() & 1)){
+                pairAdvance = 1;
+            } else {
+                pairAdvance = 2;
+            }
+
+            for(u16 i = 0; i < pointsOnScanLine.getSize() - 1; i += pairAdvance){
+                for(u16 x = pointsOnScanLine[i]; x < pointsOnScanLine[i + 1]; ++x){
+                    bitmap[x + scanLine * width] = 0xff;
+                }
+            }
+        }
+        pointsOnScanLine.clean();
+    }
+}
+
+NIA_INLINE void drawLine(u8* bitmap, const niaTTFPoint& A, const niaTTFPoint& B, i16 xOffset, i16 yOffset, u32 width, u32 height){
     r32 deltaX = B.x - A.x;
     r32 deltaY = B.y - A.y;
 
@@ -411,11 +491,19 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
 
     int index = 0;
 
+    edgeTable table;
+
+    initializeEdgeTable(&table);
+
     for(int i = 0; i < numberOfPoints; ++i){
         niaTTFPoint newPoint = points[i];
 
         if(firstPassed){
             drawLine(bitmap, previous, newPoint, xOffset, yOffset, width, height);
+            edge e = createEdge(previous, newPoint, xOffset, yOffset);
+            if(!(e.A.x == e.B.x && e.A.y == e.B.y)){ // we don't want edges that have the same point as both points...
+                addEdgeToTable(&table, e);
+            }
         } else {
             firstSectionPoint = newPoint;
             firstPassed = !firstPassed;
@@ -424,6 +512,13 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
         // here we hit the end of the shape(contour) so we can connect the last point of the shape with the first
         if(endPtsOfContours[index] == i){
             drawLine(bitmap, newPoint, firstSectionPoint, xOffset, yOffset, width, height);
+            
+            edge e = createEdge(newPoint, firstSectionPoint, xOffset, yOffset);
+
+            if(!(e.A.x == e.B.x && e.A.y == e.B.y)){
+                addEdgeToTable(&table, e);
+            }
+
             ++index;
             firstPassed = false;
             continue;
@@ -432,7 +527,7 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
         previous = points[i];
     }
 
-    scanAndFill(bitmap, width, height);
+    scanlineFill(bitmap, width, height, &table);
 
     // clean the mess
     flags.clean();
