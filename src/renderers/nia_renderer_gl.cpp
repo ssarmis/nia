@@ -363,4 +363,16 @@ void niaRenderer::renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture
     defaultShaderReflective.unuseShader();
 }
 
+void niaRenderer::renderSprite(niaSprite& sprite){
+    defaultShader.useShader();
+
+    NIA_GL_CALL(glBindVertexArray(sprite.getVao()));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, sprite.getTextureId()));
+    
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite.getVeo()));
+
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
+    defaultShader.unuseShader();
+}
+
 #endif

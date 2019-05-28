@@ -175,9 +175,9 @@ public:
      * @param mesh The mesh to be rendered
      * @param texture A cube texture to be rendered as a reflection onto the mesh
      */
-     void NIA_CALL renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
+    void NIA_CALL renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
     
-     void NIA_CALL renderSprite(const niaSprite& sprite);
+    void NIA_CALL renderSprite(niaSprite& sprite);
     
     friend class niaScene;
 };
