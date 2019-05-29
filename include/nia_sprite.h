@@ -15,11 +15,21 @@ private:
 
 public:
     NIA_CALL niaSprite();
+    NIA_CALL niaSprite(u8* bitmap, u32 textureWidth, u32 textureHeight, const niaRectangle& rect);
     NIA_CALL niaSprite(const char* filename, const niaRectangle& rect);
     NIA_CALL ~niaSprite();
 
     void NIA_CALL loadTexture(const char* filename);
+    void NIA_CALL loadTexture(u8* bitmap, u32 width, u32 height);
     void NIA_CALL setBounds(const niaRectangle& rect);
+
+    NIA_INLINE u32 NIA_CALL getWidth(){
+        return rectangle.w;
+    }
+
+    NIA_INLINE u32 NIA_CALL getHeight(){
+        return rectangle.h;
+    }
 
     NIA_INLINE u32 NIA_CALL getVao() { 
         return rectangle.vao;
@@ -32,6 +42,7 @@ public:
     NIA_INLINE u32 NIA_CALL getTextureId() {
         return texture.getTextureId();
     }
+
 };
 
 #endif //_NIA_SPRITE_H_

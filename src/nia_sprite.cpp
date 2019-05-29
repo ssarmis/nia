@@ -3,12 +3,20 @@
 #include "nia_gl.h"
 #include "nia_vertex.h"
 #include "nia_constants.h"
+#include "nia_texture_structures.h"
 
 niaSprite::niaSprite(){
 }
 
+niaSprite::niaSprite(u8* bitmap, u32 textureWidth, u32 textureHeight, const niaRectangle& rect):
+niaSprite(NULL, rect){
+    loadTexture(bitmap, textureWidth, textureHeight);
+}
+
 niaSprite::niaSprite(const char* filename, const niaRectangle& rect){
-    loadTexture(filename);
+    if(filename){
+        loadTexture(filename);
+    }
 
     setBounds(rect);
 
@@ -58,7 +66,14 @@ niaSprite::~niaSprite(){
 }
 
 void niaSprite::loadTexture(const char* filename){
+    // TODO make this actually work normally, pull of the test case that exists now below,
+    //      niaTexture(filenmae) is the only one that is needed, the flag for animated or not
+    //      + frame count if is the case will come in the destructor
     texture = niaTexture(filename, NIA_TEXTURE_NOT_ANIMATED, 3);
+}
+
+void niaSprite::loadTexture(u8* bitmap, u32 width, u32 height){
+    texture = niaTexture(bitmap, width, height, NIA_TEXTURE_FORMAT_R8_RED_UBYTE);
 }
 
 void NIA_CALL niaSprite::setBounds(const niaRectangle& rect){
