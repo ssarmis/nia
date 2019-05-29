@@ -1,6 +1,7 @@
 #include "parsers/nia_ttf_parser.h"
 
 #include "nia_array.h"
+#include "nia_rectangle.h"
 
 #define SWAP32(_n) ((((_n) & 0x000000FF) << 24) | (((_n) & 0x0000FF00) << 8) | (((_n) & 0x00FF0000) >> 8) | (((_n) & 0xFF000000) >> 24))
 #define SWAP16(_n) ((((_n) & 0xFF00) >> 8) | (((_n) & 0x00FF) << 8))
@@ -29,13 +30,13 @@ niaTTFParser::niaTTFParser(const char* filename){
             NIA_ERROR("Could not read %s, aborting font.\n", filename);
             return;
         }
-
+        // TODO make the font parser actually work for more fonts
         if(fileSize){
             readTableDirectory();
             readEssentialHeaders();
             readGlyphHeaders();
             readGlyphMetrics();
-            generateTextureAtlas();
+            // generateTextureAtlas();
             mapCharactersToIndexes();
         } else {
             NIA_ERROR("Cannot decode empty font file %s, aborting.", filename);
@@ -45,9 +46,9 @@ niaTTFParser::niaTTFParser(const char* filename){
 }
 
 niaTTFParser::~niaTTFParser(){
-    delete [] initialPointer;
-    delete [] glyphOffsets;
-    delete [] glyphBuffer;
+    delete[] initialPointer;
+    delete[] glyphOffsets;
+    delete[] glyphBuffer;
 }
 
 int niaTTFParser::loadFile(const char* filename){
@@ -151,9 +152,10 @@ int niaTTFParser::readHorizontalHeader(){
     return 0;
 }
 
+
 r32 scale = 1;
 int niaTTFParser::readGlyphHeaders(){
-    // scale = 64.0 / (r32)(ascent - descent);
+    // TODO add font scaling based on desired size in height
     u32* width = new u32[numberOfGlyphs];
     u32* height = new u32[numberOfGlyphs];
 
@@ -175,12 +177,22 @@ int niaTTFParser::readGlyphHeaders(){
         height[i] = ((((i16)SWAP16(glyphHeader.yMax) - (i16)SWAP16(glyphHeader.yMin)) + 1) * scale);
 
         bufferSize += sizeof(niaGlyph);
+
+        while(width[i] % 4){
+            ++width[i];
+        }
+
+        while(height[i] % 4){
+            ++height[i];
+        }
+
         bufferSize += width[i] * height[i];
     }
 
     glyphBuffer = new u8[bufferSize];
 
     u32 offset = glyphBufferBufferHeaderSize; // skip the look up table and index addressing
+    niaRectangle rect;
     for(int i = 0; i < numberOfGlyphs; ++i){
         niaTTFGlyphHeader glyphHeader;
 
@@ -198,8 +210,8 @@ int niaTTFParser::readGlyphHeaders(){
         glyph->bounds.xmin = (i16)SWAP16(glyphHeader.xMin) * scale;
         glyph->bounds.ymax = (i16)SWAP16(glyphHeader.yMax) * scale;
         glyph->bounds.ymin = (i16)SWAP16(glyphHeader.yMin) * scale;
-        glyph->metrics.cursorAdvance = glyph->bounds.xmax;
-        glyph->metrics.verticalAdvance = (glyph->bounds.ymin < 0 ? (glyph->bounds.ymax + glyph->bounds.ymin) : 0);
+        glyph->metrics.cursorAdvance = glyph->bounds.xmax * scale;
+        glyph->metrics.verticalAdvance = (glyph->bounds.ymin < 0 ? (glyph->bounds.ymax + glyph->bounds.ymin) : 0) * scale;
 
         offset += sizeof(niaGlyph);
 
@@ -207,10 +219,18 @@ int niaTTFParser::readGlyphHeaders(){
         offset += width[i] * height[i];
 
         generateGlyphBitmap(glyph->bitmap, glyphPointer, glyphHeader, width[i], height[i], scale);
+
+        rect.x = 0;
+        rect.y = 0;
+
+        rect.w = width[i] * scale;
+        rect.h = height[i] * scale;
+
+        glyph->sprite = niaSprite(glyph->bitmap, width[i], height[i], rect);
     }
 
-    delete [] width;
-    delete [] height;
+    delete[] width;
+    delete[] height;
 	return 0;
 }
 
@@ -535,6 +555,7 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
     delete[] endPtsOfContours;
 }
 
+#if 0
 int niaTTFParser::generateTextureAtlas(){
     u32 entries = numberOfGlyphs;
     u32 offset = 0;
@@ -630,6 +651,7 @@ int niaTTFParser::generateTextureAtlas(){
     texture = niaTexture(pixels, width, height, NIA_TEXTURE_FORMAT_R8_RED_UBYTE);
 	return 0;
 }
+#endif
 
 int niaTTFParser::readGlyphMetrics(){
     u32 index;
@@ -647,7 +669,7 @@ int niaTTFParser::readGlyphMetrics(){
             niaLongHorMetric metric;
             CONSUME(niaLongHorMetric, source7, metric);
 
-            getGlyph(index++)->metrics.cursorAdvance = SWAP16(metric.advanceWidth);
+            getGlyph(index++)->metrics.cursorAdvance = SWAP16(metric.advanceWidth) * scale;
         }
     }
 
@@ -664,7 +686,7 @@ int niaTTFParser::readGlyphMetrics(){
             niaLongVerMetric metric;
             CONSUME(niaLongVerMetric, source9, metric);
 
-            getGlyph(index++)->metrics.verticalAdvance = SWAP16(metric.advanceHeight);
+            getGlyph(index++)->metrics.verticalAdvance = SWAP16(metric.advanceHeight) * scale;
         }
     }
 	return 0;

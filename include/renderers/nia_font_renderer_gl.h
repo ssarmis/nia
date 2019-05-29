@@ -8,7 +8,7 @@
 #include "renderers/nia_batch_renderer_gl.h"
 #include "parsers/nia_ttf_parser.h"
 
-NIA_CLASS niaFontRenderer : public niaBatchRenderer {
+NIA_CLASS niaFontRenderer : public niaRenderer {
 private:
     niaTTFParser* fontParser;
 

@@ -3,6 +3,7 @@
 
 #include "nia_general.h"
 #include "nia_vector.h"
+#include "nia_sprite.h"
 
 #define NIA_FORMAT_0 0
 #define NIA_FORMAT_6 6
@@ -172,7 +173,8 @@ NIA_STRUCT niaGlyph {
     niaGlyphBounds bounds;
     niaGlyphCompoundDetails compoundDetails;
     niaGlyphMetrics metrics;
-    niaGlyphUVS uvs;
+    niaSprite sprite;
+    // niaGlyphUVS uvs;
     u8* bitmap;
 } niaGlyph;
 
@@ -234,12 +236,12 @@ public:
     int NIA_CALL readEssentialHeaders();
     int NIA_CALL readHorizontalHeader();
     int NIA_CALL generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTFGlyphHeader& glyphHeader, u32 width, u32 height, r32 scale);
-    int NIA_CALL generateTextureAtlas();
+    // int NIA_CALL generateTextureAtlas();
     int NIA_CALL readGlyphHeaders();
     int NIA_CALL readGlyphMetrics();
     int NIA_CALL mapCharactersToIndexes();
 
-    inline niaGlyph* getGlyph(u16 index){
+    NIA_INLINE niaGlyph* getGlyph(u16 index){
         if(index >= numberOfGlyphs){
             return (niaGlyph*)(glyphBuffer + *(glyphBuffer + glyphBufferIndexAddressingOffset + 0)); // just return the first glyph for an out of bounds index
         }
@@ -252,9 +254,17 @@ public:
         );
     }
 
-    inline niaGlyph* getGlyphChar(const char c){
+    NIA_INLINE niaGlyph* getGlyphChar(const char c){
         return getGlyph(glyphBuffer[c]);
     }
+
+
+    // TODO return a reference not a copy
+    NIA_INLINE niaSprite getGlyphSprite(const char c){
+        niaGlyph* g = getGlyphChar(c);
+        return g->sprite;
+    }
+
 };
 
 #endif // _NIA_TTF_PARSER_H_
