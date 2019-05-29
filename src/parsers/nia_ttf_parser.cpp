@@ -249,7 +249,8 @@ typedef struct edge {
 
 typedef struct edgeTable {
     u32 numberOfEdges;
-    edge edges[1024];
+    // TODO make this a list/vector not a hardcoded array
+    edge edges[(1 << 10) << 3];
 } edgeTable;
 
 NIA_INLINE void initializeEdgeTable(edgeTable* table){
@@ -282,9 +283,25 @@ NIA_INLINE edge createEdge(const niaTTFPoint& A, const niaTTFPoint& B, i16 xOffs
     return result;
 }
 
+NIA_INLINE bool samePoint(const niaTTFPoint& A, const niaTTFPoint& B){
+    return (A.x == B.x) && (A.y == B.y);
+}
+
+NIA_INLINE bool edgeInTable(edgeTable* table, const edge& e){
+    // don't judge
+    for(u32 i = 0; i < table->numberOfEdges; ++i){
+        if(samePoint(table->edges[i].A, e.A) && samePoint(table->edges[i].B, e.B)){
+            return true;
+        }
+    }
+    return false;
+}
+
 NIA_INLINE void addEdgeToTable(edgeTable* table, const edge& e){
-    table->edges[table->numberOfEdges] = e;
-    ++table->numberOfEdges;
+    if(!edgeInTable(table, e)){
+        table->edges[table->numberOfEdges] = e;
+        ++table->numberOfEdges;
+    }
 }
 
 NIA_INLINE bool lineOnEdge(const edge& e, u32 line){ // line is just the Y of the scanline
@@ -326,9 +343,9 @@ NIA_INLINE void scanlineFill(u8* bitmap, u32 width, u32 height, edgeTable* table
             if(lineOnEdge(table->edges[edge], scanLine)){
                 u16 xOfIntersection = (table->edges[edge].ymax - scanLine) * (-table->edges[edge].slopeInverse) + table->edges[edge].xOfYMax;
 
+                // true if this point is an edge endpoint
                 if((xOfIntersection == table->edges[edge].A.x && scanLine == table->edges[edge].A.y) ||
                    (xOfIntersection == table->edges[edge].B.x && scanLine == table->edges[edge].B.y)){
-                    // ugly way of seeing if the current point is actually part of an edge, without searching in the edge table again
                     if(scanLine != table->edges[edge].ymax){
                         continue;
                     }
@@ -383,6 +400,57 @@ NIA_INLINE void drawLine(u8* bitmap, const niaTTFPoint& A, const niaTTFPoint& B,
 
         xr = xr + xIncrement;
         yr = yr + yIncrement;
+    }
+}
+
+// TODO implement if castng is bad
+NIA_INLINE u16 r32u16(r32 number){
+    if((u16)(number + 0.5) == (u16)number){
+        return (u16)number;
+    }
+    return (u16)(number + 0.5);
+}
+
+NIA_INLINE void computePointOnEdge(){
+}
+
+NIA_INLINE void createAndAddBezierEdges(const niaTTFPoint& p0, const niaTTFPoint& p1, const niaTTFPoint& p2,
+                                        i16 xOffset, i16 yOffset, edgeTable* table){
+
+    // TODO make this function be able to take any number of control points
+    //      for now this number is decent.
+
+    edge A = createEdge(p0, p1, xOffset, yOffset);
+    edge B = createEdge(p1, p2, xOffset, yOffset);
+
+    edge Q;
+
+    niaTTFPoint q0;
+    niaTTFPoint q1;
+    niaTTFPoint interest;
+    niaTTFPoint previous;
+
+    // TODO make something so this won't be ugly anymore...
+    previous.x = p0.x - xOffset;
+    previous.y = p0.y - yOffset;
+
+    for(r32 iterator = 0; iterator < 1; iterator += 0.01){
+        q0.x = r32u16((1 - iterator) * A.A.x + iterator * A.B.x);
+        q0.y = r32u16((1 - iterator) * A.A.y + iterator * A.B.y);
+
+        q1.x = r32u16((1 - iterator) * B.A.x + iterator * B.B.x);
+        q1.y = r32u16((1 - iterator) * B.A.y + iterator * B.B.y);
+
+        interest.x = r32u16((1 - iterator) * q0.x + iterator * q1.x);
+        interest.y = r32u16((1 - iterator) * q0.y + iterator * q1.y);
+
+        if(samePoint(previous, interest)){
+            continue;
+        }
+
+        Q = createEdge(previous, interest, 0, 0); // no offset because it was applied before, so our coordinates are already offseted
+        addEdgeToTable(table, Q);
+        previous = interest;
     }
 }
 
@@ -515,15 +583,60 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
 
     initializeEdgeTable(&table);
 
+    // filling the edge table first then drawing everything
+    // lines, filling the glyph, so we can make the curves and then 
+    // make everything in terms of edges
+    bool processedBezierPoint;
     for(int i = 0; i < numberOfPoints; ++i){
         niaTTFPoint newPoint = points[i];
 
         if(firstPassed){
-            drawLine(bitmap, previous, newPoint, xOffset, yOffset, width, height);
-            edge e = createEdge(previous, newPoint, xOffset, yOffset);
-            if(!(e.A.x == e.B.x && e.A.y == e.B.y)){ // we don't want edges that have the same point as both points...
-                addEdgeToTable(&table, e);
+            if(!newPoint.onCurve && !processedBezierPoint){
+                processedBezierPoint = true;
+                niaTTFPoint nextPoint;
+                if(i + 1 <= numberOfPoints - 1){
+                    nextPoint = points[i + 1];
+
+                    if(i + 1 > endPtsOfContours[index]){
+                        nextPoint = firstSectionPoint;
+                        createAndAddBezierEdges(previous, newPoint, nextPoint, xOffset, yOffset, &table);
+
+                        ++index;
+                        firstPassed = false;
+                        processedBezierPoint = false;
+                        continue;
+                    }
+
+                    createAndAddBezierEdges(previous, newPoint, nextPoint, xOffset, yOffset, &table); // peek next point and also add him 
+                } else { // treat the last point in shape as being a normal point no matter what...
+                    if(i + 1 > endPtsOfContours[index]){
+                        edge e = createEdge(newPoint, firstSectionPoint, xOffset, yOffset);
+                        if(!samePoint(e.A, e.B)){
+                            addEdgeToTable(&table, e);
+                        }
+
+                        ++index;
+                        firstPassed = false;
+                        processedBezierPoint = false;
+                        continue;
+                    }
+
+                    edge e = createEdge(previous, newPoint, xOffset, yOffset);
+                    if(!samePoint(e.A, e.B)){
+                        addEdgeToTable(&table, e);
+                    }
+                }
+            } else {
+                if(!processedBezierPoint){
+                    edge e = createEdge(previous, newPoint, xOffset, yOffset);
+                    if(!samePoint(e.A, e.B)){ // we don't want edges that have the same point as both points...
+                        addEdgeToTable(&table, e);
+                    }
+                } else {
+                    processedBezierPoint = false;
+                }
             }
+
         } else {
             firstSectionPoint = newPoint;
             firstPassed = !firstPassed;
@@ -531,20 +644,23 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
         
         // here we hit the end of the shape(contour) so we can connect the last point of the shape with the first
         if(endPtsOfContours[index] == i){
-            drawLine(bitmap, newPoint, firstSectionPoint, xOffset, yOffset, width, height);
-            
             edge e = createEdge(newPoint, firstSectionPoint, xOffset, yOffset);
 
-            if(!(e.A.x == e.B.x && e.A.y == e.B.y)){
+            if(!samePoint(e.A, e.B)){
                 addEdgeToTable(&table, e);
             }
 
             ++index;
             firstPassed = false;
+            processedBezierPoint = false;
             continue;
         }
 
         previous = points[i];
+    }
+
+    for(int i = 0; i < table.numberOfEdges; ++i){
+        drawLine(bitmap, table.edges[i].A, table.edges[i].B, 0, 0, width, height);
     }
 
     scanlineFill(bitmap, width, height, &table);
@@ -554,104 +670,6 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
     delete[] points;
     delete[] endPtsOfContours;
 }
-
-#if 0
-int niaTTFParser::generateTextureAtlas(){
-    u32 entries = numberOfGlyphs;
-    u32 offset = 0;
-
-    u32 height = 0;
-    u32 width = 0;
-
-    u32 maximumWidth = 0;
-
-    while(entries){
-
-        u32 rowHeight = 0;
-        u32 rowWidth = 0;
-
-        i32 i = 0;
-        for(; i < 10; ++i){
-            if(offset >= numberOfGlyphs){ 
-                break;
-            }
-            niaGlyph glyph = *getGlyph(offset++);
-
-            u32 gwidth = glyph.bounds.xmax - glyph.bounds.xmin + 1;
-            u32 gheight = glyph.bounds.ymax - glyph.bounds.ymin + 1;
-
-            if(gheight > rowHeight){
-                rowHeight = gheight;
-                height += rowHeight;
-            }
-
-            rowWidth += gwidth;
-
-            if(rowWidth > maximumWidth){
-                maximumWidth = rowWidth;
-                width = rowWidth;
-            }
-        }
-
-        entries -= i;
-    }
-    if(width % 4){
-        width += width % 4;
-    }
-
-    if(height % 4){
-        height += height % 4;
-    }
-
-    u8* pixels = new u8[width * height];
-
-    i32 horizontalOffset = 0;
-    i32 verticalOffset = 0;
-
-    i32 maximumHeight = 0;
-
-    for(i32 i = 0; i < numberOfGlyphs; ++i){
-        niaGlyph* glyph = getGlyph(i);
-
-        u32 gwidth = glyph->bounds.xmax - glyph->bounds.xmin + 1;
-        u32 gheight = glyph->bounds.ymax - glyph->bounds.ymin + 1;
-
-        glyph->uvs.u0 = (r32)horizontalOffset / (r32)width;
-        glyph->uvs.u1 = (r32)(horizontalOffset + glyph->bounds.xmax - glyph->bounds.xmin) / (r32)width;
-        
-        glyph->uvs.v0 = (r32)verticalOffset / (r32)height;
-        glyph->uvs.v1 = (r32)(verticalOffset + glyph->bounds.ymax - glyph->bounds.ymin) / (r32)height;
-        
-        for(i32 y = 0; y < gheight; ++y){
-            for(i32 x = 0; x < gwidth; ++x){
-                i32 xx = horizontalOffset + x;
-                i32 yy = verticalOffset + y;
-
-                if(xx < 0 || xx >= width || yy < 0 || yy >= height){
-                    continue;
-                }
-
-                pixels[xx + yy * width] = glyph->bitmap[x + y * gwidth];
-            }
-        }
-
-        if(gheight > maximumHeight){
-            maximumHeight = gheight;
-        }
-
-        horizontalOffset += gwidth;
-
-        if(i % 10 == 0 && i){
-            verticalOffset += maximumHeight;
-            horizontalOffset = 0;
-            maximumHeight = 0;
-        }
-    }
-
-    texture = niaTexture(pixels, width, height, NIA_TEXTURE_FORMAT_R8_RED_UBYTE);
-	return 0;
-}
-#endif
 
 int niaTTFParser::readGlyphMetrics(){
     u32 index;
