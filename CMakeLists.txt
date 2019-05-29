@@ -36,6 +36,7 @@ if (UNIX)
         ./src/nia_frame_buffer.cpp
         ./src/nia_filter.cpp
         ./src/nia_post_processing_pipeline.cpp
+        ./src/nia_sprite.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
@@ -74,6 +75,7 @@ if (WIN32)
         ./src/nia_frame_buffer.cpp
         ./src/nia_filter.cpp
         ./src/nia_post_processing_pipeline.cpp
+        ./src/nia_sprite.cpp
         ./src/nia_event.cpp
         ./src/nia_wgl.cpp
         ./src/nia_gl.cpp
