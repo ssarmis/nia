@@ -33,38 +33,39 @@ niaFontRenderer::niaFontRenderer(const char* filename){
 niaFontRenderer::~niaFontRenderer(){
 }
 
-void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string){
+// void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string, r32 color[])
+
+void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string, const niaVector3<r32>& color){
     u32 vertex = 0;
     r32 horizontalCursor = 0;
 #if 1
     while(*string) {
         niaTransform transform;
-        niaGlyph glyph = *fontParser->getGlyphChar(*string);
+        niaGlyph* glyph = fontParser->getGlyphChar(*string);
 
-        r32 w = (glyph.bounds.xmax - glyph.bounds.xmin) / size;
-        r32 h0 = (glyph.bounds.ymax + - glyph.bounds.ymin);
-        r32 h = h0 * w / (glyph.bounds.xmax - glyph.bounds.xmin);
+        r32 w = (glyph->bounds.xmax - glyph->bounds.xmin) / size;
+        r32 h0 = (glyph->bounds.ymax + - glyph->bounds.ymin);
+        r32 h = h0 * w / (glyph->bounds.xmax - glyph->bounds.xmin);
 
         r32 xx = x + horizontalCursor;
-        r32 yy = y - glyph.metrics.verticalAdvance / size; // the vertical advance is wrong at the moment for some fonts
+        r32 yy = y - glyph->metrics.verticalAdvance / size; // the vertical advance is wrong at the moment for some fonts
 
         // TODO maybe change the scaling...
         // transform.scale(glyph->sprite.getWidth() / w, glyph->sprite.getHeight() / h);
         transform.translate(niaVector3<r32>(xx, yy, 0));
-        transform.scale(h / glyph.sprite.getHeight());
+        transform.scale(h / glyph->sprite.getHeight());
 
-        horizontalCursor += glyph.metrics.cursorAdvance / size; // TODO make all the division already precomputed in parsing, not at rendering
+        horizontalCursor += glyph->metrics.cursorAdvance / size; // TODO make all the division already precomputed in parsing, not at rendering
 
         submitTransformation(transform);
-        renderSprite(glyph.sprite);
+        // renderGlyph(glyph.sprite);
+        renderGlyph(glyph, color);
 
         string++;
     }
 #endif
 
 }
-
-
 
 void niaFontRenderer::render(r32 x, r32 y, r32 size, const char* string){
 }

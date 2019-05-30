@@ -8,7 +8,8 @@ NIA_GLSL_VERSION" \n""precision "
 NIA_GLSL_PRECISION" float;\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
-"layout(location = 2) in vec2 uv;\n"
+"layout(location = 2) in vec3 normals;\n"
+"layout(location = 3) in vec2 uv;\n"
 
 "uniform mat4 mP;\n"
 "uniform mat4 mT;\n"
@@ -16,13 +17,18 @@ NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 o_color;\n"
 
+"uniform vec3 fontColor;\n"
+
 "out vec2 o_uv;\n"
+
+"out vec3 o_fontColor;\n"
 
 "void main(){\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
 "   gl_Position = mP * mV * transformedPosition;\n"
 "   o_color = vec4(color, 1.0);\n"
 "   o_uv = uv;\n"
+"   o_fontColor = fontColor;\n"
 "}\n"
 "";
 
@@ -33,6 +39,7 @@ NIA_GLSL_PRECISION" float;\n"
 "out vec4 finalColor;\n"
 
 "in vec4 o_color;\n"
+"in vec3 o_fontColor;\n"
 
 "in vec2 o_uv;\n"
 
@@ -43,7 +50,8 @@ NIA_GLSL_PRECISION" float;\n"
 "   if (finalColor.x != 1.0){\n"
 "       discard;\n"
 "   }\n"
-"   finalColor *=  o_color;"
+"   finalColor = vec4(1.0, 1.0, 1.0, 1.0);\n" // reset the color here, so its not red, ask the opengl people why they don't have a greyscale color for one byte only...
+"   finalColor *= vec4(o_fontColor, 1.0);\n"
 "}\n"
 "";
 

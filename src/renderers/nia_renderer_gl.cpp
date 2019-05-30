@@ -230,6 +230,10 @@ void niaRenderer::submitTransformation(const niaTransform& transformation, bool 
     defaultShaderReflective.useShader();
     defaultShaderReflective.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
     defaultShaderReflective.unuseShader();
+
+    defaultShaderFont.useShader();
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_TRANSFORM, transformation.getTransformation(), transpose);
+    defaultShaderFont.unuseShader();
 }
 
 void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
@@ -373,6 +377,20 @@ void niaRenderer::renderSprite(niaSprite& sprite){
 
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
     defaultShader.unuseShader();
+}
+
+void niaRenderer::renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color){
+    // TODO this could be a renderSpriteRAW with the correct shader...
+    //      just sayin...
+    defaultShaderFont.useShader();
+    defaultShaderFont.setUniformVec3("fontColor", color);
+    NIA_GL_CALL(glBindVertexArray(glyph->sprite.getVao()));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, glyph->sprite.getTextureId()));
+    
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glyph->sprite.getVeo()));
+
+    NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
+    defaultShaderFont.unuseShader();
 }
 
 #endif

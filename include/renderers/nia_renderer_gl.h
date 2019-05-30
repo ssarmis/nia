@@ -20,6 +20,7 @@
 #include "shaders/nia_shader_batch.h"
 #include "shaders/nia_shader_font.h"
 #include "shaders/nia_shader_reflective.h"
+#include "parsers/nia_ttf_parser.h"
 
 /**
  *  @class niaRenderer
@@ -178,6 +179,7 @@ public:
     void NIA_CALL renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture); // TODO make the cubeTexture not needed
     
     void NIA_CALL renderSprite(niaSprite& sprite);
+    void NIA_CALL renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color);
     
     friend class niaScene;
 };
