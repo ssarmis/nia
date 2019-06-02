@@ -1,3 +1,14 @@
+/*
+ * File: nia_font_renderer_gl.cpp
+ * Project: Nia
+ * File created on May-18-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "renderers/nia_font_renderer_gl.h"
 
 #include "nia_gl.h"

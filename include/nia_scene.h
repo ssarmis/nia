@@ -1,3 +1,14 @@
+/*
+ * File: nia_scene.h
+ * Project: Nia
+ * File created on March-23-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #ifndef _NIA_SCENE_H_
 #define _NIA_SCENE_H_
 

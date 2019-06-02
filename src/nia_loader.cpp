@@ -1,3 +1,14 @@
+/*
+ * File: nia_loader.cpp
+ * Project: Nia
+ * File created on April-29-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "nia_loader.h"
 #include "nia_texture_streaming.h"
 

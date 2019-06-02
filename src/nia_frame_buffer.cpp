@@ -1,3 +1,14 @@
+/*
+ * File: nia_frame_buffer.cpp
+ * Project: Nia
+ * File created on March-30-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "nia_frame_buffer.h"
 
 niaFrameBuffer::niaFrameBuffer(r32 width, r32 height, GLenum attachment){

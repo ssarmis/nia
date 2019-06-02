@@ -1,3 +1,14 @@
+/*
+ * File: nia_ttf_parser.cpp
+ * Project: Nia
+ * File created on April-29-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "parsers/nia_ttf_parser.h"
 
 #include "nia_array.h"

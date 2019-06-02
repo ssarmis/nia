@@ -1,3 +1,14 @@
+/*
+ * File: nia_texture_gl.cpp
+ * Project: Nia
+ * File created on March-16-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "nia_texture_gl.h"
 
 #include "parsers/nia_bmp_parser.h"
@@ -122,8 +133,7 @@ niaTexture::niaTexture(){
 
 niaTexture::~niaTexture(){
 }
-
-// TODO maybe get rid of private functions form the class...
+//TODO maybe get rid of private functions form the class...
 //      if they are only declared and defined in the source file
 //      noone can access them but this source file
 void niaTexture::updateTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){

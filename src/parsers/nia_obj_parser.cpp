@@ -1,3 +1,14 @@
+/*
+ * File: nia_obj_parser.cpp
+ * Project: Nia
+ * File created on April-29-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "parsers/nia_obj_parser.h"
 
 #include <math.h>
@@ -20,14 +31,6 @@ int wastes = 0;
     ++wastes;\
 }
 
-#if 0
-#define WASTE_UNTIL(_pointer, _size, _criteria){\
-    while(*_pointer++ != _criteria){\
-        WASTE(_size);\
-    }\
-    WASTE(_size);\
-}
-#endif
 #define WASTE_UNTIL(_pointer, _size, _criteria){\
     while(*_pointer != _criteria){\
         ADVANCE(_pointer);\

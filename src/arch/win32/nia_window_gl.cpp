@@ -1,3 +1,14 @@
+/*
+ * File: nia_window_gl.cpp
+ * Project: Nia
+ * File created on October-09-2018
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #ifdef _WIN32
 
 #ifdef NIA_RENDERER_GL

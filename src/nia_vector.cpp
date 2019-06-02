@@ -1,3 +1,14 @@
+/*
+ * File: nia_vector.cpp
+ * Project: Nia
+ * File created on February-28-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #include "nia_vector.h"
 
 // TODO watch out over those copies

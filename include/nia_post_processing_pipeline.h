@@ -1,3 +1,14 @@
+/*
+ * File: nia_post_processing_pipeline.h
+ * Project: Nia
+ * File created on March-29-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #ifndef _NIA_POST_PROCESSING_PIPELINE_H_
 #define _NIA_POST_PROCESSING_PIPELINE_H_
 

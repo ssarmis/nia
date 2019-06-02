@@ -1,3 +1,14 @@
+/*
+ * File: nia_batch_renderer_gl.cpp
+ * Project: Nia
+ * File created on May-18-2019
+ * Author: Streanga Sarmis-Stefan (streangasarmis@gmail.com)
+ * 
+ * Copyright (C) 2019 Streanga Sarmis-Stefan, All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 #ifdef NIA_RENDERER_GL
 
 #include "renderers/nia_batch_renderer_gl.h"
