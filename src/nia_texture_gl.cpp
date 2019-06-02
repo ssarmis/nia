@@ -124,6 +124,15 @@ niaTexture::niaTexture(){
 niaTexture::~niaTexture(){
 }
 
+// TODO maybe get rid of private functions form the class...
+//      if they are only declared and defined in the source file
+//      noone can access them but this source file
+void niaTexture::updateTexture(u8* data, u32 width, u32 height, const textureFormatDetails& details){
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
+    NIA_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, details.storeFormat, width, height, 0, details.readFormat, details.type, data));
+    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
+}
+
 NIA_INTERNAL void niaTexture::allocateTexture(u32 width, u32 height, u8* data, const textureFormatDetails& details){ // TODO add ability to change depth
     NIA_GL_CALL(glGenTextures(1, &textureId));
 

@@ -3,14 +3,13 @@
 #include "nia_gl.h"
 #include "nia_vertex.h"
 #include "nia_constants.h"
-#include "nia_texture_structures.h"
 
 niaSprite::niaSprite(){
 }
 
-niaSprite::niaSprite(u8* bitmap, u32 textureWidth, u32 textureHeight, const niaRectangle& rect):
+niaSprite::niaSprite(u8* bitmap, u32 textureWidth, u32 textureHeight, const textureFormatDetails& details, const niaRectangle& rect):
 niaSprite(NULL, rect){
-    loadTexture(bitmap, textureWidth, textureHeight);
+    loadTexture(bitmap, textureWidth, textureHeight, details);
 }
 
 niaSprite::niaSprite(const char* filename, const niaRectangle& rect){
@@ -40,11 +39,19 @@ niaSprite::niaSprite(const char* filename, const niaRectangle& rect){
     NIA_GL_CALL(glEnableVertexAttribArray(2));
     NIA_GL_CALL(glEnableVertexAttribArray(3));
 
+
+    // 0, 0         1, 0
+    //
+    //
+    // 0, 1         1, 1
+
+
+
     niaVertex v[4] ={
-                    {rectangle.x              , rectangle.y              , 0,        1, 1, 1,     1, 1, 1,      0, 0},
-                    {rectangle.x + rectangle.w, rectangle.y + rectangle.h, 0,        1, 1, 1,     1, 1, 1,      1, 1},
-                    {rectangle.x              , rectangle.y + rectangle.h, 0,        1, 1, 1,     1, 1, 1,      0, 1},
-                    {rectangle.x + rectangle.w, rectangle.y              , 0,        1, 1, 1,     1, 1, 1,      1, 0}
+                    {rectangle.x              , rectangle.y              , 0,        1, 1, 1,     1, 1, 1,      0, 1},
+                    {rectangle.x + rectangle.w, rectangle.y + rectangle.h, 0,        1, 1, 1,     1, 1, 1,      1, 0},
+                    {rectangle.x              , rectangle.y + rectangle.h, 0,        1, 1, 1,     1, 1, 1,      0, 0},
+                    {rectangle.x + rectangle.w, rectangle.y              , 0,        1, 1, 1,     1, 1, 1,      1, 1}
     };
 
     NIA_GL_CALL(glNamedBufferSubData(vbo, 0, sizeof(niaVertex) * 4, v));
@@ -72,8 +79,8 @@ void niaSprite::loadTexture(const char* filename){
     texture = niaTexture(filename, NIA_TEXTURE_NOT_ANIMATED, 3);
 }
 
-void niaSprite::loadTexture(u8* bitmap, u32 width, u32 height){
-    texture = niaTexture(bitmap, width, height, NIA_TEXTURE_FORMAT_R8_RED_UBYTE);
+void niaSprite::loadTexture(u8* bitmap, u32 width, u32 height, const textureFormatDetails& details){
+    texture = niaTexture(bitmap, width, height, details);
 }
 
 void NIA_CALL niaSprite::setBounds(const niaRectangle& rect){
@@ -83,3 +90,10 @@ void NIA_CALL niaSprite::setBounds(const niaRectangle& rect){
     rectangle.x = rect.x;
     rectangle.y = rect.y;
 }
+
+void niaSprite::updateTexture(u8* bitmap, u32 width, u32 height, const textureFormatDetails& details){
+    texture.updateTexture(bitmap, width, height, details);
+}
+
+
+
