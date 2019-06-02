@@ -258,7 +258,7 @@ void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
     r32 colors[] = {1, 1, 1};
     renderRectangle(x, y, w, h, colors);
 }
-
+// TODO add vector alternative for colors array
 void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h, r32 colors[3]){
     renderRectangle(x, y, 0, w, h, colors);
 }
@@ -285,6 +285,7 @@ void niaRenderer::renderMesh(const niaMesh& mesh){
     defaultShader.useShader();
     NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
     
+    NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
     defaultShader.unuseShader();
 }

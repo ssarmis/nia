@@ -114,11 +114,10 @@ niaTexture::niaTexture(u8* data, u32 width, u32 height, const textureFormatDetai
 
 niaTexture::niaTexture(){
     u8 pixels[] = {
-        255, 255, 255,
-        255, 255, 255
+        255, 255, 255,      255, 255, 255,      255, 255, 255,        255, 255, 255
     };
 
-    allocateTexture(1, 1, pixels);
+    allocateTexture(4, 1, pixels);
 }
 
 niaTexture::~niaTexture(){

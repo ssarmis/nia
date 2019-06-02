@@ -25,7 +25,9 @@ private:
     bool isAnimated;
     niaAnimatedTextureChain textureChain;
 
-    NIA_INTERNAL void allocateTexture(u32 width, u32 height, u8* data, const textureFormatDetails& details = NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE);
+    NIA_INTERNAL void allocateTexture(u32 width, u32 height,
+                                      u8* data, 
+                                      const textureFormatDetails& details = NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE);
 
 public:
     GLuint textureId;
