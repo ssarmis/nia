@@ -46,6 +46,8 @@ NIA_GLSL_PRECISION" float;\n"
 "uniform sampler2D tex;\n"
 
 "void main(){\n"
+// "   vec2 copy = o_uv;\n"
+// "   copy.y = 1 - copy.y;\n"
 "   finalColor = texture(tex, o_uv);\n"
 "   if (finalColor.x != 1.0){\n"
 "       discard;\n"

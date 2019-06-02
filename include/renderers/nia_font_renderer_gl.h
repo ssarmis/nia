@@ -14,7 +14,7 @@ private:
 
 public:
     NIA_CALL niaFontRenderer();
-    NIA_CALL niaFontRenderer(const char* filename);
+    NIA_CALL niaFontRenderer(const char* filename, u16 fontSize);
     NIA_CALL ~niaFontRenderer();
 
     void NIA_CALL renderString(r32 x, r32 y, r32 size, const char* string, const niaVector3<r32>& color); // <   these 2 are the same

@@ -208,12 +208,16 @@ private:
 
     i16 ascent;
     i16 descent;
+    u16 fontSize;
+    u16 unitsPerEm;
 
     u8* initialPointer;
     u8* data;
     u8* essentialHeadersPointers[NIA_TTF_ESSENTIAL_HEADERS_AMOUNT];
 
     u32* glyphOffsets;
+
+    r32* glyphsScale;
 
     // glyph buffer
     u32 glyphBufferCharacterLUTSize;
@@ -228,7 +232,7 @@ public:
     niaTexture texture;
 
     NIA_CALL niaTTFParser();
-    NIA_CALL niaTTFParser(const char* filename);
+    NIA_CALL niaTTFParser(const char* filename, u16 fontSize);
     NIA_CALL ~niaTTFParser();
 
     int NIA_CALL loadFile(const char* filename);
@@ -240,6 +244,10 @@ public:
     int NIA_CALL readGlyphHeaders();
     int NIA_CALL readGlyphMetrics();
     int NIA_CALL mapCharactersToIndexes();
+
+    NIA_INLINE r32 getGlyphScale(u16 index){
+        return glyphsScale[index];
+    }
 
     NIA_INLINE niaGlyph* getGlyph(u16 index){
         if(index >= numberOfGlyphs){
@@ -254,15 +262,26 @@ public:
         );
     }
 
+    NIA_INLINE u16 getGlyphIndex(const char c){
+        return glyphBuffer[c];
+    }
+
     NIA_INLINE niaGlyph* getGlyphChar(const char c){
         return getGlyph(glyphBuffer[c]);
     }
-
 
     // TODO return a reference not a copy
     NIA_INLINE niaSprite getGlyphSprite(const char c){
         niaGlyph* g = getGlyphChar(c);
         return g->sprite;
+    }
+
+    NIA_INLINE i16 getFontAscent() const {
+        return ascent;
+    }
+
+    NIA_INLINE i16 getFontDescent() const {
+        return descent;
     }
 
 };

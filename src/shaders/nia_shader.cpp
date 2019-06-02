@@ -72,6 +72,7 @@ NIA_GLSL_PRECISION" float;\n"
 "void main(){\n"
 "   float finalDiffuseFactor = max(o_lightFactor, 0.3);\n"
 "   finalColor = finalDiffuseFactor * texture(tex, o_uv) * o_color;\n"
+// "   finalColor = texture(tex, o_uv);\n"
 // "   finalColor = vec4(1.0, 0.0, 1.0, 1.0);\n"
 "}\n"
 "";

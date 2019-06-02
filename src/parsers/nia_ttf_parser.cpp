@@ -24,7 +24,7 @@
 
 niaTTFParser::niaTTFParser():fileSize(0), initialPointer(NULL), data(NULL){}
 
-niaTTFParser::niaTTFParser(const char* filename){
+niaTTFParser::niaTTFParser(const char* filename, u16 fontSize):fontSize(fontSize){
     if(filename){
         if(loadFile(filename)){
             NIA_ERROR("Could not read %s, aborting font.\n", filename);
@@ -115,6 +115,8 @@ int niaTTFParser::readEssentialHeaders(){
     niaTTFHeadHeader headerHeader;
     CONSUME(niaTTFHeadHeader, essentialHeadersPointers[NIA_TTF_HEAD_POINTER], headerHeader);
 
+    unitsPerEm = SWAP16(headerHeader.unitsPerEm);
+
     niaTTFMaxPHeader maxPHeader;
     CONSUME(niaTTFMaxPHeader, essentialHeadersPointers[NIA_TTF_MAXP_POINTER], maxPHeader);
 
@@ -152,12 +154,13 @@ int niaTTFParser::readHorizontalHeader(){
     return 0;
 }
 
-
-r32 scale = 1;
 int niaTTFParser::readGlyphHeaders(){
+    // scale = (r32)(fontSize) / (r32)(ascent - descent);
     // TODO add font scaling based on desired size in height
     u32* width = new u32[numberOfGlyphs];
     u32* height = new u32[numberOfGlyphs];
+    glyphsScale = new r32[numberOfGlyphs];
+
 
     glyphBufferCharacterLUTSize = 256;
     glyphBufferIndexAddressingSize = numberOfGlyphs * sizeof(u32);
@@ -173,8 +176,14 @@ int niaTTFParser::readGlyphHeaders(){
         u8* glyphPointer = (essentialHeadersPointers[NIA_TTF_GLYF_POINTER] + glyphOffsets[i]);
         CONSUME(niaTTFGlyphHeader, glyphPointer, glyphHeader);
 
-        width[i] = ((((i16)SWAP16(glyphHeader.xMax) - (i16)SWAP16(glyphHeader.xMin)) + 1) * scale);
-        height[i] = ((((i16)SWAP16(glyphHeader.yMax) - (i16)SWAP16(glyphHeader.yMin)) + 1) * scale);
+        width[i] = ((((i16)SWAP16(glyphHeader.xMax) - (i16)SWAP16(glyphHeader.xMin)) + 1));
+        height[i] = ((((i16)SWAP16(glyphHeader.yMax) - (i16)SWAP16(glyphHeader.yMin)) + 1));
+
+        // glyphsScale[i] = ((r32)fontSize) / ((r32)height[i]);
+        glyphsScale[i] = ((r32)fontSize) / ((r32)(ascent - descent));
+
+        width[i] *= glyphsScale[i];
+        height[i] *= glyphsScale[i];
 
         bufferSize += sizeof(niaGlyph);
 
@@ -206,27 +215,27 @@ int niaTTFParser::readGlyphHeaders(){
         *(glyphBuffer + glyphBufferIndexAddressingOffset + i * 4 + 2) = (offset & 0x0000FF00) >> 8;
         *(glyphBuffer + glyphBufferIndexAddressingOffset + i * 4 + 3) = offset & 0x000000FF;
 
-        glyph->bounds.xmax = (i16)SWAP16(glyphHeader.xMax) * scale;
-        glyph->bounds.xmin = (i16)SWAP16(glyphHeader.xMin) * scale;
-        glyph->bounds.ymax = (i16)SWAP16(glyphHeader.yMax) * scale;
-        glyph->bounds.ymin = (i16)SWAP16(glyphHeader.yMin) * scale;
-        glyph->metrics.cursorAdvance = glyph->bounds.xmax * scale;
-        glyph->metrics.verticalAdvance = (glyph->bounds.ymin < 0 ? (glyph->bounds.ymax + glyph->bounds.ymin) : 0) * scale;
+        glyph->bounds.xmax = (i16)SWAP16(glyphHeader.xMax) * glyphsScale[i];
+        glyph->bounds.xmin = (i16)SWAP16(glyphHeader.xMin) * glyphsScale[i];
+        glyph->bounds.ymax = (i16)SWAP16(glyphHeader.yMax) * glyphsScale[i];
+        glyph->bounds.ymin = (i16)SWAP16(glyphHeader.yMin) * glyphsScale[i];
+        glyph->metrics.cursorAdvance = glyph->bounds.xmax;
+        glyph->metrics.verticalAdvance = (glyph->bounds.ymin < 0 ? (glyph->bounds.ymax - glyph->bounds.ymin) : 0);
 
         offset += sizeof(niaGlyph);
 
         glyph->bitmap = (glyphBuffer + offset);
         offset += width[i] * height[i];
 
-        generateGlyphBitmap(glyph->bitmap, glyphPointer, glyphHeader, width[i], height[i], scale);
+        generateGlyphBitmap(glyph->bitmap, glyphPointer, glyphHeader, width[i], height[i], glyphsScale[i]);
 
         rect.x = 0;
         rect.y = 0;
 
-        rect.w = width[i] * scale;
-        rect.h = height[i] * scale;
+        rect.w = width[i];
+        rect.h = height[i];
 
-        glyph->sprite = niaSprite(glyph->bitmap, width[i], height[i], rect);
+        glyph->sprite = niaSprite(glyph->bitmap, width[i], height[i], NIA_TEXTURE_FORMAT_R8_RED_UBYTE, rect);
     }
 
     delete[] width;
@@ -403,7 +412,6 @@ NIA_INLINE void drawLine(u8* bitmap, const niaTTFPoint& A, const niaTTFPoint& B,
     }
 }
 
-// TODO implement if castng is bad
 NIA_INLINE u16 r32u16(r32 number){
     if((u16)(number + 0.5) == (u16)number){
         return (u16)number;
@@ -587,6 +595,7 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
     // lines, filling the glyph, so we can make the curves and then 
     // make everything in terms of edges
     bool processedBezierPoint;
+    // TODO refactor this thing, it looks hideous, its not slow, but it looks ugly, it was rushed
     for(int i = 0; i < numberOfPoints; ++i){
         niaTTFPoint newPoint = points[i];
 
@@ -687,7 +696,8 @@ int niaTTFParser::readGlyphMetrics(){
             niaLongHorMetric metric;
             CONSUME(niaLongHorMetric, source7, metric);
 
-            getGlyph(index++)->metrics.cursorAdvance = SWAP16(metric.advanceWidth) * scale;
+            getGlyph(index)->metrics.cursorAdvance = SWAP16(metric.advanceWidth) * getGlyphScale(index);
+            ++index;
         }
     }
 
@@ -704,7 +714,8 @@ int niaTTFParser::readGlyphMetrics(){
             niaLongVerMetric metric;
             CONSUME(niaLongVerMetric, source9, metric);
 
-            getGlyph(index++)->metrics.verticalAdvance = SWAP16(metric.advanceHeight) * scale;
+            getGlyph(index++)->metrics.verticalAdvance = SWAP16(metric.advanceHeight) * getGlyphScale(index);
+            ++index;
         }
     }
 	return 0;
@@ -777,7 +788,7 @@ int niaTTFParser::mapCharactersToIndexes(){
                 
                     // TODO add support for format 4
                     default: {
-                            printf("Unsupported font format\n");
+                            NIA_TRACE("Unsupported font format\n");
                         };
                         break;
             }
