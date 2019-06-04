@@ -405,4 +405,22 @@ void niaRenderer::renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color){
     defaultShaderFont.unuseShader();
 }
 
+void niaRenderer::submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
+    defaultShader.useShader();
+
+    defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, position);
+    defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, color);
+    
+    defaultShader.unuseShader();
+}
+
+void niaRenderer::submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
+    defaultShader.useShader();
+
+    defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, position);
+    defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, color);
+
+    defaultShader.unuseShader();
+}
+
 #endif

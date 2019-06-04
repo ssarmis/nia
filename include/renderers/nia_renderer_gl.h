@@ -76,7 +76,7 @@ public:
      * @param w A floating point number for the width of the rectangle.
      * @param h A floating point number for the height of the rectangle.
      */
-     void NIA_CALL renderRectangle(r32 x, r32 y, r32 w, r32 h); // TODO maybe make this virtual
+     void NIA_CALL renderRectangle(r32 x, r32 y, r32 w, r32 h);
 
     /**
      * @brief Function for rendering a simple rectangle on the screen 
@@ -137,7 +137,6 @@ public:
      * @brief Function for rendering an already loaded cube texture 
      * @param texture A cube texture to be rendered
      */
-    // TODO add texture support for rectangles as well, maybe they will be sprites
      void NIA_CALL renderSkyBox(const niaCubeTexture& texture);
 
     /**
@@ -191,7 +190,10 @@ public:
     
     void NIA_CALL renderSprite(niaSprite& sprite);
     void NIA_CALL renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color);
-    
+
+    void NIA_CALL submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+    void NIA_CALL submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+
     friend class niaScene;
 };
 
