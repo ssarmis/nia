@@ -42,6 +42,7 @@ NIA_GLSL_PRECISION" float;\n"
 "out vec3 o_slC;\n"
 
 "out float o_lightFactor;\n"
+"out float o_lightSpecularFactor;\n"
 
 "void main(){\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);\n"
@@ -53,12 +54,22 @@ NIA_GLSL_PRECISION" float;\n"
 "   o_slP = slP;\n"
 "   o_slC = slC;\n"
 
-"   vec3 lightVector = (transformedPosition.xyz - dlP);\n"
-"   lightVector = normalize(lightVector);\n"
-"   vec3 transformedNormal = (transformedPosition.xyz * normal);\n"
-"   transformedNormal = normalize(transformedNormal);\n"
-"   o_lightFactor = dot(lightVector, transformedNormal);\n"
+"   vec3 lightVector = (dlP - transformedPosition.xyz);\n"
+"   vec3 normalizedLightVector = normalize(lightVector);\n"
 
+"   mat3 normalMatrix = transpose(inverse(mat3(mT)));\n"
+"   vec3 transformedNormal = (normalMatrix * normal);\n"
+"   vec3 normlizedTransformedNormal = normalize(transformedNormal);\n"
+
+"   o_lightFactor = dot(normalizedLightVector, normlizedTransformedNormal);\n"
+"   o_lightFactor = max(o_lightFactor, 0.3);\n"
+
+"   vec3 specularLightVector = (slP - transformedPosition.xyz);\n"
+"   vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normlizedTransformedNormal) * normlizedTransformedNormal);\n"
+"   reflectedCameraVector = normalize(reflectedCameraVector);\n"
+"   vec4 viewVector = normalize(inverse(mV)[3] - transformedPosition);\n"
+"   o_lightSpecularFactor = dot(-reflectedCameraVector, viewVector.xyz);\n"
+"   o_lightSpecularFactor = pow(max(o_lightSpecularFactor, 0.0), 32);\n"
 "}\n"
 "";
 
@@ -77,14 +88,14 @@ NIA_GLSL_PRECISION" float;\n"
 "in vec3 o_slP;\n"
 "in vec3 o_slC;\n"
 "in float o_lightFactor;\n"
+"in float o_lightSpecularFactor;\n"
 
 "uniform sampler2D tex;\n"
 
 "void main(){\n"
-"   float finalDiffuseFactor = max(o_lightFactor, 0.3);\n"
-"   finalColor = finalDiffuseFactor * texture(tex, o_uv) * o_color;\n"
-// "   finalColor = texture(tex, o_uv);\n"
-// "   finalColor = vec4(1.0, 0.0, 1.0, 1.0);\n"
+"   vec4 diffuse = (o_lightFactor * vec4(o_dlC, 1.0));\n"
+"   vec4 specular = (0.5 * o_lightSpecularFactor * vec4(o_slC, 1.0));\n"
+"   finalColor = (specular + diffuse) * (texture(tex, o_uv) * o_color);\n"
 "}\n"
 "";
 
