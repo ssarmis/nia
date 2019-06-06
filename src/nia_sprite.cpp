@@ -23,9 +23,9 @@ niaSprite(NULL, rect){
     loadTexture(bitmap, textureWidth, textureHeight, details);
 }
 
-niaSprite::niaSprite(const char* filename, const niaRectangle& rect){
+niaSprite::niaSprite(const char* filename, const niaRectangle& rect, u32 flags){
     if(filename){
-        loadTexture(filename);
+        loadTexture(filename, flags);
     }
 
     setBounds(rect);
@@ -83,11 +83,27 @@ niaSprite::niaSprite(const char* filename, const niaRectangle& rect){
 niaSprite::~niaSprite(){
 }
 
-void niaSprite::loadTexture(const char* filename){
+void niaSprite::scale(r32 amount){
+    transform.scale(amount);
+}
+    
+void niaSprite::translate(r32 x, r32 y, r32 z){
+    transform.translate(x, y, z);
+}
+
+void niaSprite::translate(const niaVector3<r32>& position){
+    transform.translate(position);
+}
+
+void niaSprite::rotate(r32 amount, niaAxis axis){
+    transform.rotate(amount, axis);
+}
+
+void niaSprite::loadTexture(const char* filename, u32 flags){
     // TODO make this actually work normally, pull of the test case that exists now below,
     //      niaTexture(filenmae) is the only one that is needed, the flag for animated or not
     //      + frame count if is the case will come in the destructor
-    texture = niaTexture(filename, NIA_TEXTURE_NOT_ANIMATED, 3);
+    texture = niaTexture(filename, flags);
 }
 
 void niaSprite::loadTexture(u8* bitmap, u32 width, u32 height, const textureFormatDetails& details){

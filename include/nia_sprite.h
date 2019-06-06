@@ -15,6 +15,7 @@
 #include "nia_general.h"
 #include "nia_texture.h"
 #include "nia_rectangle.h"
+#include "nia_transform.h"
 #include "nia_texture_structures.h"
 
 NIA_CLASS niaSprite {
@@ -24,20 +25,30 @@ private:
     u32 veo;
 
     niaTexture texture;
+    niaTransform transform;
 
 public:
     NIA_CALL niaSprite();
     NIA_CALL niaSprite(u8* bitmap, u32 textureWidth, u32 textureHeight, const textureFormatDetails& details, const niaRectangle& rect);
-    NIA_CALL niaSprite(const char* filename, const niaRectangle& rect);
+    NIA_CALL niaSprite(const char* filename, const niaRectangle& rect, u32 flags = NIA_TEXTURE_NOT_ANIMATED);
     NIA_CALL ~niaSprite();
 
-    void NIA_CALL loadTexture(const char* filename);
+    void NIA_CALL loadTexture(const char* filename, u32 flags);
     void NIA_CALL loadTexture(u8* bitmap, u32 width, u32 height, const textureFormatDetails& details);
     void NIA_CALL setBounds(const niaRectangle& rect);
     // TODO make more versions of update texture, maybe we won't need to specify the texture details next time
     //      just the new data would be enough assuming the width and height are the same, the same goes
     //      for the textureFormatDetails.
     void NIA_CALL updateTexture(u8* bitmap, u32 width, u32 height, const textureFormatDetails& details);
+
+    // TODO add scaling on every axis, not all at once
+    void NIA_CALL scale(r32 amount);
+    
+    void NIA_CALL translate(r32 x, r32 y, r32 z);
+    void NIA_CALL translate(const niaVector3<r32>& position);
+
+    // TODO add rotation on multiple axis at once
+    void NIA_CALL rotate(r32 amount, niaAxis axis);
 
     NIA_INLINE u32 NIA_CALL getWidth() const {
         return rectangle.w;
@@ -57,6 +68,10 @@ public:
     
     NIA_INLINE u32 NIA_CALL getTextureId() {
         return texture.getTextureId();
+    }
+
+    NIA_INLINE niaTransform getTransformation() const {
+        return transform;
     }
 
 };
