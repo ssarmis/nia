@@ -42,6 +42,8 @@ NIA_EXTERN PFNGLDRAWBUFFERPROC _nia_glDrawBuffers;
 
 NIA_EXTERN PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation;
 #define glGetUniformLocation _nia_glGetUniformLocation
+NIA_EXTERN PFNGLUNIFORM1UIPROC _nia_glUniform1ui;
+#define glUniform1ui _nia_glUniform1ui
 NIA_EXTERN PFNGLUNIFORM1DPROC _nia_glUniform1d;
 #define glUniform1d _nia_glUniform1d
 NIA_EXTERN PFNGLUNIFORM1FPROC _nia_glUniform1f;
@@ -113,6 +115,8 @@ NIA_EXTERN PFNGLSHADERSOURCEPROC _nia_glShaderSource;
 NIA_EXTERN PFNGLGETSHADERIVPROC _nia_glGetShaderiv;
 #define glGetShaderiv _nia_glGetShaderiv
 
+NIA_EXTERN PFNGLACTIVETEXTUREPROC _nia_glActiveTexture;
+#define glActiveTexture _nia_glActiveTexture
 NIA_EXTERN PFNGLGENTEXTURESPROC _nia_glGenTextures;
 #define glGenTextures _nia_glGenTextures
 NIA_EXTERN PFNGLBINDTEXTUREPROC _nia_glBindTexture;

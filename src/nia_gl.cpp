@@ -21,6 +21,7 @@ PFNGLCHECKFRAMEBUFFERSTATUSPROC _nia_glCheckFramebufferStatus = NULL;
 PFNGLDRAWBUFFERPROC _nia_glDrawBuffers = NULL;
 
 PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation = NULL;
+PFNGLUNIFORM1UIPROC _nia_glUniform1ui = NULL;
 PFNGLUNIFORM1DPROC _nia_glUniform1d = NULL;
 PFNGLUNIFORM1FPROC _nia_glUniform1f = NULL;
 PFNGLUNIFORM3FPROC _nia_glUniform3f = NULL;
@@ -59,6 +60,7 @@ PFNGLGETSHADERINFOLOGPROC _nia_glGetShaderInfoLog = NULL;
 PFNGLSHADERSOURCEPROC _nia_glShaderSource = NULL;
 PFNGLGETSHADERIVPROC _nia_glGetShaderiv = NULL;
 
+PFNGLACTIVETEXTUREPROC _nia_glActiveTexture = NULL;
 PFNGLGENTEXTURESPROC _nia_glGenTextures = NULL;
 PFNGLBINDTEXTUREPROC _nia_glBindTexture = NULL;
 PFNGLTEXPARAMETERIPROC _nia_glTexParameteri = NULL;
@@ -104,6 +106,7 @@ bool niaInitGL(){
 	checkPrint(extensionLoadCheck = ((glDrawBuffers = (PFNGLDRAWBUFFERPROC) niaGetProcAddress("glDrawBuffers")) && extensionLoadCheck), "glDrawBuffers");
 
 	checkPrint(extensionLoadCheck = ((glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) niaGetProcAddress("glGetUniformLocation")) && extensionLoadCheck), "glGetUniformLocation");
+	checkPrint(extensionLoadCheck = ((glUniform1ui = (PFNGLUNIFORM1UIPROC) niaGetProcAddress("glUniform1ui")) && extensionLoadCheck), "glUniform1ui");
 	checkPrint(extensionLoadCheck = ((glUniform1d = (PFNGLUNIFORM1DPROC) niaGetProcAddress("glUniform1d")) && extensionLoadCheck), "glUniform1d");
 	checkPrint(extensionLoadCheck = ((glUniform1f = (PFNGLUNIFORM1FPROC) niaGetProcAddress("glUniform1f")) && extensionLoadCheck), "glUniform1f");
 	checkPrint(extensionLoadCheck = ((glUniform3f = (PFNGLUNIFORM3FPROC) niaGetProcAddress("glUniform3f")) && extensionLoadCheck), "glUniform3f");
@@ -142,6 +145,7 @@ bool niaInitGL(){
 	checkPrint(extensionLoadCheck = ((glGetShaderiv = (PFNGLGETSHADERIVPROC) niaGetProcAddress("glGetShaderiv")) && extensionLoadCheck), "glGetShaderiv");
 	checkPrint(extensionLoadCheck = ((glShaderSource = (PFNGLSHADERSOURCEPROC) niaGetProcAddress("glShaderSource")) && extensionLoadCheck), "glShaderSource");
 
+	checkPrint(extensionLoadCheck = ((glActiveTexture = (PFNGLACTIVETEXTUREPROC) niaGetProcAddress("glActiveTexture")) && extensionLoadCheck), "glActiveTexture");
 	checkPrint(extensionLoadCheck = ((glGenTextures = (PFNGLGENTEXTURESPROC) niaGetProcAddress("glGenTextures")) && extensionLoadCheck), "glGenTextures");
 	checkPrint(extensionLoadCheck = ((glBindTexture = (PFNGLBINDTEXTUREPROC) niaGetProcAddress("glBindTexture")) && extensionLoadCheck), "glBindTexture");
 	checkPrint(extensionLoadCheck = ((glTexParameteri = (PFNGLTEXPARAMETERIPROC) niaGetProcAddress("glTexParameteri")) && extensionLoadCheck), "glTexParameteri");
