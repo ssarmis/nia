@@ -19,7 +19,7 @@
 int advances = 0;
 int wastes = 0;
 
-#define MEMBERS_PER_VERT 3
+#define MAXIMUM_MEMBERS_PER_VERT 3
 
 #define ADVANCE(_x){\
     ++_x;\
@@ -43,11 +43,20 @@ int wastes = 0;
 
 #define I32_UNTIL(_source, _store, _size, _sep0, _sep1, _sep2, _sep3){\
     _store = 0;\
+    bool negative = false;\
+    if(*_source == '-'){\
+        negative = !negative;\
+        ADVANCE(_source);\
+        WASTE(_size);\
+    }\
     while(*_source != _sep0 && *_source != _sep1 && *_source != _sep2 && *_source != _sep3){\
         _store *= 10;\
         _store += ATOI(*_source);\
         ADVANCE(_source);\
         WASTE(_size);\
+    }\
+    if(negative){\
+        _store *= -1;\
     }\
 }
 
@@ -241,18 +250,19 @@ u32 niaObjParser::parse(){
 
                     u8 iterations = 0;
 
-                    niaVector3<u32> vertex;
+                    niaVector3<i32> vertex(1, 1, 1);
 
                     do {
                         ADVANCE(source);
                         WASTE(fileSize);
 
                         I32_UNTIL(source, vertex.data[iterations], fileSize, '/', '\r', '\n', ' ');
-                        
-                        ++iterations;
-                        iterations %= MEMBERS_PER_VERT;
 
-                        if(iterations == 0){
+                        ++iterations;
+                        iterations %= MAXIMUM_MEMBERS_PER_VERT;
+
+                        if(*source == '\n' || *source == '\r' || *source == ' '){
+                            iterations = 0;
                             faces.add(vertex);
                         }
                     } while(*source != '\n' && *source != '\r');
@@ -283,6 +293,6 @@ niaArray<niaVector2<r32> >& niaObjParser::getUVS() {
     return uvs;
 }
 
-niaArray<niaVector3<u32> >& niaObjParser::getFaces() {
+niaArray<niaVector3<i32> >& niaObjParser::getFaces() {
     return faces;
 }

@@ -21,7 +21,7 @@ private:
     niaArray<niaVector3<r32> > vertexies;
     niaArray<niaVector3<r32> > normals;
     niaArray<niaVector2<r32> > uvs;
-    niaArray<niaVector3<u32> > faces;
+    niaArray<niaVector3<i32> > faces;
     
     i32 fileSize;
     u8* source;
@@ -35,7 +35,7 @@ public:
     niaArray<niaVector3<r32> >& NIA_CALL getVertexies();
     niaArray<niaVector3<r32> >& NIA_CALL getNormals();
     niaArray<niaVector2<r32> >& NIA_CALL getUVS();
-    niaArray<niaVector3<u32> >& NIA_CALL getFaces();
+    niaArray<niaVector3<i32> >& NIA_CALL getFaces();
 };
 
 #endif //_NIA_OBJ_PARSER_H_
