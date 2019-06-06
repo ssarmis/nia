@@ -285,12 +285,12 @@ static void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u8 maxBits, u
     u32 nextCode[16 + 1];
 
     lengths2[0] = 0;
-    for (u32 code = 0; code <= numberOfCodes; ++code){
+    for (u32 code = 0; code < numberOfCodes; ++code){
         ++lengths2[lengths[code]];
     }
 
     nextCode[0] = 0;
-    for(u32 length = 1; length < 16; ++length){
+    for(u32 length = 1; length <= 16; ++length){
         nextCode[length] = (nextCode[length - 1] + lengths2[length - 1]) << 1;
     }
 
@@ -310,6 +310,7 @@ static void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u8 maxBits, u
             code &= codeMask;
             table->entries[entry].code = code;
             table->entries[entry].symbol = entry;
+            printf("code %d symbol %d length %d\n", code, entry, lengths[entry]);
         }
         table->entries[entry].codeLength = lengths[entry];
     }
@@ -358,7 +359,10 @@ void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     }
 
     niaPNGHuffmanTable codeLengthAlphabet;
-    huffmanCreate(&codeLengthAlphabet, lengthHistogram, 4, numberOfLengthsCodes);
+    printf("\n================================\n");
+    printf("\nFirst table\n");
+    printf("\n================================\n");
+    huffmanCreate(&codeLengthAlphabet, lengthHistogram, 4, 19);
     
     for(u16 i = 0; i < numberOfLiteralsCodes; ++i){
         u16 repeats = 0;
@@ -413,9 +417,17 @@ void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     }
 
     niaPNGHuffmanTable litLengthAlphabet;
+
+    printf("\n================================\n");
+    printf("\nSecond table\n");
+    printf("\n================================\n");
     huffmanCreate(&litLengthAlphabet, litLenLengths, 15, 288);
 
     niaPNGHuffmanTable distLengthAlphabet;
+
+    printf("\n================================\n");
+    printf("\nThird table\n");
+    printf("\n================================\n");
     huffmanCreate(&distLengthAlphabet, distLengths, 15, 32);
 
     
