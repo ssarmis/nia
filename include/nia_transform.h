@@ -29,6 +29,7 @@ public:
 
     void NIA_CALL scale(r32 amount);
     void NIA_CALL translate(const niaVector3<r32>& position);
+    void NIA_CALL translate(r32 x, r32 y, r32 z);
     void NIA_CALL rotate(r32 amount, niaAxis axis);
 
     niaMatrix4 NIA_CALL getTransformation() const;

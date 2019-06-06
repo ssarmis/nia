@@ -26,6 +26,10 @@ void niaTransform::translate(const niaVector3<r32>& position){
     transform = transform.mul(niaMatrix4::translate(position.x, position.y, position.z));
 }
 
+void niaTransform::translate(r32 x, r32 y, r32 z){
+    transform = transform.mul(niaMatrix4::translate(x, y, z));
+}
+
 void niaTransform::rotate(r32 amount, niaAxis axis){
     transform = transform.mul(niaMatrix4::rotate(amount, axis));
 }
