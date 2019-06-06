@@ -26,6 +26,24 @@ NIA_GLSL_PRECISION" float;\n"
 "uniform mat4 mT;\n"
 "uniform mat4 mV;\n"
 
+"uniform vec3 dlP;\n"
+"uniform vec3 dlC;\n"
+
+"uniform vec3 slP;\n"
+"uniform vec3 slC;\n"
+
+"uniform float lightIsEnabled;\n"
+
+"varying float o_lightIsEnabled;\n"
+
+"out vec3 o_dlP;\n"
+"out vec3 o_dlC;\n"
+"out vec3 o_slP;\n"
+"out vec3 o_slC;\n"
+
+"out float o_lightFactor;\n"
+"out float o_lightSpecularFactor;\n"
+
 "out vec3 o_uv;\n"
 "out vec3 o_color;\n"
 
@@ -33,7 +51,7 @@ NIA_GLSL_PRECISION" float;\n"
 "   vec4 transformedPosition = mT * vec4(pos, 1.0);"
 "   vec4 viewVector = inverse(mV)[3] - transformedPosition;\n"
 "   viewVector = normalize(viewVector);\n"
-
+    
 "   gl_Position = mP * mV * transformedPosition;\n"
 
 "   vec3 normalTransformed = transformedPosition.xyz * normal;\n"
@@ -45,6 +63,30 @@ NIA_GLSL_PRECISION" float;\n"
 "   reflectedVector.y *= -1.0;\n"
 "   o_uv = reflectedVector;\n"
 "   o_color = color;\n"
+// light same as in default shader
+"   o_dlP = dlP;\n"
+"   o_dlC = dlC;\n"
+"   o_slP = slP;\n"
+"   o_slC = slC;\n"
+"   o_lightIsEnabled = lightIsEnabled;\n"
+"   if(lightIsEnabled > 0){\n"
+"      vec3 lightVector = (dlP - transformedPosition.xyz);\n"
+"      vec3 normalizedLightVector = normalize(lightVector);\n"
+
+"      mat3 normalMatrix = transpose(inverse(mat3(mT)));\n"
+"      vec3 transformedNormal = (normalMatrix * normal);\n"
+"      vec3 normlizedTransformedNormal = normalize(transformedNormal);\n"
+
+"      o_lightFactor = dot(normalizedLightVector, normlizedTransformedNormal);\n"
+"      o_lightFactor = max(o_lightFactor, 0.5);\n"
+
+"      vec3 specularLightVector = (slP - transformedPosition.xyz);\n"
+"      vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normlizedTransformedNormal) * normlizedTransformedNormal);\n"
+"      reflectedCameraVector = normalize(reflectedCameraVector);\n"
+"      vec4 normalizedViewVector = normalize(inverse(mV)[3] - transformedPosition);\n"
+"      o_lightSpecularFactor = dot(-reflectedCameraVector, normalizedViewVector.xyz);\n"
+"      o_lightSpecularFactor = pow(max(o_lightSpecularFactor, 0.0), 8);\n"
+"   }\n"
 "}\n"
 "";
 
@@ -54,13 +96,28 @@ NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
 
-"in  vec3 o_uv;\n"
-"in  vec3 o_color;\n"
+"in vec3 o_uv;\n"
+"in vec3 o_color;\n"
+
+"varying float o_lightIsEnabled;\n"
+
+"in vec3 o_dlP;\n"
+"in vec3 o_dlC;\n"
+"in vec3 o_slP;\n"
+"in vec3 o_slC;\n"
+"in float o_lightFactor;\n"
+"in float o_lightSpecularFactor;\n"
 
 "uniform samplerCube tex;\n"
 
 "void main(){\n"
-"   finalColor = texture(tex, o_uv) * vec4(o_color, 1.0);\n"
+"   if(o_lightIsEnabled > 0){\n"
+"      vec4 diffuse = (o_lightFactor * vec4(o_dlC, 1.0));\n"
+"      vec4 specular = (1 * o_lightSpecularFactor * vec4(o_slC, 1.0));\n"
+"      finalColor = (specular + diffuse) * (texture(tex, -o_uv) * vec4(o_color, 1.0));\n"
+"   } else {\n"
+"      finalColor = (texture(tex, -o_uv) * vec4(o_color, 1.0));\n"
+"   }"
 "}\n"
 "";
 

@@ -40,6 +40,8 @@ public:
     GLuint NIA_CALL getVertexShader() const;
     GLuint NIA_CALL getFragmentShader() const;
 
+    void NIA_CALL setUniform1f(const char* name, r32 value);
+    void NIA_CALL setUniformU32(const char* name, u32 value);
     void NIA_CALL setUniformVec3(const char* name, const niaVector3<r32>& vec);
     void NIA_CALL setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose = true);
 

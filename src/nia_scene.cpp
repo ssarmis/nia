@@ -73,15 +73,15 @@ niaScene::~niaScene(){
 }
 
 void niaScene::bind(niaRenderer* renderer){
-    renderer->defaultShader.useShader();
+    // renderer->defaultShader.useShader();
 
-    renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, diffuseLightPosition);
-    renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, diffuseLightColor);
+    // renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, diffuseLightPosition);
+    // renderer->defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, diffuseLightColor);
 
-    renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, specularLightPosition);
-    renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, specularLightColor);
+    // renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, specularLightPosition);
+    // renderer->defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, specularLightColor);
     
-    renderer->defaultShader.unuseShader();
+    // renderer->defaultShader.unuseShader();
 
     renderer->renderSkyBox(cubeTexture);
 }

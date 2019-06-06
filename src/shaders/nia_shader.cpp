@@ -32,6 +32,10 @@ NIA_GLSL_PRECISION" float;\n"
 "uniform mat4 mT;\n"
 "uniform mat4 mV;\n"
 
+"uniform float lightIsEnabled;\n"
+
+"varying float o_lightIsEnabled;\n"
+
 "out vec4 o_color;\n"
 
 "out vec2 o_uv;\n"
@@ -53,23 +57,25 @@ NIA_GLSL_PRECISION" float;\n"
 "   o_dlC = dlC;\n"
 "   o_slP = slP;\n"
 "   o_slC = slC;\n"
+"   o_lightIsEnabled = lightIsEnabled;\n"
+"   if(lightIsEnabled > 0){\n"
+"      vec3 lightVector = (dlP - transformedPosition.xyz);\n"
+"      vec3 normalizedLightVector = normalize(lightVector);\n"
 
-"   vec3 lightVector = (dlP - transformedPosition.xyz);\n"
-"   vec3 normalizedLightVector = normalize(lightVector);\n"
+"      mat3 normalMatrix = transpose(inverse(mat3(mT)));\n"
+"      vec3 transformedNormal = (normalMatrix * normal);\n"
+"      vec3 normlizedTransformedNormal = normalize(transformedNormal);\n"
 
-"   mat3 normalMatrix = transpose(inverse(mat3(mT)));\n"
-"   vec3 transformedNormal = (normalMatrix * normal);\n"
-"   vec3 normlizedTransformedNormal = normalize(transformedNormal);\n"
+"      o_lightFactor = dot(normalizedLightVector, normlizedTransformedNormal);\n"
+"      o_lightFactor = max(o_lightFactor, 0.7);\n"
 
-"   o_lightFactor = dot(normalizedLightVector, normlizedTransformedNormal);\n"
-"   o_lightFactor = max(o_lightFactor, 0.3);\n"
-
-"   vec3 specularLightVector = (slP - transformedPosition.xyz);\n"
-"   vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normlizedTransformedNormal) * normlizedTransformedNormal);\n"
-"   reflectedCameraVector = normalize(reflectedCameraVector);\n"
-"   vec4 viewVector = normalize(inverse(mV)[3] - transformedPosition);\n"
-"   o_lightSpecularFactor = dot(-reflectedCameraVector, viewVector.xyz);\n"
-"   o_lightSpecularFactor = pow(max(o_lightSpecularFactor, 0.0), 32);\n"
+"      vec3 specularLightVector = (slP - transformedPosition.xyz);\n"
+"      vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normlizedTransformedNormal) * normlizedTransformedNormal);\n"
+"      reflectedCameraVector = normalize(reflectedCameraVector);\n"
+"      vec4 viewVector = normalize(inverse(mV)[3] - transformedPosition);\n"
+"      o_lightSpecularFactor = dot(-reflectedCameraVector, viewVector.xyz);\n"
+"      o_lightSpecularFactor = pow(max(o_lightSpecularFactor, 0.0), 32);\n"
+"   }\n"
 "}\n"
 "";
 
@@ -78,6 +84,8 @@ NIA_GLSL_VERSION" \n""precision "
 NIA_GLSL_PRECISION" float;\n"
 
 "out vec4 finalColor;\n"
+
+"varying float o_lightIsEnabled;\n"
 
 "in vec4 o_color;\n"
 
@@ -93,9 +101,13 @@ NIA_GLSL_PRECISION" float;\n"
 "uniform sampler2D tex;\n"
 
 "void main(){\n"
-"   vec4 diffuse = (o_lightFactor * vec4(o_dlC, 1.0));\n"
-"   vec4 specular = (0.5 * o_lightSpecularFactor * vec4(o_slC, 1.0));\n"
-"   finalColor = (specular + diffuse) * (texture(tex, o_uv) * o_color);\n"
+"   if(o_lightIsEnabled > 0){\n"
+"      vec4 diffuse = (o_lightFactor * vec4(o_dlC, 1.0));\n"
+"      vec4 specular = (1 * o_lightSpecularFactor * vec4(o_slC, 1.0));\n"
+"      finalColor = (specular + diffuse) * (texture(tex, o_uv) * o_color);\n"
+"   } else {\n"
+"      finalColor = (texture(tex, o_uv) * o_color);\n"
+"   }"
 "}\n"
 "";
 
@@ -209,6 +221,17 @@ void niaShader::useShader(){
 
 void niaShader::unuseShader(){
     NIA_GL_CALL(glUseProgram(0));
+}
+
+// TODO cache uniform ids
+void niaShader::setUniform1f(const char* name, r32 value){
+    GLint id = glGetUniformLocation(program, name); // cache these
+    NIA_GL_CALL(glUniform1f(id, value));
+}
+
+void niaShader::setUniformU32(const char* name, u32 value){
+    GLint id = glGetUniformLocation(program, name); // cache these
+    NIA_GL_CALL(glUniform1ui(id, value));
 }
 
 void niaShader::setUniformMat4(const char* name, const niaMatrix4& mat, bool transpose){

@@ -33,6 +33,9 @@
 #include "shaders/nia_shader_reflective.h"
 #include "parsers/nia_ttf_parser.h"
 
+#define NIA_RENDERER_NO_FLAGS     0x00000000
+#define NIA_RENDERER_ENABLE_LIGHT 0x00000001
+
 /**
  *  @class niaRenderer
  *  @author Streanga Sarmis-Stefan
@@ -56,7 +59,7 @@ protected:
     niaCubeTexture defaultCubeTexture;
 
 public:
-    NIA_CALL niaRenderer();
+    NIA_CALL niaRenderer(u32 flags = NIA_RENDERER_NO_FLAGS);
     NIA_CALL ~niaRenderer();
 
     /**
@@ -105,6 +108,7 @@ public:
      * @param transposed Specifies if you have the transformations in a transposed form(this defaults to true).
      */
      void NIA_CALL submitTransformation(const niaTransform& transformation, bool transpose = true);
+     void NIA_CALL submitClearTransformation();
 
     /**
      * @brief Function for submiting the view for the screen/scene
@@ -193,6 +197,8 @@ public:
 
     void NIA_CALL submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
     void NIA_CALL submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+
+    void NIA_CALL bindTexture(u32 activeNumber, u32 textureId, GLenum type = GL_TEXTURE_2D);
 
     friend class niaScene;
 };

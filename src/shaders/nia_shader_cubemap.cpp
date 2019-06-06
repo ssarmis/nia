@@ -41,7 +41,7 @@ NIA_GLSL_PRECISION" float;\n"
 "uniform samplerCube tex;\n"
 
 "void main(){\n"
-"   finalColor = texture(tex, o_uv);\n"
+"   finalColor = texture(tex, -o_uv);\n"
 "}\n"
 "";
 

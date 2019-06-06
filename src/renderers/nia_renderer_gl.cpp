@@ -137,7 +137,7 @@ NIA_INLINE void NIA_INTERNAL cacheStoreIndicesId(renderCache* cache, u32 indices
     }\
 }
 
-niaRenderer::niaRenderer(){
+niaRenderer::niaRenderer(u32 flags){
     cacheInit(&localRenderCache);
 
     cubeMesh = niaMesh::cube(100);
@@ -162,11 +162,21 @@ niaRenderer::niaRenderer(){
                  0, 3, 1};
 
     NIA_GL_CALL(glGenBuffers(1, &rectVeo));
-    // printf("%d \n", rectVeo);
+
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
     NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+    if(flags & NIA_RENDERER_ENABLE_LIGHT){
+        defaultShader.useShader();
+        defaultShader.setUniform1f("lightIsEnabled", 1);
+        defaultShader.unuseShader();
+
+        defaultShaderReflective.useShader();
+        defaultShaderReflective.setUniform1f("lightIsEnabled", 1);
+        defaultShaderReflective.unuseShader();
+    }
 }
 
 niaRenderer::~niaRenderer(){
@@ -247,6 +257,13 @@ void niaRenderer::submitTransformation(const niaTransform& transformation, bool 
     defaultShaderFont.unuseShader();
 }
 
+void niaRenderer::submitClearTransformation(){
+    defaultShader.useShader();
+    defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
+    defaultShader.unuseShader();
+}
+
+
 void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
     defaultShader.useShader();
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
@@ -278,14 +295,14 @@ void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[
     u32 hash = computeHash(x, y, z, w, h, colors, rectVao, defaultTexture.textureId, rectVeo);
 
     defaultShader.useShader();
-
-    CACHE_CHECK(localRenderCache, cachedHash, hash, {
+    // TODO fix the caching for rectangles
+    // CACHE_CHECK(localRenderCache, cachedHash, hash, {
         createAndBufferVertexies(x, y, z, w, h, colors);
         NIA_GL_CALL(glBindVertexArray(rectVao));
-        NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+        bindTexture(0, defaultTexture.textureId);
         
         NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rectVeo));
-    });
+    // });
 
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
     defaultShader.unuseShader();
@@ -294,7 +311,7 @@ void niaRenderer::renderRectangle(r32 x, r32 y, r32 z, r32 w, r32 h, r32 colors[
 void niaRenderer::renderMesh(const niaMesh& mesh){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
     defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, defaultTexture.textureId));
+    bindTexture(0, defaultTexture.textureId);
     
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -304,7 +321,7 @@ void niaRenderer::renderMesh(const niaMesh& mesh){
 void niaRenderer::renderMesh(const niaMesh& mesh, niaTexture& texture){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
     defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.getTextureId()));
+    bindTexture(0, texture.getTextureId());
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -314,7 +331,7 @@ void niaRenderer::renderMesh(const niaMesh& mesh, niaTexture& texture){
 void niaRenderer::renderMesh(const niaMesh& mesh, GLuint textureId){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
     defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
+    bindTexture(0, textureId);
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -328,11 +345,10 @@ NIA_CALL void niaRenderer::renderRectangleRaw(r32 x, r32 y, r32 w, r32 h, niaTex
     createAndBufferVertexies(x, y, z, w, h, colors);
 
     NIA_GL_CALL(glBindVertexArray(rectVao));
-    // defaultShader.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.getTextureId()));
+
+    bindTexture(0, texture.getTextureId());
 
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
-    // defaultShader.unuseShader();
 }
 
 void niaRenderer::renderMeshRaw(const niaMesh& mesh){
@@ -344,14 +360,14 @@ void niaRenderer::renderMeshRaw(const niaMesh& mesh){
 
 void niaRenderer::renderMeshRaw(const niaMesh& mesh, const niaTexture& texture){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture.textureId));
+    bindTexture(0, texture.textureId);
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
 }
 void niaRenderer::renderMeshRaw(const niaMesh& mesh, GLuint textureId){
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, textureId));
+    bindTexture(0, textureId);
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -361,7 +377,7 @@ void niaRenderer::renderSkyBox(const niaCubeTexture& texture){
     NIA_GL_CALL(glDepthFunc(GL_LEQUAL));
     NIA_GL_CALL(glBindVertexArray(cubeMesh.vao.id));
     defaultShaderCubeMap.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, texture.textureId));
+    bindTexture(0, texture.textureId, GL_TEXTURE_CUBE_MAP);
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeMesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, cubeMesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -372,7 +388,7 @@ void niaRenderer::renderSkyBox(const niaCubeTexture& texture){
 void niaRenderer::renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture& texture){ // TODO make the cubeTexture not needed
     NIA_GL_CALL(glBindVertexArray(mesh.vao.id));
     defaultShaderReflective.useShader();
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, texture.textureId));
+    bindTexture(0, texture.textureId, GL_TEXTURE_CUBE_MAP);
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vao.veoId));
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, mesh.verts, GL_UNSIGNED_SHORT, 0));
@@ -380,15 +396,19 @@ void niaRenderer::renderReflectiveMesh(const niaMesh& mesh, const niaCubeTexture
 }
 
 void niaRenderer::renderSprite(niaSprite& sprite){
+    submitTransformation(sprite.getTransformation());
+    
     defaultShader.useShader();
 
     NIA_GL_CALL(glBindVertexArray(sprite.getVao()));
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, sprite.getTextureId()));
+    bindTexture(0, sprite.getTextureId());
     
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite.getVeo()));
 
     NIA_GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0));
     defaultShader.unuseShader();
+
+    submitClearTransformation();
 }
 
 void niaRenderer::renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color){
@@ -397,7 +417,7 @@ void niaRenderer::renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color){
     defaultShaderFont.useShader();
     defaultShaderFont.setUniformVec3("fontColor", color);
     NIA_GL_CALL(glBindVertexArray(glyph->sprite.getVao()));
-    NIA_GL_CALL(glBindTexture(GL_TEXTURE_2D, glyph->sprite.getTextureId()));
+    bindTexture(0, glyph->sprite.getTextureId());
     
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glyph->sprite.getVeo()));
 
@@ -412,6 +432,13 @@ void niaRenderer::submitDiffuseLightProperties(const niaVector3<r32>& position, 
     defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, color);
     
     defaultShader.unuseShader();
+
+    defaultShaderReflective.useShader();
+
+    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, position);
+    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, color);
+
+    defaultShaderReflective.unuseShader();
 }
 
 void niaRenderer::submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
@@ -421,6 +448,19 @@ void niaRenderer::submitSpecularLightProperties(const niaVector3<r32>& position,
     defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, color);
 
     defaultShader.unuseShader();
+
+    defaultShaderReflective.useShader();
+
+    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, position);
+    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, color);
+
+    defaultShaderReflective.unuseShader();
+}
+
+// TODO add case for textures and not just ids because this way animated textures won't work.
+void niaRenderer::bindTexture(u32 activeNumber, u32 textureId, GLenum type){ 
+    NIA_GL_CALL(glActiveTexture(GL_TEXTURE0 + activeNumber));
+    NIA_GL_CALL(glBindTexture(type, textureId));
 }
 
 #endif
