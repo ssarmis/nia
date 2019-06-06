@@ -17,12 +17,20 @@
 
 #include "nia_constants.h"
 
+#include <windows.h> //remove
+
 niaMesh::niaMesh(){
 }
 
 // TODO Make parser a base class and obj parser a derived one...
 niaMesh::niaMesh(const char* filename){
     // Lets assume for now we only get .obj files, no checking, nothing
+    // TODO add parsing for multiple objects inside the obj file...
+    LARGE_INTEGER then;
+    LARGE_INTEGER now;
+
+    QueryPerformanceCounter(&then);
+
     niaObjParser parser(filename);
 
     if(parser.parse()){
@@ -30,14 +38,16 @@ niaMesh::niaMesh(const char* filename){
         return;
     }
 
+    QueryPerformanceCounter(&now);
+
+    printf("Total time elapsed parsing file: %f\n", (double)(now.QuadPart - then.QuadPart));
+
     NIA_GL_CALL(glGenVertexArrays(1, &vao.id));
     NIA_GL_CALL(glBindVertexArray(vao.id));
 
     NIA_GL_CALL(glGenBuffers(1, &vao.vboId));
     NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, vao.vboId));
 
-    NIA_GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(niaVertex) * parser.getVertexies().getSize(), 0, GL_STATIC_DRAW));
-    
     NIA_GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_VERTEX_STRIDE));
     NIA_GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_COLOR_STRIDE));
     NIA_GL_CALL(glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(niaVertex), (GLvoid*)NIA_NORMALS_STRIDE));
@@ -50,10 +60,9 @@ niaMesh::niaMesh(const char* filename){
 
     r32 colors[3] = {1, 1, 1}; 
 
-    niaArray<u16> indices;
-
     int vertexOffset = 0;
 
+    u16* indices = new u16[parser.getFaces().getSize()];
     niaVertex* vertexies = new niaVertex[parser.getVertexies().getSize()];
 
     // 3   /   1   /   1
@@ -63,6 +72,8 @@ niaMesh::niaMesh(const char* filename){
     // 2 -> 0.306641 0.500000
     // 3 -> 0.000000 0.000000 0.000000
 
+    QueryPerformanceCounter(&then);
+
     if(!parser.getUVS().getSize()){
         parser.getUVS().add(niaVector2<r32>(0, 0));
     }
@@ -71,52 +82,76 @@ niaMesh::niaMesh(const char* filename){
         parser.getVertexies().add(niaVector3<r32>(0.0, 0.0, 0.0));
     }
 
-    if(!parser.getFaces().getSize()){
-        parser.getFaces().add(niaVector3<u32>(0, 0, 0));
+    if(!parser.getNormals().getSize()){
+        parser.getNormals().add(niaVector3<r32>(0, 0, 0));
     }
+
+    i32 vert;
+    i32 tex;
+    i32 norm;
 
     for(int index = 0; index < parser.getFaces().getSize(); ++index){
-        u32 vert = parser.getFaces()[index].data[0];
-        u32 tex = parser.getFaces()[index].data[1];
-        u32 norm = parser.getFaces()[index].data[2];
-        if(!tex){
-            tex = 1;
+        vert = parser.getFaces()[index].data[0] - 1;
+        tex = parser.getFaces()[index].data[1] - 1;
+        norm = parser.getFaces()[index].data[2] - 1;
+
+        if(vert < 0){
+            vert = parser.getVertexies().getSize() - vert;
         }
 
-        indices.add((u16)(vert - 1));// TODO fix f a//b
+        if(tex < 0){
+            tex = parser.getUVS().getSize() - tex;
+        }
 
-        vertexies[vert - 1].nx = parser.getNormals()[norm - 1].x;
-        vertexies[vert - 1].ny = parser.getNormals()[norm - 1].y;
-        vertexies[vert - 1].nz = parser.getNormals()[norm - 1].z;
-        vertexies[vert - 1].u = parser.getUVS()[tex - 1].x;
-        vertexies[vert - 1].v = parser.getUVS()[tex - 1].y;
+        if(norm < 0){
+            norm = parser.getNormals().getSize() - norm;
+        }
+
+        indices[index] = vert;
+
+        vertexies[vert].nx = parser.getNormals()[norm].x;
+        vertexies[vert].ny = parser.getNormals()[norm].y;
+        vertexies[vert].nz = parser.getNormals()[norm].z;
+        vertexies[vert].u = parser.getUVS()[tex].x;
+        vertexies[vert].v = parser.getUVS()[tex].y;
+
+        if(index < parser.getVertexies().getSize()){
+            vertexies[index].x = parser.getVertexies()[index].x;
+            vertexies[index].y = parser.getVertexies()[index].y;
+            vertexies[index].z = parser.getVertexies()[index].z;
+            
+            vertexies[index].r = colors[0];
+            vertexies[index].g = colors[1];
+            vertexies[index].b = colors[2];
+        }
     }
 
-    for(int index = 0; index < parser.getVertexies().getSize(); ++index){
-        vertexies[index].x = parser.getVertexies()[index].x;
-        vertexies[index].y = parser.getVertexies()[index].y;
-        vertexies[index].z = parser.getVertexies()[index].z;
-        
-        vertexies[index].r = colors[0];
-        vertexies[index].g = colors[1];
-        vertexies[index].b = colors[2];
+    QueryPerformanceCounter(&now);
 
-        NIA_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(niaVertex), sizeof(niaVertex), &vertexies[index]));
-    }
+    printf("Total time elapsed creating the mesh for opengl / iteration: %f\n", (double)(now.QuadPart - then.QuadPart)/(double)parser.getFaces().getSize());
 
+    QueryPerformanceCounter(&then);
+
+    NIA_GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(niaVertex) * parser.getVertexies().getSize(),
+                             vertexies, GL_STATIC_DRAW));
+    
+    QueryPerformanceCounter(&now);
+    
+    printf("Total time elapsed buffering the mesh to opengl: %f\n", (double)(now.QuadPart - then.QuadPart));
 
     NIA_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
     NIA_GL_CALL(glGenBuffers(1, &vao.veoId));
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao.veoId));
-    NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indices.getSize(), indices.getData(), GL_STATIC_DRAW));
+    NIA_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * parser.getFaces().getSize(),
+                             indices, GL_STATIC_DRAW));
 
     NIA_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
     NIA_GL_CALL(glBindVertexArray(0));
 
-    verts = indices.getSize();
+    verts = parser.getFaces().getSize();
     delete[] vertexies;
 }
 
