@@ -32,6 +32,9 @@
 #define NIA_UNIFORM_SPECULAR_LIGHT_POSITION  "slP"
 #define NIA_UNIFORM_SPECULAR_LIGHT_COLOR     "slC"
 
+// TODO make this larger
+#define NIA_MAXIMUM_LIGHT_SOURCES   "9"
+#define NIA_MAXIMUM_LIGHT_SOURCES_I  9
 
 #define NIA_PI                  3.14159
 

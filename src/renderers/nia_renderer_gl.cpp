@@ -137,6 +137,14 @@ NIA_INLINE void NIA_INTERNAL cacheStoreIndicesId(renderCache* cache, u32 indices
     }\
 }
 
+NIA_INLINE void initializeLightArray(lightArray& array){
+    array.usedLights = 0;
+}
+
+NIA_INLINE void appendLight(lightArray& array, const niaLight& light){
+    array.lights[array.usedLights++] = {light.position, light.color};
+}
+
 niaRenderer::niaRenderer(u32 flags){
     cacheInit(&localRenderCache);
 
@@ -177,6 +185,9 @@ niaRenderer::niaRenderer(u32 flags){
         defaultShaderReflective.setUniform1f("lightIsEnabled", 1);
         defaultShaderReflective.unuseShader();
     }
+
+    initializeLightArray(diffuseLights);
+    initializeLightArray(specularLights);
 }
 
 niaRenderer::~niaRenderer(){
@@ -192,51 +203,58 @@ void niaRenderer::enableDepthTest(){
 }
 
 void niaRenderer::pushOrthographicView(r32 left, r32 right, r32 top, r32 bottom, r32 n, r32 f){
+    niaMatrix4 orthographic = niaMatrix4::orthographic(left, right, top, bottom, n, f);
     defaultShader.useShader();
-    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, orthographic);
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShader.unuseShader();
 
     defaultShaderBatch.useShader();
-    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, orthographic);
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderBatch.unuseShader();
 
     defaultShaderFont.useShader();
-    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::orthographic(left, right, top, bottom, n, f));
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, orthographic);
     defaultShaderFont.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShaderFont.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderFont.unuseShader();
+
+    projectionMatrix = orthographic;
 }
 
 void niaRenderer::pushPerspectiveView(r32 fov, r32 aspectRatio, r32 n, r32 f){
+    niaMatrix4 perspective = niaMatrix4::perspective(fov, aspectRatio, n, f);
+    
     defaultShader.useShader();
-    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShader.setUniformMat4(NIA_UNIFORM_PROJECTION, perspective);
     defaultShader.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShader.unuseShader();
 
     defaultShaderBatch.useShader();
-    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderBatch.setUniformMat4(NIA_UNIFORM_PROJECTION, perspective);
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShaderBatch.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderBatch.unuseShader();
 
     defaultShaderFont.useShader();
-    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderFont.setUniformMat4(NIA_UNIFORM_PROJECTION, perspective);
     defaultShaderFont.setUniformMat4(NIA_UNIFORM_TRANSFORM, niaMatrix4::identity());
     defaultShaderFont.setUniformMat4(NIA_UNIFORM_VIEW, niaMatrix4::identity());
     defaultShaderFont.unuseShader();
 
     defaultShaderCubeMap.useShader();
-    defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderCubeMap.setUniformMat4(NIA_UNIFORM_PROJECTION, perspective);
     defaultShaderCubeMap.unuseShader();
 
     defaultShaderReflective.useShader();
-    defaultShaderReflective.setUniformMat4(NIA_UNIFORM_PROJECTION, niaMatrix4::perspective(fov, aspectRatio, n, f));
+    defaultShaderReflective.setUniformMat4(NIA_UNIFORM_PROJECTION, perspective);
     defaultShaderReflective.unuseShader();
+
+    projectionMatrix = perspective;
 }
 
 void niaRenderer::submitTransformation(const niaTransform& transformation, bool transpose){
@@ -263,7 +281,6 @@ void niaRenderer::submitClearTransformation(){
     defaultShader.unuseShader();
 }
 
-
 void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
     defaultShader.useShader();
     defaultShader.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
@@ -280,6 +297,8 @@ void niaRenderer::submitView(const niaMatrix4& view, bool transpose){
     defaultShaderReflective.useShader();
     defaultShaderReflective.setUniformMat4(NIA_UNIFORM_VIEW, view, transpose);
     defaultShaderReflective.unuseShader();
+
+    viewMatrix = view;
 }
 
 void niaRenderer::renderRectangle(r32 x, r32 y, r32 w, r32 h){
@@ -425,42 +444,126 @@ void niaRenderer::renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color){
     defaultShaderFont.unuseShader();
 }
 
-void niaRenderer::submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
-    defaultShader.useShader();
+#define COPY_3BYTES(_src, _dest) {\
+    _dest[0] = _src[0];\
+    _dest[1] = _src[1];\
+    _dest[2] = _src[2];\
+}
 
-    defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, position);
-    defaultShader.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, color);
+void niaRenderer::updateDiffuseLight(u32 index, const niaVector3<r32>& position, const niaVector3<r32>& color){
+    // dlC[0]
+    char lightPositionIndexed[7];
+    lightPositionIndexed[3] = '[';
+    lightPositionIndexed[4] = index + '0';
+    lightPositionIndexed[5] = ']';
+    lightPositionIndexed[6] = 0;
+
+    char lightColorIndexed[7];
+    lightColorIndexed[3] = '[';
+    lightColorIndexed[4] = index + '0';
+    lightColorIndexed[5] = ']';
+    lightColorIndexed[6] = 0;
+
+    COPY_3BYTES(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, lightPositionIndexed);
+    COPY_3BYTES(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, lightColorIndexed);
+
+    defaultShader.useShader();
+    defaultShader.setUniformVec3(lightPositionIndexed, position);
+    defaultShader.setUniformVec3(lightColorIndexed, color);
+    defaultShader.unuseShader();
     
-    defaultShader.unuseShader();
-
     defaultShaderReflective.useShader();
-
-    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_POSITION, position);
-    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_DIFFUSE_LIGHT_COLOR, color);
-
+    defaultShaderReflective.setUniformVec3(lightPositionIndexed, position);
+    defaultShaderReflective.setUniformVec3(lightColorIndexed, color);
     defaultShaderReflective.unuseShader();
 }
 
-void niaRenderer::submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
+void niaRenderer::updateSpecularLight(u32 index, const niaVector3<r32>& position, const niaVector3<r32>& color){
+    // dlC[0]
+    char lightPositionIndexed[7];
+    lightPositionIndexed[3] = '[';
+    lightPositionIndexed[4] = index + '0';
+    lightPositionIndexed[5] = ']';
+    lightPositionIndexed[6] = 0;
+
+    char lightColorIndexed[7];
+    lightColorIndexed[3] = '[';
+    lightColorIndexed[4] = index + '0';
+    lightColorIndexed[5] = ']';
+    lightColorIndexed[6] = 0;
+
+    COPY_3BYTES(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, lightPositionIndexed);
+    COPY_3BYTES(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, lightColorIndexed);
+
     defaultShader.useShader();
+    defaultShader.setUniformVec3(lightPositionIndexed, position);
+    defaultShader.setUniformVec3(lightColorIndexed, color);
+    defaultShader.unuseShader();
+    
+    defaultShaderReflective.useShader();
+    defaultShaderReflective.setUniformVec3(lightPositionIndexed, position);
+    defaultShaderReflective.setUniformVec3(lightColorIndexed, color);
+    defaultShaderReflective.unuseShader();
+}
 
-    defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, position);
-    defaultShader.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, color);
+u32 niaRenderer::submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
+    appendLight(diffuseLights, {position, color});
+    u32 index = diffuseLights.usedLights - 1;
 
+    // TODO refactor this, we bind the shaders too much
+    defaultShader.useShader();
+    defaultShader.setUniform1i("diffuseLightsUsed", index + 1);
     defaultShader.unuseShader();
 
     defaultShaderReflective.useShader();
-
-    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_POSITION, position);
-    defaultShaderReflective.setUniformVec3(NIA_UNIFORM_SPECULAR_LIGHT_COLOR, color);
-
+    defaultShaderReflective.setUniform1i("diffuseLightsUsed", index + 1);
     defaultShaderReflective.unuseShader();
+
+    updateDiffuseLight(index, position, color);
+    updateDiffuseLight(index, position, color);
+
+    return index;
 }
+
+u32 niaRenderer::submitDiffuseLightProperties(const niaLight& light){
+    // TODO implement me
+}
+
+u32 niaRenderer::submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color){
+    appendLight(specularLights, {position, color});
+    u32 index = specularLights.usedLights - 1;
+
+    // TODO refactor this, we bind the shaders too much
+    defaultShader.useShader();
+    defaultShader.setUniform1i("specularLightsUsed", index + 1);
+    defaultShader.unuseShader();
+
+    defaultShaderReflective.useShader();
+    defaultShaderReflective.setUniform1i("specularLightsUsed", index + 1);
+    defaultShaderReflective.unuseShader();
+
+    updateSpecularLight(index, position, color);
+    updateSpecularLight(index, position, color);
+    
+    return index;
+}
+
+u32 niaRenderer::submitSpecularLightProperties(const niaLight& light){
+    // TODO implement me
+}
+
 
 // TODO add case for textures and not just ids because this way animated textures won't work.
 void niaRenderer::bindTexture(u32 activeNumber, u32 textureId, GLenum type){ 
     NIA_GL_CALL(glActiveTexture(GL_TEXTURE0 + activeNumber));
     NIA_GL_CALL(glBindTexture(type, textureId));
+}
+
+niaMatrix4 niaRenderer::getViewMatrix() const {
+    return viewMatrix;
+}
+niaMatrix4 niaRenderer::getProjectionMatrix() const {
+    return projectionMatrix;
 }
 
 #endif

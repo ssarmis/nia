@@ -62,4 +62,7 @@ template class niaArray<niaVector3<unsigned int> >;
 #include "nia_filter.h"
 template class niaArray<niaFilter*>;
 
+#include "nia_light.h"
+template class niaArray<niaLight>;
+
 #endif // _NIA_ARRAY_H_

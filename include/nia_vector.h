@@ -161,6 +161,7 @@ public:
     T w;
     
     NIA_CALL niaVector4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0);
+    NIA_CALL niaVector4(const niaVector3<T>& other);
     NIA_CALL ~niaVector4();
 
     niaVector4 NIA_CALL add(const niaVector4& other) const;

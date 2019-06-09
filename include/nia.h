@@ -36,22 +36,23 @@
 #define GL_GLEXT_PROTOTYPES
 #endif
 
-#include "nia_constants.h"
-
 #include "nia_mesh.h"
 #include "nia_event.h"
 #include "nia_scene.h"
+#include "nia_light.h"
 #include "nia_vector.h"
 #include "nia_matrix.h"
-#include "shaders/nia_shader.h"
-#include "shaders/nia_shader_cubemap.h"
 #include "nia_loader.h"
 #include "nia_window.h"
+#include "nia_sprite.h"
 #include "nia_general.h"
+#include "nia_texture.h"
 #include "nia_renderer.h"
 #include "nia_transform.h"
+#include "nia_constants.h"
+#include "shaders/nia_shader.h"
+#include "shaders/nia_shader_cubemap.h"
+#include "shaders/nia_shader_add_blend.h"
 #include "nia_post_processing_pipeline.h"
-#include "nia_texture.h"
-#include "nia_sprite.h"
 
 #endif //_NIA_H_

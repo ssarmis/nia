@@ -161,6 +161,11 @@ x(x), y(y), z(z), w(w){
 }
 
 template<typename T>
+niaVector4<T>::niaVector4(const niaVector3<T>& other):
+x(other.x), y(other.y), z(other.z), w(1){
+}
+
+template<typename T>
 niaVector4<T>::~niaVector4(){
 }
 

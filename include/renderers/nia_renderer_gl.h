@@ -20,6 +20,7 @@
 #define _NIA_RENDERER_GL_WIN32_H_
 
 #include "nia_mesh.h"
+#include "nia_light.h"
 #include "nia_sprite.h"
 #include "nia_matrix.h"
 #include "nia_general.h"
@@ -43,8 +44,18 @@
  * 
  *  Main Nia renderer used to render primiteves to the screen
  */
+
+NIA_STRUCT lightArray {
+  u32 usedLights;
+  niaLight lights[NIA_MAXIMUM_LIGHT_SOURCES_I];
+} lightArray;
+
 NIA_CLASS niaRenderer {
 protected:
+
+    lightArray diffuseLights;
+    lightArray specularLights;
+
     niaMesh cubeMesh;
 
     niaShader defaultShader;
@@ -57,6 +68,9 @@ protected:
 
     niaTexture defaultTexture;
     niaCubeTexture defaultCubeTexture;
+
+    niaMatrix4 viewMatrix;
+    niaMatrix4 projectionMatrix;
 
 public:
     NIA_CALL niaRenderer(u32 flags = NIA_RENDERER_NO_FLAGS);
@@ -195,10 +209,19 @@ public:
     void NIA_CALL renderSprite(niaSprite& sprite);
     void NIA_CALL renderGlyph(niaGlyph* glyph, const niaVector3<r32>& color);
 
-    void NIA_CALL submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
-    void NIA_CALL submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+    void NIA_CALL updateDiffuseLight(u32 index, const niaVector3<r32>& position, const niaVector3<r32>& color);
+    void NIA_CALL updateSpecularLight(u32 index, const niaVector3<r32>& position, const niaVector3<r32>& color);
+
+    u32 NIA_CALL submitDiffuseLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+    u32 NIA_CALL submitDiffuseLightProperties(const niaLight& light);
+
+    u32 NIA_CALL submitSpecularLightProperties(const niaVector3<r32>& position, const niaVector3<r32>& color);
+    u32 NIA_CALL submitSpecularLightProperties(const niaLight& light);
 
     void NIA_CALL bindTexture(u32 activeNumber, u32 textureId, GLenum type = GL_TEXTURE_2D);
+
+    niaMatrix4 NIA_CALL getViewMatrix() const;
+    niaMatrix4 NIA_CALL getProjectionMatrix() const;
 
     friend class niaScene;
 };
