@@ -86,6 +86,9 @@ public:
     NIA_CALL niaMatrix4(r32 data = 1);
     NIA_CALL ~niaMatrix4();
 
+    niaVector4<r32> NIA_CALL vector_mul(const niaVector4<r32>& vector);
+    niaVector3<r32> NIA_CALL vector_mul(const niaVector3<r32>& vector);
+
     void NIA_CALL add_self(r32 number); // to avoind copying when using it for current matrix
     niaMatrix4 NIA_CALL add(r32 number) const;
     niaMatrix4 NIA_CALL add(const niaMatrix4& other) const;
@@ -109,6 +112,8 @@ public:
     static niaMatrix4 NIA_CALL orthographic(r32 left, r32 right, r32 top, r32 bottom, r32 near, r32 far);
     static niaMatrix4 NIA_CALL perspective(r32 fov, r32 aspectRatio, r32 near, r32 far);
     static niaMatrix4 NIA_CALL lookAt(const niaVector3<r32>& position, const niaVector3<r32>& target, const niaVector3<r32>& up);
+
+    static niaMatrix4 NIA_CALL inverse(const niaMatrix4& other);
 
     static void NIA_CALL printMat4(const niaMatrix4& mat);
 };

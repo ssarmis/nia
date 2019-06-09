@@ -231,6 +231,29 @@ niaMatrix4 niaMatrix4::identity(){
     return niaMatrix4(1.0);
 }
 
+niaVector4<r32> niaMatrix4::vector_mul(const niaVector4<r32>& vector){
+    niaVector4<r32> result;
+
+    result.x = m[0]  * vector.x + m[1]  * vector.y + m[2]  * vector.z + m[3]  * vector.w;
+    result.y = m[4]  * vector.x + m[5]  * vector.y + m[6]  * vector.z + m[7]  * vector.w;
+    result.z = m[8]  * vector.x + m[9]  * vector.y + m[10] * vector.z + m[11] * vector.w;
+    result.w = m[12] * vector.x + m[13] * vector.y + m[14] * vector.z + m[15] * vector.w;
+
+    return result;
+}
+
+niaVector3<r32> niaMatrix4::vector_mul(const niaVector3<r32>& vector){
+    niaVector4<r32> copy(vector);
+    niaVector3<r32> result;
+
+    result.x = m[0]  * copy.x + m[1]  * copy.y + m[2]  * copy.z + m[3]  * copy.w;
+    result.y = m[4]  * copy.x + m[5]  * copy.y + m[6]  * copy.z + m[7]  * copy.w;
+    result.z = m[8]  * copy.x + m[9]  * copy.y + m[10] * copy.z + m[11] * copy.w;
+
+    return result;
+}
+
+
 void niaMatrix4::add_self(r32 number){
     _mm_store_ps(m, _mm_add_ps(_mm_load_ps(m), _mm_set1_ps(number)));
     _mm_store_ps(m + 4, _mm_add_ps(_mm_load_ps(m + 4), _mm_set1_ps(number)));
@@ -393,5 +416,153 @@ niaMatrix4 niaMatrix4::lookAt(const niaVector3<r32>& position, const niaVector3<
 
     result.m[15] = 1.0;
 
+    return result;
+}
+
+NIA_INLINE r32 subDeterminant(r32* other){
+    // TODO maybe do this by hand to be faster, later on
+    // TODO use SIMD
+    r32 result = +other[0] * other[4] * other[8]
+                 +other[1] * other[5] * other[6]
+                 +other[2] * other[3] * other[7]
+                 -other[2] * other[4] * other[6]
+                 -other[1] * other[3] * other[8]
+                 -other[0] * other[5] * other[7];
+
+    return result;
+}
+
+niaMatrix4 niaMatrix4::inverse(const niaMatrix4& other){
+    niaMatrix4 result;
+    // TODO add SIMD later
+    // replace with constant
+    r32 determinant = other.m[0 + 3 * 4] * other.m[1 + 2 * 4] * other.m[2 + 1 * 4] * other.m[3 + 0 * 4] - other.m[0 + 2 * 4] * other.m[1 + 3 * 4] * other.m[2 + 1 * 4] * other.m[3 + 0 * 4] -
+                      other.m[0 + 3 * 4] * other.m[1 + 1 * 4] * other.m[2 + 2 * 4] * other.m[3 + 0 * 4] + other.m[0 + 1 * 4] * other.m[1 + 3 * 4] * other.m[2 + 2 * 4] * other.m[3 + 0 * 4] +
+                      other.m[0 + 2 * 4] * other.m[1 + 1 * 4] * other.m[2 + 3 * 4] * other.m[3 + 0 * 4] - other.m[0 + 1 * 4] * other.m[1 + 2 * 4] * other.m[2 + 3 * 4] * other.m[3 + 0 * 4] -
+                      other.m[0 + 3 * 4] * other.m[1 + 2 * 4] * other.m[2 + 0 * 4] * other.m[3 + 1 * 4] + other.m[0 + 2 * 4] * other.m[1 + 3 * 4] * other.m[2 + 0 * 4] * other.m[3 + 1 * 4] +
+                      other.m[0 + 3 * 4] * other.m[1 + 0 * 4] * other.m[2 + 2 * 4] * other.m[3 + 1 * 4] - other.m[0 + 0 * 4] * other.m[1 + 3 * 4] * other.m[2 + 2 * 4] * other.m[3 + 1 * 4] -
+                      other.m[0 + 2 * 4] * other.m[1 + 0 * 4] * other.m[2 + 3 * 4] * other.m[3 + 1 * 4] + other.m[0 + 0 * 4] * other.m[1 + 2 * 4] * other.m[2 + 3 * 4] * other.m[3 + 1 * 4] +
+                      other.m[0 + 3 * 4] * other.m[1 + 1 * 4] * other.m[2 + 0 * 4] * other.m[3 + 2 * 4] - other.m[0 + 1 * 4] * other.m[1 + 3 * 4] * other.m[2 + 0 * 4] * other.m[3 + 2 * 4] -
+                      other.m[0 + 3 * 4] * other.m[1 + 0 * 4] * other.m[2 + 1 * 4] * other.m[3 + 2 * 4] + other.m[0 + 0 * 4] * other.m[1 + 3 * 4] * other.m[2 + 1 * 4] * other.m[3 + 2 * 4] +
+                      other.m[0 + 1 * 4] * other.m[1 + 0 * 4] * other.m[2 + 3 * 4] * other.m[3 + 2 * 4] - other.m[0 + 0 * 4] * other.m[1 + 1 * 4] * other.m[2 + 3 * 4] * other.m[3 + 2 * 4] -
+                      other.m[0 + 2 * 4] * other.m[1 + 1 * 4] * other.m[2 + 0 * 4] * other.m[3 + 3 * 4] + other.m[0 + 1 * 4] * other.m[1 + 2 * 4] * other.m[2 + 0 * 4] * other.m[3 + 3 * 4] +
+                      other.m[0 + 2 * 4] * other.m[1 + 0 * 4] * other.m[2 + 1 * 4] * other.m[3 + 3 * 4] - other.m[0 + 0 * 4] * other.m[1 + 2 * 4] * other.m[2 + 1 * 4] * other.m[3 + 3 * 4] -
+                      other.m[0 + 1 * 4] * other.m[1 + 0 * 4] * other.m[2 + 2 * 4] * other.m[3 + 3 * 4] + other.m[0 + 0 * 4] * other.m[1 + 1 * 4] * other.m[2 + 2 * 4] * other.m[3 + 3 * 4];
+
+    r32 m00[] = {
+        other.m[1 + 1 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 1 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 1 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+    
+
+    r32 m01[] = {
+        other.m[1 + 0 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+    
+    r32 m02[] = {
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 3 * 4]
+    };
+    
+    r32 m03[] = {
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 2 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 2 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 2 * 4]
+    };
+    
+    r32 m10[] = {
+        other.m[0 + 1 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[2 + 1 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 1 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+    
+    r32 m11[] = {
+        other.m[0 + 0 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+    
+    r32 m12[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 3 * 4]
+    };
+
+    r32 m13[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 2 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 2 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 2 * 4]
+    };
+
+    r32 m20[] = {
+        other.m[0 + 1 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 1 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[3 + 1 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+
+    r32 m21[] = {
+        other.m[0 + 0 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 2 * 4], other.m[3 + 3 * 4]
+    };
+
+    r32 m22[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 3 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 3 * 4]
+    };
+
+    r32 m23[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 2 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 2 * 4],
+        other.m[3 + 0 * 4], other.m[3 + 1 * 4], other.m[3 + 2 * 4]
+    };
+
+    r32 m30[] = {
+        other.m[0 + 1 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 1 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 1 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4]
+    };
+
+    r32 m31[] = {
+        other.m[0 + 0 * 4], other.m[0 + 2 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 2 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 2 * 4], other.m[2 + 3 * 4]
+    };
+
+    r32 m32[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 3 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 3 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 3 * 4]
+    };
+
+    r32 m33[] = {
+        other.m[0 + 0 * 4], other.m[0 + 1 * 4], other.m[0 + 2 * 4],
+        other.m[1 + 0 * 4], other.m[1 + 1 * 4], other.m[1 + 2 * 4],
+        other.m[2 + 0 * 4], other.m[2 + 1 * 4], other.m[2 + 2 * 4]
+    };
+
+    result.m[0] = +subDeterminant(m00);
+    result.m[1] = -subDeterminant(m01);
+    result.m[2] = +subDeterminant(m02);
+    result.m[3] = -subDeterminant(m03);
+    result.m[4] = -subDeterminant(m10);
+    result.m[5] = +subDeterminant(m11);
+    result.m[6] = -subDeterminant(m12);
+    result.m[7] = +subDeterminant(m13);
+    result.m[8] = +subDeterminant(m20);
+    result.m[9] = -subDeterminant(m21);
+    result.m[10] = +subDeterminant(m22);
+    result.m[11] = -subDeterminant(m23);
+    result.m[12] = -subDeterminant(m30);
+    result.m[13] = +subDeterminant(m31);
+    result.m[14] = -subDeterminant(m32);
+    result.m[15] = +subDeterminant(m33);
+
+    result.mul_self(1.0 / determinant);
     return result;
 }
