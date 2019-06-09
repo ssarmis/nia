@@ -144,7 +144,7 @@ NIA_GLSL_PRECISION" float;\n"
 
 "void main(){\n"
 "   if(o_lightIsEnabled > 0){\n"
- "      finalColor = vec4(0, 0, 0, 0);\n"
+"       finalColor = vec4(0, 0, 0, 0);\n"
 "       for(int i = 0; i < o_diffuseLightsUsed; ++i){\n"
 "           finalColor += computeDiffuseOutput(o_lightFactor[i], o_dlC[i]);\n"
 "       }\n"
