@@ -12,6 +12,18 @@
 #ifndef _NIA_EVENT_H_
 #define _NIA_EVENT_H_
 
+#define NIA_EVENT_NONE   0xff
+
+#define NIA_KEY_RELEASED 0
+#define NIA_KEY_PRESSED  1
+
+#ifdef _WIN32
+#define NIA_SPECIAL_KEY(_key) VK_##_key
+#define NIA_CHARACTER_KEY(_key) (#_key)[0]
+#elif defined __unix__
+#define NIA_KEY(_key) _key
+#endif
+
 #ifdef _WIN32
 #   include "arch/win32/nia_event.h"
 #elif defined __unix__

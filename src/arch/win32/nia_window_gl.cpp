@@ -66,7 +66,9 @@ void niaWindow::createWindow(u32 width, u32 height, const char* title){
 void niaWindow::handleEvents(niaEvent& event){
     while (PeekMessageW(&event.msg, NULL, 0, 0, PM_REMOVE)) {
         TranslateMessage(&event.msg);
-        DispatchMessageW(&event.msg);
+        if(!event.processMessageReceived()){
+            DispatchMessageW(&event.msg);
+        }
     }
 }
 
