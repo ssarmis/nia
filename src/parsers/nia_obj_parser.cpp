@@ -32,7 +32,7 @@ int wastes = 0;
 }
 
 #define WASTE_UNTIL(_pointer, _size, _criteria){\
-    while(*_pointer != _criteria){\
+    while(*_pointer != _criteria && _size > 0){\
         ADVANCE(_pointer);\
         WASTE(_size);\
     }\
@@ -128,12 +128,16 @@ niaObjParser::~niaObjParser(){
     // free(source); <-- this is busted because we moved the pointer, fix will come soon
 }
 
-u32 niaObjParser::parse(){
+u32 niaObjParser::parse(u32 objectIndex){
+    u32 seenObjects = 0;
+
     if (fileSize <= 0){
         return 1;
     }
 
-    while(fileSize > 0){
+    bool forceStop = false;
+
+    while(fileSize > 0 && !forceStop){
         switch (*source) {
             case '\r' : { // ignore
                     ADVANCE(source);
@@ -152,7 +156,32 @@ u32 niaObjParser::parse(){
                 }
                 break;
 
-            case 'o' : { // ignore
+            case 'g': {
+                    // for now the parser can only parse 1 mesh from the file,
+                    // it will stop parsing if we encounter another one
+                    // its because on how we decided to handle meshes
+                    // we can extract any of the objects from the file
+                    // but the usage of the parser only allows us to extract one.
+                    // we can specify what object we want, by its number in the file
+                    if(seenObjects == objectIndex){
+                        WASTE_UNTIL(source, fileSize, '\n');
+                    } else {
+                        if(seenObjects > objectIndex){
+                            forceStop = true;
+                            break;
+                        }
+                        ++seenObjects;
+
+                        ADVANCE(source);
+                        WASTE(fileSize);
+
+                        WASTE_UNTIL(source, fileSize, 'g');
+                        WASTE_UNTIL(source, fileSize, '\n');
+                    }
+                }
+                break;
+
+            case 'o' : { // ignore for now
                     WASTE_UNTIL(source, fileSize, '\n');
                 }
                 break;

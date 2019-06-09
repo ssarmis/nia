@@ -50,14 +50,6 @@ niaSprite::niaSprite(const char* filename, const niaRectangle& rect, u32 flags){
     NIA_GL_CALL(glEnableVertexAttribArray(2));
     NIA_GL_CALL(glEnableVertexAttribArray(3));
 
-
-    // 0, 0         1, 0
-    //
-    //
-    // 0, 1         1, 1
-
-
-
     niaVertex v[4] ={
                     {rectangle.x              , rectangle.y              , 0,        1, 1, 1,     1, 1, 1,      0, 1},
                     {rectangle.x + rectangle.w, rectangle.y + rectangle.h, 0,        1, 1, 1,     1, 1, 1,      1, 0},
@@ -97,6 +89,10 @@ void niaSprite::translate(const niaVector3<r32>& position){
 
 void niaSprite::rotate(r32 amount, niaAxis axis){
     transform.rotate(amount, axis);
+}
+
+void niaSprite::clearTransformations(){
+    transform.clear();
 }
 
 void niaSprite::loadTexture(const char* filename, u32 flags){

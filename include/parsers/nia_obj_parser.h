@@ -30,7 +30,7 @@ public:
     NIA_CALL niaObjParser(const char* filename);
     NIA_CALL ~niaObjParser();
 
-    u32 NIA_CALL parse();
+    u32 NIA_CALL parse(u32 objectIndex = 0);
 
     niaArray<niaVector3<r32> >& NIA_CALL getVertexies();
     niaArray<niaVector3<r32> >& NIA_CALL getNormals();

@@ -23,7 +23,7 @@ niaMesh::niaMesh(){
 }
 
 // TODO Make parser a base class and obj parser a derived one...
-niaMesh::niaMesh(const char* filename){
+niaMesh::niaMesh(const char* filename, u32 objectIndex){
     // Lets assume for now we only get .obj files, no checking, nothing
     // TODO add parsing for multiple objects inside the obj file...
     LARGE_INTEGER then;
@@ -33,7 +33,7 @@ niaMesh::niaMesh(const char* filename){
 
     niaObjParser parser(filename);
 
-    if(parser.parse()){
+    if(parser.parse(objectIndex)){
         NIA_ERROR("Could not parse file, returning.\n");
         return;
     }
@@ -235,6 +235,15 @@ niaMesh niaMesh::cube(r32 size){
         -1.000000 * size, 1.000000 * size, -1.000000 * size,
     };
 
+    r32 normals[] = {
+        1, 0, 0,
+        0, 0, 1,
+        0, 1, 0,
+        0, -1, 0,
+        -1, 0, 0,
+        0, 0, -1
+    };
+
     NIA_GL_CALL(glGenVertexArrays(1, &result.vao.id));
     NIA_GL_CALL(glBindVertexArray(result.vao.id));
 
@@ -266,9 +275,9 @@ niaMesh niaMesh::cube(r32 size){
             1,
             1,
 
-            1,
-            1,
-            1,
+            normals[offset + 0],
+            normals[offset + 1],
+            normals[offset + 2],
 
             0,
             0

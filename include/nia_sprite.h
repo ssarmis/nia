@@ -18,6 +18,8 @@
 #include "nia_transform.h"
 #include "nia_texture_structures.h"
 
+
+// TODO add loading for already existing textures
 NIA_CLASS niaSprite {
 private:
     niaGlRectangle rectangle;
@@ -49,6 +51,8 @@ public:
 
     // TODO add rotation on multiple axis at once
     void NIA_CALL rotate(r32 amount, niaAxis axis);
+
+    void NIA_CALL clearTransformations();
 
     NIA_INLINE u32 NIA_CALL getWidth() const {
         return rectangle.w;
