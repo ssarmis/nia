@@ -27,10 +27,14 @@
 NIA_EXTERN PFNGLDRAWBUFFERPROC _nia_glDrawBuffer;
 #define glDrawBuffer _nia_glDrawBuffer
 
+NIA_EXTERN PFNGLBLITFRAMEBUFFERPROC _nia_glBlitFramebuffer;
+#define glBlitFramebuffer _nia_glBlitFramebuffer
 NIA_EXTERN PFNGLGENFRAMEBUFFERSPROC _nia_glGenFramebuffers;
 #define glGenFramebuffers _nia_glGenFramebuffers
 NIA_EXTERN PFNGLBINDFRAMEBUFFERPROC _nia_glBindFramebuffer;
 #define glBindFramebuffer _nia_glBindFramebuffer
+NIA_EXTERN PFNGLFRAMEBUFFERTEXTURE2DPROC _nia_glFramebufferTexture2D;
+#define glFramebufferTexture2D _nia_glFramebufferTexture2D
 NIA_EXTERN PFNGLFRAMEBUFFERTEXTUREPROC _nia_glFramebufferTexture;
 #define glFramebufferTexture _nia_glFramebufferTexture
 NIA_EXTERN PFNGLDELETEBUFFERSPROC _nia_glDeleteFramebuffers;
@@ -42,6 +46,8 @@ NIA_EXTERN PFNGLDRAWBUFFERPROC _nia_glDrawBuffers;
 
 NIA_EXTERN PFNGLGETUNIFORMLOCATIONPROC _nia_glGetUniformLocation;
 #define glGetUniformLocation _nia_glGetUniformLocation
+NIA_EXTERN PFNGLUNIFORM1IPROC _nia_glUniform1i;
+#define glUniform1i _nia_glUniform1i
 NIA_EXTERN PFNGLUNIFORM1UIPROC _nia_glUniform1ui;
 #define glUniform1ui _nia_glUniform1ui
 NIA_EXTERN PFNGLUNIFORM1DPROC _nia_glUniform1d;

@@ -22,6 +22,7 @@
 
 NIA_CLASS niaPostProcessingPipeline {
 private:
+    niaFrameBuffer originalFrameBuffer;
     niaFrameBuffer inFrameBuffer;
     niaFrameBuffer outFrameBuffer;
     niaFrameBuffer finalFrameBuffer;

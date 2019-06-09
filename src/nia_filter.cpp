@@ -69,16 +69,15 @@ niaFilterGreyScale::~niaFilterGreyScale(){
     printf("Destroyed\n");
 }
 
-void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterGreyScale::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.useShader();
     renderFrameBuffer(renderer, in);
     shader.unuseShader();
     out.unbind();
 }
 /// 
-
-
 
 
 /// invert
@@ -126,8 +125,9 @@ niaFilter(invertVertex, invertFragment){
 niaFilterInvert::~niaFilterInvert(){
 }
 
-void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterInvert::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.useShader();
     renderFrameBuffer(renderer, in);
     shader.unuseShader();
@@ -187,8 +187,155 @@ niaFilter(boxBlurVertex, boxBlurFragment){
 niaFilterBoxBlur::~niaFilterBoxBlur(){
 }
 
-void niaFilterBoxBlur::process(niaRenderer* renderer, niaFrameBuffer& in, niaFrameBuffer& out){
+void niaFilterBoxBlur::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
     out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    shader.useShader();
+    renderFrameBuffer(renderer, in);
+    shader.unuseShader();
+    out.unbind();
+}
+///
+
+/// brightness
+
+const char* brightnessVertex = ""
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
+"layout(location = 0) in vec3 pos;\n"
+"layout(location = 3) in vec2 uv;\n"
+
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
+
+"out vec2 o_uv;\n"
+
+"void main(){\n"
+"   vec4 position = vec4(pos, 1.0);\n"
+"   gl_Position = vec4(pos, 1.0);\n"
+"   o_uv = uv;\n"
+"}\n"
+"";
+
+const char* brightnessFragment = ""
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
+
+"out vec4 finalColor;\n"
+
+"in  vec2 o_uv;\n"
+
+"uniform sampler2D tex;\n"
+
+"void main(){\n"
+"   vec3 color = texture(tex, o_uv).rgb;\n"
+"   vec3 normalizedColor = color;\n"
+"   float brightness = normalizedColor.r * 0.2126 + normalizedColor.y * 0.7152 + normalizedColor.z * 0.0722;\n"
+"   if(brightness > 0.8){\n"
+"       finalColor = texture(tex, o_uv) * 1.1;\n"
+"   } else {\n"
+"       finalColor = vec4(0.0, 0.0, 0.0, 0.0);\n"
+"   }\n"
+"}\n";
+
+
+niaFilterBrightness::niaFilterBrightness():
+niaFilter(brightnessVertex, brightnessFragment){
+}
+niaFilterBrightness::~niaFilterBrightness(){
+}
+
+void niaFilterBrightness::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
+    out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    shader.useShader();
+    renderFrameBuffer(renderer, in);
+    shader.unuseShader();
+    out.unbind();
+}
+///
+
+
+niaFilterBloom::niaFilterBloom(){
+}
+
+niaFilterBloom::~niaFilterBloom(){
+}
+
+void niaFilterBloom::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
+    brightPassFilter.process(renderer, original, in, out);
+    blurFilter.process(renderer, original, out, in);
+   
+    out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    blendAddShader.useShader();
+    renderer->bindTexture(0, in.getTextureId(), GL_TEXTURE_2D);
+    renderer->bindTexture(1, original.getTextureId(), GL_TEXTURE_2D);
+
+    blendAddShader.setUniform1i("tex", 0);
+    blendAddShader.setUniform1i("tex2", 1);
+
+    renderer->renderMeshRaw(niaMesh::quad(1.0));
+    blendAddShader.unuseShader();
+
+    out.unbind();
+}
+
+///
+
+
+
+/// sepia
+
+const char* sepiaVertex = ""
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
+"layout(location = 0) in vec3 pos;\n"
+"layout(location = 3) in vec2 uv;\n"
+
+"uniform mat4 mP;\n"
+"uniform mat4 mT;\n"
+"uniform mat4 mV;\n"
+
+"out vec2 o_uv;\n"
+
+"void main(){\n"
+"   vec4 position = vec4(pos, 1.0);\n"
+"   gl_Position = vec4(pos, 1.0);\n"
+"   o_uv = uv;\n"
+"}\n"
+"";
+
+const char* sepiaFragment = ""
+NIA_GLSL_VERSION" \n""precision "
+NIA_GLSL_PRECISION" float;\n"
+
+"out vec4 finalColor;\n"
+
+"in vec2 o_uv;\n"
+
+"uniform sampler2D tex;\n"
+
+"void main(){\n"
+"   vec4 color = texture(tex, o_uv);\n"
+"   color.x = color.x * 0.393 + color.y * 0.769 + color.z * 0.189;\n"
+"   color.y = color.x * 0.349 + color.y * 0.686 + color.z * 0.168;\n"
+"   color.z = color.x * 0.272 + color.y * 0.534 + color.z * 0.131;\n"
+"   finalColor = color;\n"
+"}\n";
+
+niaFilterSepia::niaFilterSepia():
+niaFilter(sepiaVertex, sepiaFragment){
+}
+
+niaFilterSepia::~niaFilterSepia(){
+}
+
+void niaFilterSepia::process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out){
+    out.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.useShader();
     renderFrameBuffer(renderer, in);
     shader.unuseShader();
