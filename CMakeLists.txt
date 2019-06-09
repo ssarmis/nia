@@ -31,6 +31,7 @@ if (UNIX)
         ./src/shaders/nia_shader_cubemap.cpp
         ./src/shaders/nia_shader_reflective.cpp
         ./src/shaders/nia_shader_quad.cpp
+        ./src/shaders/nia_shader_add_blend.cpp
         ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_frame_buffer.cpp
@@ -70,6 +71,7 @@ if (WIN32)
         ./src/shaders/nia_shader_cubemap.cpp
         ./src/shaders/nia_shader_reflective.cpp
         ./src/shaders/nia_shader_quad.cpp
+        ./src/shaders/nia_shader_add_blend.cpp
         ./src/nia_cube_texture.cpp
         ./src/nia_texture_gl.cpp
         ./src/nia_frame_buffer.cpp
