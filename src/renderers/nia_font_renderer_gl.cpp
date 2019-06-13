@@ -53,12 +53,14 @@ void niaFontRenderer::renderString(r32 x, r32 y, r32 size, const char* string, c
 
         transform.translate(niaVector3<r32>(xx, yy, 0));
 
-        horizontalCursor += glyph->metrics.cursorAdvance; // TODO make all the division already precomputed in parsing, not at rendering
+        horizontalCursor += glyph->metrics.cursorAdvance;
 
         submitTransformation(transform);
         renderGlyph(glyph, color);
 
         string++;
+
+        submitClearTransformation();
     }
 #endif
 
