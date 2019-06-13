@@ -53,8 +53,12 @@ public:
 };
 
 NIA_CLASS niaFilterBoxBlur : public niaFilter{
+private:
+    r32 depthLimit;
+
 public:
     NIA_CALL niaFilterBoxBlur();
+    NIA_CALL niaFilterBoxBlur(r32 depthLimit);
     NIA_CALL ~niaFilterBoxBlur();
 
     void NIA_CALL process(niaRenderer* renderer, niaFrameBuffer& original, niaFrameBuffer& in, niaFrameBuffer& out);

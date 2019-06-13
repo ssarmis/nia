@@ -11,19 +11,24 @@
 
 #include "nia_filter.h"
 
+// TODO rewrite the whole filter system, make it more data oriended
+
 niaFilter::niaFilter(){
-    quad = niaMesh::quad(1.0);
+    quad = quad.quad(1.0);
 }
 
 niaFilter::niaFilter(const char* sourceVertex, const char* sourceFragment):
 shader(sourceVertex, sourceFragment){
+    quad = quad.quad(1.0);
 }
 
 niaFilter::~niaFilter(){
 }
 
 void niaFilter::renderFrameBuffer(niaRenderer* renderer, niaFrameBuffer& in){
-    renderer->renderMeshRaw(niaMesh::quad(1.0), in.getTextureId());
+    renderer->bindTexture(1, in.getDepthTextureId());
+    shader.setUniform1i("depthTexture", 1);
+    renderer->renderMeshRaw(quad, in.getTextureId());
 }
 
 /// greyscale
@@ -165,23 +170,39 @@ NIA_GLSL_PRECISION" float;\n"
 "in  vec2 o_uv;\n"
 
 "uniform sampler2D tex;\n"
+"uniform sampler2D depthTexture;\n"
+
+"uniform float depthLimit;\n"
 
 "void main(){\n"
-"   float pixelSize = 1.0 / 800.0;\n"
-"   float radius = 5.0 * pixelSize;\n"
-"   vec3 color;\n"
-"   for(float y = -radius; y <= radius; y += pixelSize){\n"
-"       for(float x = -radius; x <= radius; x += pixelSize){\n"
-"           vec2 fxy = o_uv + vec2(x, y);\n"
-"           color += texture(tex, fxy).xyz;\n"
+"   vec4 dcolor = texture(depthTexture, o_uv);\n"
+"   dcolor.r = pow(dcolor.r, 128.0);\n"
+"   dcolor.g = pow(dcolor.g, 128.0);\n"
+"   dcolor.b = pow(dcolor.b, 128.0);\n"
+"   float avg = (dcolor.r + dcolor.g + dcolor.b) / 3.0;\n"
+"   if(avg >= depthLimit){\n"
+"      float pixelSize = 1.0 / 800.0;\n"
+"      float radius = 5.0 * pixelSize;\n"
+"      vec3 color;\n"
+"      for(float y = -radius; y <= radius; y += pixelSize){\n"
+"         for(float x = -radius; x <= radius; x += pixelSize){\n"
+"             vec2 fxy = o_uv + vec2(x, y);\n"
+"             color += texture(tex, fxy).xyz;\n"
+"         }\n"
 "       }\n"
+"       color /= 100.0;\n"
+"       finalColor = vec4(color, 1.0);\n"
+"   } else {\n"
+"       finalColor = texture(tex, o_uv);\n"
 "   }\n"
-"   color /= 100.0;\n"
-"   finalColor = vec4(color, 1.0);\n"
 "}\n";
 
-niaFilterBoxBlur::niaFilterBoxBlur():
+niaFilterBoxBlur::niaFilterBoxBlur(){
+}
+
+niaFilterBoxBlur::niaFilterBoxBlur(r32 depthLimit):
 niaFilter(boxBlurVertex, boxBlurFragment){
+    this->depthLimit = depthLimit;
 }
 
 niaFilterBoxBlur::~niaFilterBoxBlur(){
@@ -191,6 +212,7 @@ void niaFilterBoxBlur::process(niaRenderer* renderer, niaFrameBuffer& original, 
     out.bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.useShader();
+    shader.setUniform1f("depthLimit", depthLimit);
     renderFrameBuffer(renderer, in);
     shader.unuseShader();
     out.unbind();
@@ -257,7 +279,9 @@ void niaFilterBrightness::process(niaRenderer* renderer, niaFrameBuffer& origina
 ///
 
 
-niaFilterBloom::niaFilterBloom(){
+niaFilterBloom::niaFilterBloom():
+niaFilter(){
+    blurFilter = niaFilterBoxBlur(0.0);
 }
 
 niaFilterBloom::~niaFilterBloom(){
@@ -277,7 +301,7 @@ void niaFilterBloom::process(niaRenderer* renderer, niaFrameBuffer& original, ni
     blendAddShader.setUniform1i("tex", 0);
     blendAddShader.setUniform1i("tex2", 1);
 
-    renderer->renderMeshRaw(niaMesh::quad(1.0));
+    renderer->renderMeshRaw(quad);
     blendAddShader.unuseShader();
 
     out.unbind();
