@@ -77,7 +77,7 @@ public:
     NIA_CALL ~niaRenderer();
 
     /**
-     * @brief The function if for clearing the viewport 
+     * @brief The function for clearing the viewport 
      */
     void NIA_CALL clear();
 
@@ -177,7 +177,7 @@ public:
      */
      void NIA_CALL renderMesh(const niaMesh& mesh, GLuint textureId);
 
-    NIA_CALL void renderRectangleRaw(r32 x, r32 y, r32 w, r32 h, niaTexture& texture);
+     void NIA_CALL renderRectangleRaw(r32 x, r32 y, r32 w, r32 h, niaTexture& texture);
     
     /**
      * @brief Function for rendering an already loaded mesh, but without any predefined shaders being used
