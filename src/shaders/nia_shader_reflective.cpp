@@ -75,7 +75,8 @@ NIA_GLSL_PRECISION" float;\n"
 "   vec3 transformedNormal = (normalMatrix * normal);\n"
 "   vec3 normlizedTransformedNormal = normalize(transformedNormal);\n"
 // TODO this should be reflect() but its probably just as fast
-"   vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normlizedTransformedNormal) * normlizedTransformedNormal);\n"
+"   vec3 reflectedCameraVector = specularLightVector - 2 * (dot(specularLightVector, normal)"
+"                                * normal);\n"
 "   reflectedCameraVector = normalize(reflectedCameraVector);\n"
 "   vec4 viewVector = normalize(inverse(mV)[3] - transformedPosition);\n"
 
