@@ -120,7 +120,6 @@ niaMesh::niaMesh(const char* filename, u32 objectIndex){
     vector3fNode* previousNormalNode = NULL;
 
     for(int index = 0; index < facesChain.size; ++index){
-#if 1
         faceNode = parser.getNode3i(&facesChain, index);
 
         currentVertIndex = faceNode->data.data[0] - 1;
