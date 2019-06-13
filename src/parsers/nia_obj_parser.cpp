@@ -117,13 +117,18 @@ niaObjParser::niaObjParser(const char* filename){
     fread(source, sizeof(u8), fileSize, file);
 
     fclose(file);
+
+    initializeChain3f(&vertexies);
+    initializeChain3f(&normals);
+    initializeChain2f(&uvs);
+    initializeChain3i(&faces);
 }
 
 niaObjParser::~niaObjParser(){
-    vertexies.clean();
-    normals.clean();
-    uvs.clean();
-    faces.clean();
+    // vertexies.clean();
+    // normals.clean();
+    // uvs.clean();
+    // faces.clean();
     
     // free(source); <-- this is busted because we moved the pointer, fix will come soon
 }
@@ -214,7 +219,9 @@ u32 niaObjParser::parse(u32 objectIndex){
                                     R32_UNTIL(source, values[iterations], fileSize, ' ', '\n', '\r');
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
-                                vertexies.add(niaVector3<r32>(values));
+
+                                // vertexies.add(niaVector3<r32>(values));
+                                addNode3f(&vertexies, niaVector3<r32>(values));
                             }
                             break;
 
@@ -236,7 +243,8 @@ u32 niaObjParser::parse(u32 objectIndex){
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
                                 // TODO BE CAREFUL SOMETIMES THERE CAN BE 3, ADD SOME TEST CASES LATER
-                                uvs.add(niaVector2<r32>(values));
+                                // uvs.add(niaVector2<r32>(values));
+                                addNode2f(&uvs, niaVector2<r32>(values));
                             }
                             break;
 
@@ -257,7 +265,8 @@ u32 niaObjParser::parse(u32 objectIndex){
 
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
-                                normals.add(niaVector3<r32>(values));
+                                // normals.add(niaVector3<r32>(values));
+                                addNode3f(&normals, niaVector3<r32>(values));
                             }
                             break;
 
@@ -292,7 +301,8 @@ u32 niaObjParser::parse(u32 objectIndex){
 
                         if(*source == '\n' || *source == '\r' || *source == ' '){
                             iterations = 0;
-                            faces.add(vertex);
+                            // faces.add(vertex);
+                            addNode3i(&faces, vertex);
                         }
                     } while(*source != '\n' && *source != '\r');
                    
@@ -310,18 +320,18 @@ u32 niaObjParser::parse(u32 objectIndex){
     return 0;
 }
 
-niaArray<niaVector3<r32> >& niaObjParser::getVertexies() {
-    return vertexies;
-}
+// niaArray<niaVector3<r32> >& niaObjParser::getVertexies() {
+//     return vertexies;
+// }
 
-niaArray<niaVector3<r32> >& niaObjParser::getNormals() {
-    return normals;
-}
+// niaArray<niaVector3<r32> >& niaObjParser::getNormals() {
+//     return normals;
+// }
 
-niaArray<niaVector2<r32> >& niaObjParser::getUVS() {
-    return uvs;
-}
+// niaArray<niaVector2<r32> >& niaObjParser::getUVS() {
+//     return uvs;
+// }
 
-niaArray<niaVector3<i32> >& niaObjParser::getFaces() {
-    return faces;
-}
+// niaArray<niaVector3<i32> >& niaObjParser::getFaces() {
+//     return faces;
+// }
