@@ -41,6 +41,10 @@ NIA_STRUCT niaPNGHeaderTIME {
     u8 second;
 } niaPNGHeaderTIME;
 
+NIA_STRUCT niaPNGHeaderGAMA {
+    u32 imageGamma;
+} niaPNGHeaderGAMA;
+
 NIA_STRUCT niaPNGHeaderPHYS {
     u32 xPPU;
     u32 yPPU;
@@ -100,6 +104,7 @@ private:
     niaPNGHeaderIHDR ihdr;
     niaPNGHeaderTIME time;
     niaPNGHeaderPHYS phys;
+    niaPNGHeaderGAMA gama;
 
     niaPNGDecompresedOutput decompressedOutput;
     niaPNGCompressedStream stream;
@@ -108,8 +113,11 @@ private:
     u8* pngData;
     u8* pixelData;
 
-    void methodDynamicHuffman(niaPNGChunkData* chunk);
-    void methodNoCompression(niaPNGChunkData* chunk);
+    u8 numberOfComponents;
+
+    void methodDynamicHuffman(niaPNGChunkData*& chunk);
+    void methodFixedHuffman(niaPNGChunkData*& chunk);
+    void methodNoCompression(niaPNGChunkData*& chunk);
 
     void iterateHeader();
     void decompressChunks();

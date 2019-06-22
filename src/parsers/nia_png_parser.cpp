@@ -32,82 +32,97 @@
 
 #define compareHeader(_needed, _got) \
     (\
-    (_needed[3] == ((_got&0xFF000000) >> 24) & 0xFF) && \
-    (_needed[2] == ((_got&0x00FF0000) >> 16) & 0xFF) && \
-    (_needed[1] == ((_got&0x0000FF00) >>  8) & 0xFF) && \
-    (_needed[0] == ((_got&0x000000FF)      ) & 0xFF))
+    (_needed[3] == ((_got & 0xFF000000) >> 24) & 0xFF) && \
+    (_needed[2] == ((_got & 0x00FF0000) >> 16) & 0xFF) && \
+    (_needed[1] == ((_got & 0x0000FF00) >>  8) & 0xFF) && \
+    (_needed[0] == ((_got & 0x000000FF)      ) & 0xFF))
 
 
+NIA_STATIC NIA_INLINE u8 readBit(niaPNGChunkData*& chunk){
+    u8 result = (chunk->data[chunk->bitsUsed >> 3] >> ((chunk->bitsUsed++) & 7)) & 1;
+    if((chunk->bitsUsed >> 3) >= chunk->size){
+        chunk = chunk->next;
+        fflush(stdout);
+    }
 
-static inline u8 readBit(niaPNGChunkData* chunk){
-    return (chunk->data[chunk->bitsUsed >> 3] >> ((chunk->bitsUsed++) & 7)) & 1;
+    if(!chunk){
+        NIA_TRACE("Something is wrong? Wanted to read more bits than in file.");
+        return result;
+    }
+    return result;
 }
 
-static inline u32 readBits(niaPNGChunkData* chunk, u32 amount){
+NIA_STATIC NIA_INLINE u32 readBits(niaPNGChunkData*& chunk, u32 amount){
     u32 result = 0;
     for(u32 i = 0; i < amount; ++i){
+        if((chunk->bitsUsed >> 3) >= chunk->size){
+            chunk = chunk->next;
+            fflush(stdout);
+        }
+
+        if(!chunk){
+            NIA_TRACE("Something is wrong? Wanted to read more bits than in file.");
+            return result;
+        }
         result |= readBit(chunk) << i;
     }
     return result;
 }
 
-static inline u32 readBitsReversed(niaPNGChunkData* chunk, u32 amount){
-    u32 result = 0;
-    for(int i = amount - 1; i >= 0; --i){
-        result |= readBit(chunk) << i;
-    }
-    return result;
-}
-
-
-static inline u32 lookAtBitsReversed(niaPNGChunkData* chunk, u32 amount){
-    u32 result = readBitsReversed(chunk, amount);
-    chunk->bitsUsed -= amount;
-    return result;
-} 
-
-static inline u32 lookAtBits(niaPNGChunkData* chunk, u32 amount){
-    u32 result = readBits(chunk, amount);
-    chunk->bitsUsed -= amount;
-    return result;
-}
-
-static inline void wasteCurrentByte(niaPNGChunkData* chunk){
+NIA_STATIC NIA_INLINE void wasteCurrentByte(niaPNGChunkData*& chunk){
     while(chunk->bitsUsed & 7 != 0){
+        if((chunk->bitsUsed >> 3) >= chunk->size){
+            chunk = chunk->next;
+            fflush(stdout);
+        }
+
+        if(!chunk){
+            NIA_TRACE("Something is wrong? Wanted to read more bits than in file.");
+            break;
+        }
         chunk->bitsUsed++;
     }
 }
 
-static inline void writeToOutput(niaPNGDecompresedOutput* output, u8 data){
+NIA_STATIC NIA_INLINE void writeToOutput(niaPNGDecompresedOutput* output, u8 data){
     *(output->data + (output->used++)) = data;
 }
 
-static inline void writeToOutputAmount(niaPNGDecompresedOutput* output, u8* data, u32 amount){
+NIA_STATIC NIA_INLINE void writeToOutputAmount(niaPNGDecompresedOutput* output, u8* data, u32 amount){
     while(amount--){
         *(output->data + (output->used++)) = *(data++);
     }
 }
 
-static inline void copyDataToOutput(u8* data, niaPNGDecompresedOutput* output, u32 amount){
+NIA_STATIC NIA_INLINE void copyDataToOutput(u8* data, niaPNGDecompresedOutput* output, u32 amount){
     while(amount--){
         *(output->data + (output->used++)) = *(data++);
     }
 }
 
-static inline void copyChunkToOutput(niaPNGChunkData* chunk, niaPNGDecompresedOutput* output, u32 amount){
+NIA_STATIC NIA_INLINE void copyChunkToOutput(niaPNGChunkData*& chunk, niaPNGDecompresedOutput* output, u32 amount){
     while(amount--){
         *(output->data + (output->used++)) = *(chunk->data + (chunk->bitsUsed >> 3));
         chunk->bitsUsed += 8;
+        if((chunk->bitsUsed >> 3) >= chunk->size){
+            chunk = chunk->next;
+            fflush(stdout);
+        }
+
+        if(!chunk){
+            NIA_TRACE("Something is wrong? Wanted to read more bits than in file.");
+            break;
+        }
     }
 }
 
-u32 lengthBases[] = {
+NIA_STATIC u32 lengthBases[] = {
     3, 4, 5, 6, 7, 8, 9, 10,
     11, 13, 15, 17, 19, 23 ,27, 31, 35, 43, 51, 59,
     67, 83, 99, 115, 131, 163, 195, 227, 258
 };
 
-u32 lengthExtraBits[] = {
+NIA_STATIC u32 lengthExtraBits[] = {
     0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 1, 1,
     2, 2, 2, 2,
@@ -117,13 +132,13 @@ u32 lengthExtraBits[] = {
     0
 };
 
-u32 distanceBases[] = {
+NIA_STATIC u32 distanceBases[] = {
     1, 2, 3, 4, 5, 7, 9, 13, 17, 25,
     33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 
     1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577
 };
 
-u32 distanceExtraBits[] = {
+NIA_STATIC u32 distanceExtraBits[] = {
     0, 0, 0, 0,
     1, 1, 2, 2, 
     3, 3, 4, 4,
@@ -139,9 +154,22 @@ niaPngParser::niaPngParser(const char* filename){
     loadFile(filename);
     iterateHeader();
 
-    textureFormat = NIA_TEXTURE_FORMAT_RGBA_RGBA_UBYTE;
+    switch(ihdr.colorType){
+        case 2: {
+                textureFormat = NIA_TEXTURE_FORMAT_RGB_RGB_UBYTE;
+                numberOfComponents = 3;
+            }
+            break;
+        case 6: default: {
+                textureFormat = NIA_TEXTURE_FORMAT_RGBA_RGBA_UBYTE;
+                numberOfComponents = 4;
+            }
+            break;
+    }
+
+
     decompressedOutput.used = 0;
-    decompressedOutput.data = new u8[ihdr.width * ihdr.height * 4 * 4]; // ok change this thing sometime
+    decompressedOutput.data = new u8[ihdr.width * ihdr.height * numberOfComponents];
 
     decompressChunks();
     defilterData();
@@ -151,6 +179,11 @@ niaPngParser::~niaPngParser(){}
 
 void niaPngParser::loadFile(const char* filename){
     FILE* file = fopen(filename, "rb");
+
+    if(!file){
+        NIA_ERROR("File could not be read.\n");
+        return;
+    }
 
     fseek(file, 0, SEEK_END);
     u32 size = ftell(file);
@@ -204,19 +237,10 @@ void niaPngParser::iterateHeader(){
 
         header.data = source;
 
-        char a[] = {(header.type & 0xFF), 
-                    ((header.type >> 8) & 0xFF), 
-                    ((header.type >> 16) & 0xFF),
-                    ((header.type >> 24) & 0xFF), 0};
-
-        NIA_TRACE("%s\n", a);
-
         if(compareHeader("IHDR", header.type)){
             CONSUME(header.data, niaPNGHeaderIHDR, ihdr);
             ihdr.width = SWAP32(ihdr.width);
             ihdr.height = SWAP32(ihdr.height);
-            NIA_TRACE("Bitdepth: %d\n", ihdr.bitDepth);
-            NIA_TRACE("Color type: %d\n", ihdr.colorType);
         } else if(compareHeader("IEND", header.type)){
             done = 1;
         } else if(compareHeader("IDAT", header.type)){
@@ -226,13 +250,14 @@ void niaPngParser::iterateHeader(){
             CONSUME(header.data, niaPNGHeaderPHYS, phys);
             phys.xPPU = SWAP32(phys.xPPU);
             phys.yPPU = SWAP32(phys.yPPU);
+        } else if(compareHeader("gAMA", header.type)){
+            CONSUME(header.data, niaPNGHeaderGAMA, gama);
+            gama.imageGamma = SWAP32(gama.imageGamma); // gamma * 100000
         } else if(compareHeader("tIME", header.type)){
             CONSUME(header.data, niaPNGHeaderTIME, time);
             time.year = SWAP16(time.year);
-            
-            NIA_TRACE("\t%d-%d-%d, %d:%d:%d\n", time.year, time.month, time.day,
-                    time.hour, time.minute, time.second);
         } else if(compareHeader("tEXt", header.type)){
+#if 0
             u8* keyword = header.data;
             NIA_TRACE("\t%s\n", keyword);
 
@@ -241,12 +266,12 @@ void niaPngParser::iterateHeader(){
 
             u32 count = header.length - (keyword - header.data); // playing with fire
 
-            printf("\t");
+            NIA_TRACE("\t");
             while(count--){
-                printf("%c", *text++);
+                NIA_TRACE("%c", *text++);
             }
-            printf("\n");
-
+            NIA_TRACE("\n");
+#endif
             WASTE(header.data, header.length);
         } else {
             WASTE(header.data, header.length);
@@ -258,7 +283,7 @@ void niaPngParser::iterateHeader(){
     }
 }
 
-void niaPngParser::methodNoCompression(niaPNGChunkData* chunk){
+void niaPngParser::methodNoCompression(niaPNGChunkData*& chunk){
     wasteCurrentByte(chunk);
     u16 len = readBits(chunk, 16);
     u16 nlen = readBits(chunk, 16);
@@ -270,7 +295,7 @@ void niaPngParser::methodNoCompression(niaPNGChunkData* chunk){
     copyChunkToOutput(chunk, &decompressedOutput, len);
 }
 
-static i16 getSymbolIfCodeIsReal(u32 code, u16 length, niaPNGHuffmanTable* table){
+NIA_INLINE i16 getSymbolIfCodeIsReal(u32 code, u16 length, niaPNGHuffmanTable* table){
     for(int entry = 0; entry <= table->numberOfEntries; ++entry){
         if(code == table->entries[entry].code && length == table->entries[entry].codeLength){
             return table->entries[entry].symbol;
@@ -279,10 +304,10 @@ static i16 getSymbolIfCodeIsReal(u32 code, u16 length, niaPNGHuffmanTable* table
     return -1;
 }
 
-static void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u8 maxBits, u32 numberOfCodes){
+NIA_INLINE void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u32 numberOfCodes, u32 codeOffset = 0){
     table->numberOfEntries = numberOfCodes + 1;
-    u32 lengths2[16] = {}; 
-    u32 nextCode[16 + 1];
+    u32 lengths2[16 + 1] = {}; 
+    u32 nextCode[16 + 1] = {};
 
     lengths2[0] = 0;
     for (u32 code = 0; code < numberOfCodes; ++code){
@@ -291,7 +316,7 @@ static void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u8 maxBits, u
 
     nextCode[0] = 0;
     for(u32 length = 1; length <= 16; ++length){
-        nextCode[length] = (nextCode[length - 1] + lengths2[length - 1]) << 1;
+        nextCode[length] = ((nextCode[length - 1] + lengths2[length - 1]) << 1) + codeOffset;
     }
 
     table->entries = new niaPNGHuffmanEntry[table->numberOfEntries + 1];
@@ -310,13 +335,12 @@ static void huffmanCreate(niaPNGHuffmanTable* table, u32* lengths, u8 maxBits, u
             code &= codeMask;
             table->entries[entry].code = code;
             table->entries[entry].symbol = entry;
-            printf("code %d symbol %d length %d\n", code, entry, lengths[entry]);
         }
         table->entries[entry].codeLength = lengths[entry];
     }
 }
 
-static u16 decodeHuffmanSymbol(niaPNGHuffmanTable* table, niaPNGChunkData* chunk){
+NIA_INLINE u16 decodeHuffmanSymbol(niaPNGHuffmanTable* table, niaPNGChunkData*& chunk){
     u32 code = 0;
     u32 readBits = 0;
     i16 symbol = 0;
@@ -334,13 +358,72 @@ static u16 decodeHuffmanSymbol(niaPNGHuffmanTable* table, niaPNGChunkData* chunk
     }
 }
 
-#define SWAP(_x, _y) {\
-    (_x) ^= (_y);\
-    (_y) ^= (_x);\
-    (_x) ^= (_y);\
+void niaPngParser::methodFixedHuffman(niaPNGChunkData*& chunk){
+//      0 - 143     8          00110000 through
+//                             10111111
+//    144 - 255     9          110010000 through
+//                             111111111
+//    256 - 279     7          0000000 through
+//                             0010111
+//    280 - 287     8          11000000 through
+//                             11000111
+    u32 litLenLengths[512] = {};
+    u32 distLengths[512] = {};
+
+    for(u16 i = 0; i <= 143; ++i){
+        litLenLengths[i] = 8;
+    }
+
+    for(u16 i = 144; i <= 255; ++i){
+        litLenLengths[i] = 9;
+    }
+
+    for(u16 i = 256; i <= 279; ++i){
+        litLenLengths[i] = 7;
+    }
+
+    for(u16 i = 280; i <= 287; ++i){
+        litLenLengths[i] = 8;
+    }
+
+    for(u16 i = 0; i <= 32; ++i){
+        distLengths[i] = 5;
+    }
+
+    niaPNGHuffmanTable litLengthAlphabet;
+    huffmanCreate(&litLengthAlphabet, litLenLengths, 288);
+
+    niaPNGHuffmanTable distLengthAlphabet;
+    huffmanCreate(&distLengthAlphabet, distLengths, 32);
+
+    for(;;){
+        u32 symbol = decodeHuffmanSymbol(&litLengthAlphabet, chunk);
+        if(symbol < 256){
+            writeToOutput(&(decompressedOutput), symbol);
+        } else {
+            if(symbol == 256){
+                break;
+            } else if (symbol >= 257 && symbol <= 288){
+                // symbol is converted to length here
+                u32 length = lengthBases[symbol - 257];
+                u32 extraLengthBitsAmount = lengthExtraBits[symbol - 257];
+                u32 extraLegnthBits = readBits(chunk, extraLengthBitsAmount);
+                u32 finalLength = length + extraLegnthBits;
+
+                // distance
+                u32 distanceIndex = decodeHuffmanSymbol(&distLengthAlphabet, chunk);
+                u32 distance = distanceBases[distanceIndex];
+                u32 extraDistanceBitsAmount = distanceExtraBits[distanceIndex];
+                u32 extraDistanceBits = readBits(chunk, extraDistanceBitsAmount);
+                u32 finalDistance = distance + extraDistanceBits;
+                writeToOutputAmount(&(decompressedOutput),
+                             (decompressedOutput.data + (decompressedOutput.used - finalDistance)), finalLength);
+            }
+        }
+    }
 }
 
-void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
+void niaPngParser::methodDynamicHuffman(niaPNGChunkData*& chunk){
     u32 numberOfLiteralsCodes = readBits(chunk, 5) + 257;
     u32 numberOfDistancesCodes = readBits(chunk, 5) + 1;
     u32 numberOfLengthsCodes = readBits(chunk, 4) + 4;
@@ -359,10 +442,7 @@ void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     }
 
     niaPNGHuffmanTable codeLengthAlphabet;
-    printf("\n================================\n");
-    printf("\nFirst table\n");
-    printf("\n================================\n");
-    huffmanCreate(&codeLengthAlphabet, lengthHistogram, 4, 19);
+    huffmanCreate(&codeLengthAlphabet, lengthHistogram, 19);
     
     for(u16 i = 0; i < numberOfLiteralsCodes; ++i){
         u16 repeats = 0;
@@ -417,19 +497,10 @@ void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
     }
 
     niaPNGHuffmanTable litLengthAlphabet;
-
-    printf("\n================================\n");
-    printf("\nSecond table\n");
-    printf("\n================================\n");
-    huffmanCreate(&litLengthAlphabet, litLenLengths, 15, 288);
+    huffmanCreate(&litLengthAlphabet, litLenLengths, 288);
 
     niaPNGHuffmanTable distLengthAlphabet;
-
-    printf("\n================================\n");
-    printf("\nThird table\n");
-    printf("\n================================\n");
-    huffmanCreate(&distLengthAlphabet, distLengths, 15, 32);
-
+    huffmanCreate(&distLengthAlphabet, distLengths, 32);
     
     for(;;){
         u32 symbol = decodeHuffmanSymbol(&litLengthAlphabet, chunk);
@@ -459,64 +530,70 @@ void niaPngParser::methodDynamicHuffman(niaPNGChunkData* chunk){
 }
 
 void niaPngParser::decompressChunks(){
-    niaPNGChunkData* current = stream.head;
-    while(current){
-        u8 compressionMethod = readBits(current, 4);
-        u8 compressionInfo = readBits(current, 4);
+    niaPNGChunkData*& current = stream.head;
 
-        u8 fcheck = readBits(current, 5);
-        u8 fdict = readBit(current);
-        u8 flevel = readBits(current, 2);
-        // compresionMethod should be 8 !!!
-        u8 btype = 0;
-        u8 bfinal = 0;
+    u8 compressionMethod = readBits(current, 4);
+    u8 compressionInfo = readBits(current, 4);
 
-        do {
-            bfinal = readBit(current);
-            btype = readBits(current, 2);
+    u8 fcheck = readBits(current, 5);
+    u8 fdict = readBit(current);
+    u8 flevel = readBits(current, 2);
 
-            switch(btype){
-                case NIA_PNG_METHOD_NO_COMPRESSION: {
-                        printf("no compression\n");
-                        methodNoCompression(current);
-                    }
-                    break;
+    NIA_ASSERT(compressionMethod == 8);
 
-                case NIA_PNG_METHOD_FIXED_HUFFMAN:{
-                        printf("fixed\n");
-                    }
-                    break;                
+    u8 btype = 0;
+    u8 bfinal = 0;
+    while(!bfinal){
+        bfinal = readBit(current);
+        btype = readBits(current, 2);
 
-                case NIA_PNG_METHOD_DYNAMIC_HUFFMAN:{
-                        printf("dynamic\n");
-                        methodDynamicHuffman(current);
-                    }
-                    break;             
+        switch(btype){
+            case NIA_PNG_METHOD_NO_COMPRESSION: {
+                    methodNoCompression(current);
+                }
+                break;
 
-                case NIA_PNG_METHOD_ERROR:{
-                        printf("no good here :(\n");
-                    }
-                    break;                
-   
-                default:{
-                    }
-                    break;
-            }
-        } while(!bfinal);
-        current = current->next;
+            case NIA_PNG_METHOD_FIXED_HUFFMAN:{
+                    methodFixedHuffman(current);
+                }
+                break;                
+
+            case NIA_PNG_METHOD_DYNAMIC_HUFFMAN:{
+                    methodDynamicHuffman(current);
+                }
+                break;             
+
+            case NIA_PNG_METHOD_ERROR:{
+                    NIA_ERROR("Invalid zlib chunk detected, the png file is corrupted.\n");
+                }
+                break;                
+
+            default:{
+                }
+                break;
+        }
     }
 }
 
 void niaPngParser::defilterData(){
     switch(ihdr.filterMethod){
         case NIA_PNG_FILTER0:{
-                pixelData = new u8[ihdr.width * ihdr.height * 4];
+                // TODO change this depending on the color type
+#if 0
+                for(int i = 0;  i < ihdr.width * ihdr.height * numberOfComponents; ++i){
+                    if(!(i % ihdr.width * numberOfComponents)){
+                        printf("\n");
+                    }
+                    printf("%x ", decompressedOutput.data[i]);
+                }
+#endif
+                pixelData = new u8[ihdr.width * ihdr.height * numberOfComponents];
 
                 u32 pixelOffset = 0;
                 u32 dataOffset = 1;
 
                 for(int y = 0; y < ihdr.height; ++y){
-                    for(int i = 0; i < ihdr.width * 4; ++i){
+                    for(int i = 0; i < ihdr.width * numberOfComponents; ++i){
                         pixelData[pixelOffset++] = decompressedOutput.data[dataOffset++];
                     }
                     ++dataOffset;
