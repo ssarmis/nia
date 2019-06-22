@@ -155,6 +155,10 @@ NIA_GLSL_PRECISION" float;\n"
 "   } else {\n"
 "       finalColor = (texture(tex, o_uv) * o_color);\n"
 "   }"
+
+"   if(finalColor.w < 1){\n"
+"       discard;\n"
+"   }"
 "}\n"
 "";
 

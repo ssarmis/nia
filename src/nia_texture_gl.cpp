@@ -78,6 +78,7 @@ niaTexture::niaTexture(const char* filename, u32 flag, u16 frameNumber){
 
                 case 'p':{
                         isAnimated = false; // this format doesn't support animation, force it to false
+                        canBeStreamed = false;
                         niaPngParser parser(filename);
                         allocateTexture(parser.getWidth(), parser.getHeight(), parser.getPixelData(), parser.getTextureFormat());
                         textureFormat = parser.getTextureFormat();

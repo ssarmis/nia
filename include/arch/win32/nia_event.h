@@ -26,6 +26,8 @@ NIA_STRUCT keyboardDetails {
 } keyboardDetails;
 
 NIA_STRUCT mouseDetails {
+    i32 scrollX;
+    i32 scrollY;
     bool leftMouseClicked;
     bool rightMouseClicked;
     i32 x;
@@ -71,6 +73,14 @@ public:
 
     NIA_INLINE bool NIA_CALL getMouseRightButton(){
         return mouse.rightMouseClicked;
+    }
+
+    NIA_INLINE i32 NIA_CALL getMouseScrollOffsetX(){
+        return mouse.scrollX;
+    }
+
+    NIA_INLINE i32 NIA_CALL getMouseScrollOffsetY(){
+        return mouse.scrollY;
     }
 
     bool NIA_CALL processMessageReceived();

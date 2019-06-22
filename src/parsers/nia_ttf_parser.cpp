@@ -679,9 +679,9 @@ int niaTTFParser::generateGlyphBitmap(u8* bitmap, u8* glyphPointer, const niaTTF
         previous = points[i];
     }
 
-    for(int i = 0; i < table.numberOfEdges; ++i){
-        drawLine(bitmap, table.edges[i].A, table.edges[i].B, 0, 0, width, height);
-    }
+    // for(int i = 0; i < table.numberOfEdges; ++i){
+    //     drawLine(bitmap, table.edges[i].A, table.edges[i].B, 0, 0, width, height);
+    // }
 
     scanlineFill(bitmap, width, height, &table);
 

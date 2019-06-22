@@ -31,6 +31,7 @@
 
 #include "parsers/nia_bmp_parser.h"
 #include "parsers/nia_tga_parser.h"
+#include "parsers/nia_png_parser.h"
 
 NIA_CLASS niaTextureStreaming {
 private:

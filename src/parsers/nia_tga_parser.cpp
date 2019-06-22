@@ -78,12 +78,6 @@ void niaTgaParser::decodeFile(){ // TODO add consume macro
         // TODO implement consume color map section...
     }
 
-    typedef struct niaPiexl24 { // TODO move this into something more general, don't leave here...
-        u8 red;
-        u8 green;
-        u8 blue;
-    } niaPiexl24;
-
     tgaData.textureFormat = NIA_TEXTURE_FORMAT_RGB_BGR_UBYTE; // most common for our suported tga formats
 
     switch (tgaData.fileHeader.imageType) {
@@ -100,15 +94,15 @@ void niaTgaParser::decodeFile(){ // TODO add consume macro
 
 }
 
-u32 niaTgaParser::getWidth() const{
+u32 niaTgaParser::getWidth() const {
     return tgaData.fileHeader.width;
 }
 
-u32 niaTgaParser::getHeight() const{
+u32 niaTgaParser::getHeight() const {
     return tgaData.fileHeader.height;
 }
 
-u8*niaTgaParser:: getPixelData() const{
+u8* niaTgaParser:: getPixelData() const {
     return tgaData.pixelData;
 }
 

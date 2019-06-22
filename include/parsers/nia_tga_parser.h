@@ -16,7 +16,7 @@
 #include "nia_texture_structures.h"
 
 #pragma pack(push, 1)
-typedef struct niaTGAHeader {
+NIA_STRUCT niaTGAHeader {
     u8 idLength;
     u8 colorMapType;
     u8 imageType;
@@ -35,13 +35,12 @@ typedef struct niaTGAHeader {
 } niaTGAHeader;
 #pragma pack(pop)
 
-typedef struct niaTGA{
+NIA_STRUCT niaTGA {
     textureFormatDetails textureFormat;
     niaTGAHeader fileHeader;
     u8* fileData;
     u8* pixelData;
 } niaTGA;
-
 
 NIA_CLASS niaTgaParser {
 private:

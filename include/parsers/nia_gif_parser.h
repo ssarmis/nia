@@ -43,7 +43,6 @@ NIA_STRUCT niaGIFImageDescriptor {
     u8 packedFields;
 } niaGIFImageDescriptor;
 
-
 NIA_STRUCT niaGIFGraphicControlExtension {
     u8 blockSize;
     u8 packedFileds;

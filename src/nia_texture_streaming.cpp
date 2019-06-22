@@ -134,6 +134,12 @@ void niaTextureStreaming::updateTexture(const textureLiveLoadingChunk& chunk){
     while(*tmp){
         if(*tmp++ == '.'){
             switch (*tmp) {
+                case 'p':{
+                        niaPngParser parser(chunk.texturePath);
+                        NIA_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, chunk.details.storeFormat, parser.getWidth(), parser.getHeight(), 0, chunk.details.readFormat, chunk.details.type, parser.getPixelData()));
+                    }
+                    break;
+
                 case 't':{
                         niaTgaParser parser(chunk.texturePath);
                         NIA_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, chunk.details.storeFormat, parser.getWidth(), parser.getHeight(), 0, chunk.details.readFormat, chunk.details.type, parser.getPixelData()));

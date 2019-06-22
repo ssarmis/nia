@@ -47,7 +47,7 @@ NIA_STATIC u32 usedRectangles = 0;
 
 niaRectangle rectangleArray[NIA_BATCH_MAXIMUM_QUADS] = {};
 
-NIA_STATIC void setupBatchBuffers(){
+NIA_STATIC NIA_INLINE void setupBatchBuffers(){
     NIA_GL_CALL(glGenVertexArrays(1, &batchVao));
     NIA_GL_CALL(glBindVertexArray(batchVao));
 

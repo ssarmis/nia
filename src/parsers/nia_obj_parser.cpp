@@ -220,7 +220,6 @@ u32 niaObjParser::parse(u32 objectIndex){
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
 
-                                // vertexies.add(niaVector3<r32>(values));
                                 addNode3f(&vertexies, niaVector3<r32>(values));
                             }
                             break;
@@ -243,7 +242,6 @@ u32 niaObjParser::parse(u32 objectIndex){
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
                                 // TODO BE CAREFUL SOMETIMES THERE CAN BE 3, ADD SOME TEST CASES LATER
-                                // uvs.add(niaVector2<r32>(values));
                                 addNode2f(&uvs, niaVector2<r32>(values));
                             }
                             break;
@@ -265,7 +263,6 @@ u32 niaObjParser::parse(u32 objectIndex){
 
                                     iterations++;
                                 } while(*source != '\n' && *source != '\r');
-                                // normals.add(niaVector3<r32>(values));
                                 addNode3f(&normals, niaVector3<r32>(values));
                             }
                             break;

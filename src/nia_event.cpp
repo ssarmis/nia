@@ -11,6 +11,9 @@
 
 // TODO put in some win32 arch file
 #ifdef _WIN32
+
+#define WM_MOUSEHWHEEL                  0x020E
+
 #include "nia_event.h"
 
 niaEvent::niaEvent(){
@@ -61,6 +64,12 @@ bool niaEvent::processMessageReceived(){
 
         case WM_RBUTTONDOWN: case WM_RBUTTONUP: {
                 mouse.rightMouseClicked = (msg.message == WM_RBUTTONDOWN);
+            }
+            break;
+
+        case WM_MOUSEHWHEEL: {
+                mouse.scrollX = (msg.lParam & 0x0000FFFF);
+                mouse.scrollY = ((msg.lParam & 0xFFFF0000) >> 16);
             }
             break;
 
