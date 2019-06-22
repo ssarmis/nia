@@ -65,4 +65,7 @@ template class niaArray<niaFilter*>;
 #include "nia_light.h"
 template class niaArray<niaLight>;
 
+#include "nia_vertex.h"
+template class niaArray<niaVertex>;
+
 #endif // _NIA_ARRAY_H_
