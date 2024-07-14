@@ -58,3 +58,6 @@ Now you should have a Visual Studio 20XX project that you can build into a share
 ```g++ -shared -o libnia.so *.o -lX11 -lGL -lGLU```<br>
 ```g++ -o a ./examples/test.cpp -L. -lnia -I./include/ -lGL```<br>
 ```export LD_LIBRARY_PATH=/home/<your user here>/nia:$LD_LIBRARY_PATH```<br>
+
+
+Created by Streanga Sarmis-Stefan
